@@ -1,0 +1,267 @@
+ng generate component nombre-componente abreviado: ng g c nombre-componente
+para crear un componente 
+
+ejemplos: 
+Ejemplo para tu proyecto:
+ng g c registro-alumno
+ng g c credenciales
+ng g c bitácora
+ng generate component lista-alumnos
+
+¿Qué significa cada parte?
+- ng: ejecuta Angular CLI.
+- generate: indica que quieres generar algo.
+- component: especifica que quieres generar un componente.
+- lista-alumnos: es el nombre que le darás.
+
+para iniciar una aplicación se pone:
+npm start
+
+¿Para qué sirve npm start?
+Ejecuta el script llamado start que esté definido en el archivo package.json.
+
+Por ejemplo, si tienes esta configuración:
+{
+  "scripts": {
+    "start": "ng serve"
+  }
+}
+
+¿Qué es ng serve?
+Es un comando de Angular CLI que compila la aplicación y la sirve localmente para que puedas probarla en el navegador.
+
+También puedes ejecutar:
+ng serve --open
+
+| Comando           | Función                                               |
+|                   |                                                       |
+| `npm start`       | Ejecuta el script `start` definido en `package.json`. |
+| `ng serve`        | Inicia el servidor de desarrollo de Angular.          |
+| `ng serve --open` | Inicia el servidor e intenta abrir el navegador.      |
+| `npm install`     | Instala las dependencias declaradas para el proyecto. |
+
+4. app.component.ts — Componente principal
+Este archivo contiene la lógica del componente principal de tu aplicación.
+
+Por ejemplo, puede definir el título de tu sistema y controlar qué información se muestra en la página principal.
+
+En muchos proyectos encontrarás algo parecido a esto:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [],
+  templateUrl: './app.html',
+  styleUrl: './app.css'
+})
+export class App {
+  titulo = 'Sistema de credenciales escolares';
+}
+templateUrl
+
+Indica el archivo HTML que contiene la plantilla del componente.
+
+styleUrl
+
+Indica el archivo CSS asociado al componente.
+
+export class App
+
+Define y exporta la clase del componente, donde puedes escribir propiedades y métodos.
+
+5. app.module.ts — Módulo principal
+Este archivo pertenece a una forma de organizar aplicaciones Angular mediante módulos.
+
+En proyectos tradicionales de Angular, app.module.ts suele contener el módulo principal de la aplicación.
+
+Un módulo puede agrupar componentes, directivas, pipes y dependencias relacionadas.
+Ejemplo tradicional
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppComponent } from './app.component';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  bootstrap: [
+    AppComponent
+  ]
+})
+export class AppModule {}
+
+| Elemento       | Función                                                                                 |
+|                |                                                                                         |
+| `@NgModule`    | Configura un módulo de Angular.                                                         |
+| `declarations` | Declara los componentes, directivas y pipes no independientes que pertenecen al módulo. |
+| `imports`      | Incorpora otros módulos o dependencias admitidas por el módulo.                         |
+| `bootstrap`    | Indica el componente inicial de la aplicación.                                          |
+
+normalmente no encontrarías la sección de modulo sino que encontrarías la sección de scr	
+src/app/
+├── app.ts
+├── app.html
+├── app.css
+├── app.config.ts
+└── app.routes.ts
+
+7. angular.json — Configuración del proyecto
+Este archivo contiene la configuración que utilizan Angular CLI y sus herramientas de compilación.
+
+Generalmente se encuentra en la raíz del proyecto:
+mi-proyecto/
+├── src/
+├── node_modules/
+├── angular.json
+├── package.json
+└── tsconfig.json
+
+¿Para qué sirve?
+Permite configurar aspectos como:
+- Los proyectos que contiene el espacio de trabajo.
+- Las herramientas de compilación.
+- Los archivos de estilos globales.
+- Los recursos estáticos.
+- Algunas opciones de compilación y ejecución.
+
+simplificado:
+{
+  "projects": {
+    "mi-proyecto": {
+      "architect": {
+        "build": {},
+        "serve": {}
+      }
+    }
+  }
+}
+
+Qué significa esta instrucción?
+<a routerLink="/alumnos">Alumnos</a>
+
+- <a>: crea un enlace HTML.
+- routerLink: establece la ruta de destino.
+- "/alumnos": es la ruta a la que se desea navegar.
+- Alumnos: es el texto visible del enlace.
+
+Importante: routerLink no crea las páginas por sí mismo. Solo permite navegar a rutas que hayas configurado.
+
+¿Qué hace este código?
+ApplicationConfig
+
+Es el tipo que representa la configuración de la aplicación.
+
+provideRouter(routes)
+
+Configura el enrutamiento utilizando las rutas importadas.
+
+providers
+
+Especifica los proveedores disponibles en el contexto de la aplicación.
+
+Si necesitas utilizar solicitudes HTTP, puedes agregar provideHttpClient() a los proveedores correspondientes.
+¿Es obligatorio tenerlo?
+Depende de la estructura y versión de tu proyecto.
+
+En las aplicaciones modernas que utilizan configuración independiente, es habitual encontrarlo.
+
+En aplicaciones tradicionales basadas en módulos, parte de esta configuración puede realizarse de otra manera.
+
+10. app.css — Estilos del componente principal
+Este archivo contiene estilos CSS asociados al componente principal cuando la configuración del componente apunta a él.
+
+Por ejemplo:
+h1 {
+  color: #2563eb;
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+}
+
+Cuál es la diferencia entre app.css y styles.css?
+En una estructura habitual:
+- app.css contiene los estilos específicos del componente principal.
+- styles.css contiene los estilos globales de la aplicación.
+Por ejemplo, podrías utilizar styles.css para definir la tipografía general de todo el sitio y app.css para ajustar el diseño particular de la página principal.
+
+11. app.routes.ts — Configuración de rutas
+Este archivo define las rutas que puede utilizar tu aplicación Angular.
+
+En algunos proyectos encontrarás app.routes.ts; en otros, el archivo puede tener un nombre diferente.
+Ejemplo
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  {
+    path: 'inicio',
+    loadComponent: () =>
+      import('./paginas/inicio/inicio')
+        .then(m => m.Inicio)
+  },
+  {
+    path: 'alumnos',
+    loadComponent: () =>
+      import('./paginas/alumnos/alumnos')
+        .then(m => m.Alumnos)
+  }
+];
+
+¿Qué podemos escribir en ellos?
+Variables:
+const nombre: string = 'Carlos';
+
+Funciones:
+function saludar(): void {
+  console.log('Hola');
+}
+
+Interfaces:
+interface Alumno {
+  nombre: string;
+  matricula: string;
+}
+
+Clases:
+class AlumnoRegistro {
+  nombre = '';
+  matricula = '';
+}
+
+Configuraciones de Angular:
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-ejemplo',
+  template: '<p>Hola Angular</p>'
+})
+export class Ejemplo {}
+
+¿Cuál es la diferencia entre .ts y .html?
+Extensión	Función
+.ts	        Contiene código TypeScript.
+.html	        Contiene la estructura visual.
+.css	        Contiene los estilos.
+.json	        Contiene datos o configuraciones en formato JSON.
+
+| Elemento                | ¿Qué es? | ¿Para qué sirve? |
+|                         |                                |                                                                |
+| `components`            | Concepto de Angular            | Representa las partes de la interfaz.                          |
+| `ng generate component` | Comando                        | Genera un componente.                                          |
+| `npm start`             | Comando                        | Ejecuta el script `start` de `package.json`.                   |
+| `app.component.ts`      | Archivo TypeScript tradicional | Contiene la lógica del componente principal.                   | 
+| `app.module.ts`         | Archivo TypeScript tradicional | Define el módulo principal en aplicaciones basadas en módulos. |
+| `src/app`               | Carpeta                        | Contiene gran parte del código de la aplicación.               |
+| `angular.json`          | Archivo de configuración       | Define opciones para las herramientas de Angular.              |
+| `routerLink`            | Directiva                      | Permite navegar entre rutas.                                   |
+| `app.config.ts`         | Archivo de configuración       | Configura proveedores de una aplicación independiente.         |
+| `app.css`               | Archivo CSS                    | Define estilos del componente principal.                       | 
+| `app.routes.ts`         | Archivo TypeScript             | Define las rutas de la aplicación.                             |
+| `path`                  | Propiedad de una ruta          | Define el segmento de URL correspondiente.                     |
+| `.ts`                   | Extensión de archivo           | Identifica archivos TypeScript.                                |
