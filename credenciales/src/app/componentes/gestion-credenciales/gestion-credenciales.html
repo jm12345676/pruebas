@@ -1,1 +1,72 @@
-<p>gestion-credenciales works!</p>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="pagina">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+    <div class="titulos">
+      <h1>Gestion de credenciales</h1>
+      <p>Gestion de alumnos</p>
+    </div>
+
+    <div class="buscador">
+      <mat-icon>search</mat-icon>
+      <input type="text" [(ngModel)]="filtro">
+    </div>
+
+    <div class="acciones-header">
+      <button class="btn-oscuro" (click)="toggleModalAgregar()">
+        <mat-icon>add_box</mat-icon> Crear alumno
+      </button>
+      <button class="btn-oscuro" (click)="toggleModalNiveles()">
+        <mat-icon>layers</mat-icon> Ver niveles
+      </button>
+      <button class="btn-oscuro" (click)="toggleModalBitacora()">
+        <mat-icon>assignment_turned_in</mat-icon> Ver bitacora
+      </button>
+    </div>
+  </header>
+
+  <!-- TARJETA CON TABLA -->
+  <section class="tarjeta">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th class="col-matricula">Matricula</th>
+          <th class="col-nombre">Nombre</th>
+          <th class="col-nivel">Nivel</th>
+          <th class="col-estatus">Estatus</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (a of alumnosFiltrados; track a.matricula) {
+          <tr>
+            <td>{{ a.matricula }}</td>
+            <td>{{ a.nombre }}</td>
+            <td>{{ a.nivel }}</td>
+            <td>
+              <span class="badge" [class]="'badge ' + claseBadge(a.status)">{{ a.status }}</span>
+            </td>
+            <td>
+              <div class="botones-fila">
+                <button class="btn-icono" [class]="'btn-icono ver-' + a.status.toLowerCase()" title="Ver detalle">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button class="btn-icono" title="Editar">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button class="btn-icono" title="Eliminar" (click)="eliminar(a.matricula)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </section>
+
+</div>
