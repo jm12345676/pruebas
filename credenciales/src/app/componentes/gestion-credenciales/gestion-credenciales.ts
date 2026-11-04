@@ -24,14 +24,15 @@ interface Alumno {
 export class GestionCredenciales {
   constructor(private rourter: Router) {}
 
-  VerDetalle(alumnos: any){
+  VerDetalle(alumno: any) {
     this.rourter.navigate(
-      ['/credencial', alumnos.matricula],
+      ['/credencial', alumno.matricula],
       {
-        state: {alumnos:alumnos}
+        state: { alumno: alumno }
       }
     );
   }
+
   alumnos: Alumno[] = [
     { matricula: '970103035', apellidoPaterno: 'AGUILAR', apellidoMaterno: 'MONTOYA',
       nombres: 'VICTOR HUGO', telefonoEmergencia: '', escuela: '',

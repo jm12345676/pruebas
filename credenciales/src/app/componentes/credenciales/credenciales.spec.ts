@@ -1,6 +1,6 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CredencialesComponent } from './credenciales'; // Verifica el nombre exacto de tu clase
+import { provideRouter } from '@angular/router';
+import { CredencialesComponent } from './credenciales';
 
 describe('CredencialesComponent', () => {
   let component: CredencialesComponent;
@@ -8,12 +8,13 @@ describe('CredencialesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CredencialesComponent] // Al ser Standalone Component, entra directamente en imports
+      imports: [CredencialesComponent],
+      providers: [provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(CredencialesComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges(); // Ejecuta la detección inicial de cambios en lugar de whenStable()
+    fixture.detectChanges();
   });
 
   it('should create', () => {
@@ -21,21 +22,21 @@ describe('CredencialesComponent', () => {
   });
 
   it('debe iniciar con mostrarFormatos y mostrarAlerta en false', () => {
-    expect(component.mostrarFormatos).toBeFalse();
-    expect(component.mostrarAlerta).toBeFalse();
+    expect(component.mostrarFormatos()).toBe(false);
+    expect(component.mostrarAlerta()).toBe(false);
   });
 
   it('debe cambiar el estado de mostrarFormatos al llamar toggleFormatos()', () => {
     component.toggleFormatos();
-    expect(component.mostrarFormatos).toBeTrue();
+    expect(component.mostrarFormatos()).toBe(true);
     component.toggleFormatos();
-    expect(component.mostrarFormatos).toBeFalse();
+    expect(component.mostrarFormatos()).toBe(false);
   });
 
   it('debe abrir y cerrar la alerta correctamente', () => {
     component.abrirAlerta();
-    expect(component.mostrarAlerta).toBeTrue();
+    expect(component.mostrarAlerta()).toBe(true);
     component.cerrarAlerta();
-    expect(component.mostrarAlerta).toBeFalse();
+    expect(component.mostrarAlerta()).toBe(false);
   });
 });

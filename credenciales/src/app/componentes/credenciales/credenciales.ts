@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -8,10 +8,11 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './credenciales.html',
   styleUrl: './credenciales.css'
 })
+export class CredencialesComponent implements OnInit {
 
-export class CredencialesComponent {
+  alumno: any = null;
+  matricula = '';
 
-  
   // FOTOGRAFÍA DEL ALUMNO
   fotoAlumno = signal<string>('/img/foto-alumno.png');
 
@@ -24,6 +25,16 @@ export class CredencialesComponent {
   // CONTROLAR LA ALERTA
   mostrarAlerta = signal<boolean>(false);
 
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    // Obtener la matrícula de la dirección
+    this.matricula =
+      this.route.snapshot.paramMap.get('matricula') ?? '';
+
+    // Recibir los datos del alumno
+    this.alumno = history.state.alumno ?? null;
+  }
 
   // ABRIR Y CERRAR FORMATOS
   toggleFormatos(): void {
@@ -39,20 +50,4 @@ export class CredencialesComponent {
   cerrarAlerta(): void {
     this.mostrarAlerta.set(false);
   }
-alumno: any = null;
-  matricula = '';
-
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-
-    // Obtener la matrícula de la dirección
-    this.matricula =
-      this.route.snapshot.paramMap.get('matricula') ?? '';
-
-    // Recibir los datos del alumno
-    this.alumno = history.state.alumno ?? null;
-
-  }
-
 }

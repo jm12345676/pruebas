@@ -5,17 +5,17 @@
       <div class="credencial">
         <div class="cred-header">Frente</div>
         <div class="cred-cuerpo">
-          <!-- Lectura de la Signal fotoAlumno() -->
-          <img [src]="fotoAlumno()" alt="Foto del Alumno" class="foto-alumno">
-          
+          <img [src]="alumno?.foto || fotoAlumno()" alt="Foto del Alumno" class="foto-alumno">
+
           <div class="datos-alumno">
             <p><strong>ALUMNO</strong></p>
-            <p>ROBLES CONTRERAS MARIANA</p>
-            <p>BACHILLERATO</p>
+            <p>{{ alumno?.apellidoPaterno }} {{ alumno?.apellidoMaterno }} {{ alumno?.nombres }}</p>
+            <p>{{ alumno?.nivel }}</p>
+            <p>Matrícula: {{ alumno?.matricula }}</p>
           </div>
         </div>
       </div>
-      
+
       <div class="credencial">
         <div class="cred-header">Reverso</div>
         <div class="cred-cuerpo">
@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    
+
     <button class="btn-guardar" (click)="abrirAlerta()">Guardar Plantilla</button>
   </div>
 
@@ -33,13 +33,12 @@
     <div class="etiqueta-estado">PAGO PENDIENTE</div>
     <button class="btn-accion">IMPRIMIR CREDENCIAL</button>
     <button class="btn-accion">CAMBIAR MÉDICA</button>
-    
+
     <div class="botones-secundarios">
       <button class="btn-mitad" (click)="toggleFormatos()">DISEÑO FORMATO</button>
       <button class="btn-mitad">ELIMINAR FORMATO</button>
     </div>
 
-    <!-- Control de flujo moderno @if evaluando la Signal -->
     @if (mostrarFormatos()) {
       <div class="panel-formatos">
         <p class="titulo-formatos">Selecciona el modelo que desees</p>
@@ -73,35 +72,3 @@
     </div>
   }
 </div>
-
-@if (alumno) {
-
-  <div class="credencial">
-
-    <h2>Credencial del alumno</h2>
-
-    <p>Matrícula: {{ alumno.matricula }}</p>
-
-    <p>Nombre: 
-      {{ alumno.nombres }}
-      {{ alumno.apellidoPaterno }}
-      {{ alumno.apellidoMaterno }}
-    </p>
-
-    <p>Nivel: {{ alumno.nivel }}</p>
-
-    <p>Escuela: {{ alumno.escuela }}</p>
-
-    <p>Vigencia: {{ alumno.vigencia }}</p>
-
-    @if (alumno.foto) {
-      <img [src]="alumno.foto" alt="Foto del alumno">
-    }
-
-  </div>
-
-} @else {
-
-  <p>No se recibió la información del alumno.</p>
-
-}
