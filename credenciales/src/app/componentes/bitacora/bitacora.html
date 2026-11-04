@@ -1,1 +1,60 @@
-<p>bitacora works!</p>
+<div class="bitacora-container">
+  <!-- Encabezado superior con navegación y acciones principales -->
+  <header class="header-bitacora">
+    <a routerLink="/credenciales" class="btn-regresar">
+      <span class="flecha">&#8592;</span> Regresar
+    </a>
+
+    <div class="titulos-header">
+      <h1 class="titulo-principal">Bitacora de credenciales</h1>
+      <span class="subtitulo">Gestión de credenciales</span>
+    </div>
+
+    <button class="btn-borrar-todos" (click)="borrarTodos()">
+      <svg class="icono-trash" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+      </svg>
+      Borrar todos los registros
+    </button>
+  </header>
+
+  <!-- Tarjeta blanca principal que envuelve la tabla -->
+  <main class="card-tabla">
+    <table class="tabla-bitacora">
+      <thead>
+        <tr>
+          <th>Fecha y hora</th>
+          <th>Usuario</th>
+          <th>Matricula</th>
+          <th>Nombre completo</th>
+          <th class="col-center">Borrar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Bucle moderno @for en Angular v17+ -->
+        @for (item of registros(); track item.id) {
+          <tr>
+            <td class="col-fecha">{{ item.fechaHora }}</td>
+            <td class="col-usuario">{{ item.usuario }}</td>
+            <td class="col-matricula">{{ item.matricula }}</td>
+            <td class="col-nombre">{{ item.nombreCompleto }}</td>
+            <td class="col-center">
+              <button class="btn-borrar-item" (click)="borrarRegistro(item.id)">
+                <svg class="icono-trash-sm" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                </svg>
+                Borrar registro
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="sin-registros">
+              No hay registros en la bitácora actualmente.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </main>
+</div>
