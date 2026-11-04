@@ -1,1 +1,70 @@
-<p>credenciales works!</p>
+<div class="contenedor-principal">
+  <!-- Sección Izquierda: Vista Previa de Credenciales -->
+  <div class="seccion-previa">
+    <div class="credenciales-grid">
+      <div class="credencial">
+        <div class="cred-header">Frente</div>
+        <div class="cred-cuerpo">
+          <div class="foto-placeholder"></div>
+          <div class="datos-alumno">
+            <p><strong>ALUMNO</strong></p>
+            <p>ROBLES CONTRERAS MARIANA</p>
+            <p>BACHILLERATO</p>
+          </div>
+        </div>
+      </div>
+      <div class="credencial">
+        <div class="cred-header">Reverso</div>
+        <div class="cred-cuerpo">
+          <div class="firma-placeholder"></div>
+          <div class="codigo-barras-placeholder"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Llama a abrirAlerta() mostrando el modal oscuro -->
+    <button class="btn-guardar" (click)="abrirAlerta()">Guardar Plantilla</button>
+  </div>
+
+  <!-- Sección Derecha: Panel de Control -->
+  <div class="seccion-controles">
+    <div class="etiqueta-estado">PAGO PENDIENTE</div>
+    <button class="btn-accion">IMPRIMIR CREDENCIAL</button>
+    <button class="btn-accion">CAMBIAR MÉDICA</button>
+    
+    <div class="botones-secundarios">
+      <!-- Este botón alterna la aparición del bloque de plantillas -->
+      <button class="btn-mitad" (click)="toggleFormatos()">DISEÑO FORMATO</button>
+      <button class="btn-mitad">ELIMINAR FORMATO</button>
+    </div>
+
+    <!-- Panel de Formatos: Aparece en la segunda vista -->
+    <div class="panel-formatos" *ngIf="mostrarFormatos">
+      <p class="titulo-formatos">Selecciona el modelo que desees</p>
+      <div class="rejilla-formatos">
+        <div class="formato-item">Diseño 1</div>
+        <div class="formato-item">Diseño 2</div>
+        <div class="formato-item">Diseño 3</div>
+        <div class="formato-item">Diseño 4</div>
+      </div>
+    </div>
+
+    <!-- Panel Inferior -->
+    <div class="panel-codigos">
+      <div class="qr-placeholder">QR</div>
+      <div class="barras-placeholder">||||||||||</div>
+    </div>
+  </div>
+
+  <!-- Modal de Alerta: Aparece en la tercera vista superponiendo la pantalla -->
+  <div class="fondo-oscuro" *ngIf="mostrarAlerta">
+    <div class="caja-alerta">
+      <h3 class="alerta-titulo">¡Alumno sin alta académica!</h3>
+      <p class="alerta-texto">Este alumno no ha pagado el alta académica.</p>
+      <p class="alerta-texto">¿Deseas continuar?</p>
+      <div class="alerta-botones">
+        <button class="btn-gris" (click)="cerrarAlerta()">Cancelar</button>
+        <button class="btn-azul" (click)="cerrarAlerta()">Continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
