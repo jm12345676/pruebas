@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 interface Alumno {
   matricula: string;
@@ -22,6 +22,16 @@ interface Alumno {
   styleUrl: './gestion-credenciales.css',
 })
 export class GestionCredenciales {
+  constructor(private rourter: Router) {}
+
+  VerDetalle(alumnos: any){
+    this.rourter.navigate(
+      ['/credencial', alumnos.matricula],
+      {
+        state: {alumnos:alumnos}
+      }
+    );
+  }
   alumnos: Alumno[] = [
     { matricula: '970103035', apellidoPaterno: 'AGUILAR', apellidoMaterno: 'MONTOYA',
       nombres: 'VICTOR HUGO', telefonoEmergencia: '', escuela: '',

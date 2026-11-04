@@ -104,9 +104,10 @@
               <div class="botones-fila">
 
                 <!-- VER DETALLE -->
-                <button
-                  [class]="'btn-icono ' + claseOjo(a.status)"
-                  title="Ver detalle">
+               <button
+                  class="btn-icono"
+                  title="Ver detalle"
+                  (click)="verDetalle(a)">
 
                   <svg viewBox="0 0 24 24" class="icono">
                     <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>

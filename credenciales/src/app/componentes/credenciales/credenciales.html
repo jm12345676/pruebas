@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-
+      
       <div class="credencial">
         <div class="cred-header">Reverso</div>
         <div class="cred-cuerpo">
@@ -73,3 +73,35 @@
     </div>
   }
 </div>
+
+@if (alumno) {
+
+  <div class="credencial">
+
+    <h2>Credencial del alumno</h2>
+
+    <p>Matrícula: {{ alumno.matricula }}</p>
+
+    <p>Nombre: 
+      {{ alumno.nombres }}
+      {{ alumno.apellidoPaterno }}
+      {{ alumno.apellidoMaterno }}
+    </p>
+
+    <p>Nivel: {{ alumno.nivel }}</p>
+
+    <p>Escuela: {{ alumno.escuela }}</p>
+
+    <p>Vigencia: {{ alumno.vigencia }}</p>
+
+    @if (alumno.foto) {
+      <img [src]="alumno.foto" alt="Foto del alumno">
+    }
+
+  </div>
+
+} @else {
+
+  <p>No se recibió la información del alumno.</p>
+
+}
