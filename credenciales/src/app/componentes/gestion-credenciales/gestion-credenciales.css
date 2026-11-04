@@ -245,6 +245,153 @@
   padding: 16px 20px;
   border-top: 1px solid #e2e8f0;
 }
+/* ---------- Modal Crear alumno ---------- */
+.modal-alumno {
+  background: #fff;
+  border-radius: 28px;
+  width: 95%;
+  max-width: 900px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 24px 32px 28px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
+}
+
+.modal-alumno-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+  border-bottom: 3px solid #f1f5f9;
+}
+
+.modal-alumno-header h2 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.header-derecha {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-credencial {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 20px;
+  background: #1e3a6e;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-credencial:hover { background: #274a8c; }
+
+/* Cuerpo: formulario a la izquierda, foto a la derecha */
+.modal-alumno-body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 40px;
+  padding-top: 24px;
+}
+
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 36px;
+}
+
+.formulario .campo label {
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: #1e293b;
+}
+
+.formulario .campo input {
+  height: 46px;
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0 14px;
+}
+
+/* Zona de foto */
+.foto-zona {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 20px;
+}
+
+.foto-caja {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  border: 3px dashed #cbd5e1;
+  border-radius: 28px;
+  overflow: hidden;
+}
+
+.foto-caja img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.foto-placeholder {
+  width: 60%;
+  fill: #cbd5e1;
+}
+
+.foto-botones {
+  display: flex;
+  gap: 50px;
+}
+
+.btn-redondo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.btn-redondo:hover { transform: scale(1.08); }
+.btn-redondo.azul { background: #3b82f6; }
+.btn-redondo.rojo { background: #ef4444; }
+.btn-redondo .icono { width: 22px; height: 22px; }
+
+.modal-alumno-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+/* Pantallas pequeñas: foto debajo del formulario */
+@media (max-width: 800px) {
+  .modal-alumno-body { grid-template-columns: 1fr; }
+  .formulario { grid-template-columns: 1fr; }
+}
 
 /* ---------- Formularios ---------- */
 .fila-dos {
@@ -276,3 +423,7 @@
 
 .campo input:focus,
 .campo select:focus { border-color: #3b82f6; }
+
+a.btn-oscuro {
+  text-decoration: none;
+}

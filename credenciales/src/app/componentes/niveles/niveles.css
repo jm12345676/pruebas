@@ -1,0 +1,361 @@
+
+/* ---------- PÁGINA ---------- */
+.pagina {
+  min-height: 100vh;
+  padding: 30px;
+  background: #f8fafc;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  color: #475569;
+  box-sizing: border-box;
+}
+
+
+/* ---------- ICONOS ---------- */
+.icono {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.icono.grande {
+  width: 32px;
+  height: 32px;
+}
+
+
+/* ---------- ENCABEZADO ---------- */
+.encabezado-niveles {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.encabezado-niveles h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #475569;
+  text-align: center;
+}
+
+
+/* ---------- BOTONES PRINCIPALES ---------- */
+.btn-pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 18px;
+  background: #1e293b;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.2s;
+}
+
+.btn-pildora:hover {
+  background: #334155;
+}
+
+.encabezado-niveles .btn-pildora:last-child {
+  justify-self: end;
+}
+
+.btn-pildora.grande {
+  height: 51px;
+  padding: 0 24px;
+  font-size: 1.3rem;
+}
+
+
+/* ---------- TARJETA ---------- */
+.tarjeta {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 20px 10px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
+}
+
+
+/* ---------- TABLA ---------- */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.tabla thead tr {
+  background: #f8fafc;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.tabla th {
+  padding: 14px 20px;
+  text-align: left;
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: #475569;
+}
+
+.col-nombre {
+  width: 34%;
+}
+
+.col-abrev {
+  width: 16%;
+}
+
+.col-rvoe {
+  width: 18%;
+}
+
+.col-tipo {
+  width: 18%;
+}
+
+.col-acciones {
+  width: 14%;
+}
+
+.tabla td {
+  height: 47px;
+  padding: 0 20px;
+  font-size: 1rem;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.tabla td.tenue {
+  color: #94a3b8;
+}
+
+.tabla tbody tr:hover {
+  background: #f8fafc;
+}
+
+.vacio {
+  text-align: center;
+  color: #94a3b8;
+}
+
+
+/* ---------- BOTÓN EDITAR ---------- */
+.btn-editar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  background: #1e4b82;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-editar:hover {
+  background: #2a5fa0;
+}
+
+.btn-editar .icono {
+  width: 18px;
+  height: 18px;
+}
+
+
+/* ---------- MODAL ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 15px;
+}
+
+
+/* ---------- VENTANA PRINCIPAL ---------- */
+.modal-nivel {
+  background: white;
+  width: 900px;
+  max-width: 100%;
+  padding: 35px 65px 25px;
+  border-radius: 45px;
+  box-sizing: border-box;
+  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
+}
+
+
+/* ---------- ENCABEZADO DEL MODAL ---------- */
+.modal-header {
+  text-align: center;
+  border-bottom: 5px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+
+.modal-header h2 {
+  color: #1e293b;
+  font-size: 36px;
+  margin: 0;
+  font-weight: 700;
+}
+
+
+/* ---------- CUERPO DEL MODAL ---------- */
+.modal-body {
+  padding-top: 35px;
+}
+
+
+/* ---------- FORMULARIO ---------- */
+.formulario {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 65px;
+  row-gap: 25px;
+}
+
+
+/* ---------- CAMPOS ---------- */
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.campo label {
+  font-size: 24px;
+  color: #26364f;
+}
+
+.campo input {
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+  border: 2px solid #cbd5e1;
+  border-radius: 16px;
+  background: #f8fafc;
+  padding: 0 15px;
+  font-size: 17px;
+  outline: none;
+}
+
+.campo input:focus {
+  border-color: #294d80;
+  background: white;
+}
+
+
+/* ---------- PIE DEL MODAL ---------- */
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+
+/* ---------- BOTÓN GUARDAR ---------- */
+.btn-guardar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: #294d80;
+  color: white;
+  border: none;
+  border-radius: 35px;
+  padding: 12px 25px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-guardar:hover {
+  background: #1e3a65;
+}
+
+
+/* ---------- BOTÓN CANCELAR ---------- */
+.btn-cancelar {
+  background: #e2e8f0;
+  color: #1e293b;
+  border: none;
+  border-radius: 35px;
+  padding: 12px 22px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 700px) {
+
+  .pagina {
+    padding: 15px;
+  }
+
+  .encabezado-niveles {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .encabezado-niveles h1 {
+    grid-row: 1;
+  }
+
+  .encabezado-niveles .btn-pildora {
+    justify-self: center;
+  }
+
+  .modal-nivel {
+    padding: 25px;
+    border-radius: 25px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .formulario {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 27px;
+  }
+
+  .campo label {
+    font-size: 18px;
+  }
+
+  .modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .tarjeta {
+    overflow-x: auto;
+  }
+
+  .tabla {
+    min-width: 650px;
+  }
+}

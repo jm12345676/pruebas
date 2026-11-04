@@ -1,1 +1,207 @@
-<p>niveles works!</p>
+
+<div class="pagina">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado-niveles">
+
+    <a class="btn-pildora" routerLink="/inicio">
+
+      <svg viewBox="0 0 24 24" class="icono">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="10,6 4,12 10,18"/>
+      </svg>
+
+      Regresar
+
+    </a>
+
+    <h1>Niveles</h1>
+
+    <button
+      class="btn-pildora grande"
+      (click)="crearNivel()">
+
+      <svg viewBox="0 0 24 24" class="icono grande">
+        <polygon points="12,4 23,9 12,14 1,9"/>
+        <path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>
+        <line x1="23" y1="9" x2="23" y2="15"/>
+      </svg>
+
+      Crear un nivel
+
+    </button>
+
+  </header>
+
+
+  <!-- TARJETA CON TABLA -->
+  <section class="tarjeta">
+
+    <table class="tabla">
+
+      <thead>
+        <tr>
+          <th class="col-nombre">Nombre</th>
+          <th class="col-abrev">Abreviatura</th>
+          <th class="col-rvoe">RVOE</th>
+          <th class="col-tipo">Tipo RVOE</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (n of niveles; track $index) {
+
+          <tr>
+
+            <td>{{ n.nombre }}</td>
+
+            <td [class.tenue]="n.abreviatura === 'MEP'">
+              {{ n.abreviatura }}
+            </td>
+
+            <td>{{ n.rvoe }}</td>
+
+            <td>{{ n.tipoRvoe }}</td>
+
+            <td>
+
+              <button
+                class="btn-editar"
+                (click)="editar(n)">
+
+                <svg viewBox="0 0 24 24" class="icono">
+                  <path d="M12 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-6"/>
+                  <path d="M18 3l3 3-9 9-4 1 1-4z"/>
+                </svg>
+
+                Editar
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        } @empty {
+
+          <tr>
+            <td colspan="5" class="vacio">
+              No hay niveles registrados
+            </td>
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+  <!-- MODAL PARA CREAR NIVEL -->
+  @if (mostrarModalAgregar) {
+
+    <div class="modal-overlay">
+
+      <div class="modal-nivel">
+
+        <!-- ENCABEZADO DEL MODAL -->
+        <div class="modal-header">
+
+          <h2>Crear nivel</h2>
+
+        </div>
+
+
+        <!-- CUERPO DEL MODAL -->
+        <div class="modal-body">
+
+          <div class="formulario">
+
+            <!-- DESCRIPCIÓN -->
+            <div class="campo">
+
+              <label>Descripción</label>
+
+              <input
+                type="text"
+                [(ngModel)]="nuevoNivel.nombre">
+
+            </div>
+
+
+            <!-- ABREVIATURA -->
+            <div class="campo">
+
+              <label>Abreviatura</label>
+
+              <input
+                type="text"
+                [(ngModel)]="nuevoNivel.abreviatura">
+
+            </div>
+
+
+            <!-- ACUERDO -->
+            <div class="campo">
+
+              <label>Acuerdo</label>
+
+              <input
+                type="text"
+                [(ngModel)]="nuevoNivel.rvoe">
+
+            </div>
+
+
+            <!-- TIPO DE RVOE -->
+            <div class="campo">
+
+              <label>Tipo de RVOE</label>
+
+              <input
+                type="text"
+                [(ngModel)]="nuevoNivel.tipoRvoe">
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- BOTÓN GUARDAR -->
+        <div class="modal-footer">
+
+          <button
+            class="btn-guardar"
+            (click)="guardarNivel()">
+
+            <svg viewBox="0 0 24 24" class="icono">
+              <polyline points="4 12 10 18 21 5"/>
+            </svg>
+
+            Guardar
+
+          </button>
+
+          <button
+            class="btn-cancelar"
+            (click)="cerrarModal()">
+
+            Cancelar
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

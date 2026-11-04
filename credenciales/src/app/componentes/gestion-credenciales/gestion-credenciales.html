@@ -25,24 +25,23 @@
         Crear alumno
       </button>
 
-      <button class="btn-oscuro" (click)="toggleModalNiveles()">
-        <svg viewBox="0 0 24 24" class="icono">
-          <polygon points="12,3 22,8 12,13 2,8"/>
-          <polyline points="2,12 12,17 22,12"/>
-          <polyline points="2,16 12,21 22,16"/>
-        </svg>
-        Ver niveles
-      </button>
+          <a class="btn-oscuro" routerLink="/niveles">
+      <svg viewBox="0 0 24 24" class="icono">
+        <polygon points="12,3 22,8 12,13 2,8"/>
+        <polyline points="2,12 12,17 22,12"/>
+        <polyline points="2,16 12,21 22,16"/>
+      </svg>
+      Ver niveles
+    </a>
 
-      <button class="btn-oscuro" (click)="toggleModalBitacora()">
-        <svg viewBox="0 0 24 24" class="icono">
-          <rect x="5" y="4" width="14" height="17" rx="2"/>
-          <line x1="9" y1="9" x2="15" y2="9"/>
-          <polyline points="9,15 11,17 15,13"/>
-        </svg>
-        Ver bitacora
-      </button>
-    </div>
+          <a class="btn-oscuro" routerLink="/bitacora">
+      <svg viewBox="0 0 24 24" class="icono">
+        <rect x="5" y="4" width="14" height="17" rx="2"/>
+        <line x1="9" y1="9" x2="15" y2="9"/>
+        <polyline points="9,15 11,17 15,13"/>
+      </svg>
+      Ver bitacora
+    </a>
   </header>
 
   <!-- TARJETA CON TABLA -->
@@ -53,11 +52,8 @@
           <th class="col-matricula">Matricula</th>
           <th class="col-nombre">Nombre</th>
           <th class="col-nivel">Nivel</th>
-          <th class="col-telemergencia">Tel emergencia</th>
+          <th class="col-estatus">Estatus</th>
           <th class="col-acciones">Acciones</th>
-          <th class="col-amaterno">Apellido materno</th>
-          <th class="col-apaterno">Apellido paterno</th>
-          <th class="col-escuela">escuela</th>
         </tr>
       </thead>
 
@@ -103,48 +99,117 @@
   </section>
 
   <!-- MODAL: CREAR ALUMNO -->
-  @if (mostrarModalAgregar) {
-    <div class="modal-overlay">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Registrar alumno</h2>
+@if (mostrarModalAgregar) {
+  <div class="modal-overlay">
+    <div class="modal-alumno">
+
+      <!-- Encabezado -->
+      <div class="modal-alumno-header">
+        <h2>Crear alumno</h2>
+
+        <div class="header-derecha">
+          <button class="btn-credencial" (click)="generarCredencial()">
+            <svg viewBox="0 0 24 24" class="icono">
+              <rect x="2" y="5" width="20" height="14" rx="3"/>
+              <circle cx="8" cy="11" r="2"/>
+              <path d="M5 16c.5-1.5 5.5-1.5 6 0"/>
+              <line x1="14" y1="10" x2="19" y2="10"/>
+              <line x1="14" y1="14" x2="19" y2="14"/>
+            </svg>
+            Generar credencial
+          </button>
           <button class="btn-cerrar" (click)="toggleModalAgregar()">✕</button>
         </div>
-
-        <div class="modal-body">
-          <div class="fila-dos">
-            <div class="campo">
-              <label>Matricula *</label>
-              <input type="text" [(ngModel)]="nuevo.matricula" placeholder="Ej. 201510101270">
-            </div>
-            <div class="campo">
-              <label>Estatus *</label>
-              <select [(ngModel)]="nuevo.status">
-                <option>Activo</option>
-                <option>Pendiente</option>
-                <option>Baja</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="campo">
-            <label>Nombre completo *</label>
-            <input type="text" [(ngModel)]="nuevo.nombre" placeholder="Apellidos y nombre">
-          </div>
-
-          <div class="campo">
-            <label>Nivel / Carrera *</label>
-            <input type="text" [(ngModel)]="nuevo.nivel" placeholder="Ej. Licenciatura en Psicología">
-          </div>
-        </div>
-
-        <div class="modal-footer">
-          <button class="btn-oscuro" (click)="guardar()">Guardar</button>
-          <button class="btn-peligro" (click)="toggleModalAgregar()">Cancelar</button>
-        </div>
       </div>
+
+      <!-- Cuerpo: formulario + foto -->
+      <div class="modal-alumno-body">
+
+        <div class="formulario">
+          <div class="campo">
+            <label>Apellido materno</label>
+            <input type="text" [(ngModel)]="nuevo.apellidoMaterno">
+          </div>
+          <div class="campo">
+            <label>Apellido paterno</label>
+            <input type="text" [(ngModel)]="nuevo.apellidoPaterno">
+          </div>
+
+          <div class="campo">
+            <label>Nombre(s)</label>
+            <input type="text" [(ngModel)]="nuevo.nombres">
+          </div>
+          <div class="campo">
+            <label>Matricula</label>
+            <input type="text" [(ngModel)]="nuevo.matricula">
+          </div>
+
+          <div class="campo">
+            <label>Telefono de emergencia</label>
+            <input type="tel" [(ngModel)]="nuevo.telefonoEmergencia">
+          </div>
+          <div class="campo">
+            <label>Escuela</label>
+            <input type="text" [(ngModel)]="nuevo.escuela">
+          </div>
+
+          <div class="campo">
+            <label>Nivel</label>
+            <input type="text" [(ngModel)]="nuevo.nivel">
+          </div>
+          <div class="campo">
+            <label>Vigencia</label>
+            <input type="date" [(ngModel)]="nuevo.vigencia">
+          </div>
+        </div>
+
+        <!-- Foto -->
+        <div class="foto-zona">
+          <div class="foto-caja">
+            @if (nuevo.foto) {
+              <img [src]="nuevo.foto" alt="Foto del alumno">
+            } @else {
+              <svg viewBox="0 0 100 100" class="foto-placeholder">
+                <circle cx="50" cy="50" r="50"/>
+                <circle cx="50" cy="38" r="14" fill="#f8fafc"/>
+                <path d="M22 78c4-16 52-16 56 0 -10 12 -46 12 -56 0z" fill="#f8fafc"/>
+              </svg>
+            }
+          </div>
+
+          <div class="foto-botones">
+            <!-- El input file está oculto; el botón azul lo activa -->
+            <input #archivo type="file" accept="image/*" hidden (change)="seleccionarFoto($event)">
+
+            <button class="btn-redondo azul" title="Subir foto" (click)="archivo.click()">
+              <svg viewBox="0 0 24 24" class="icono">
+                <polyline points="6,11 12,5 18,11"/>
+                <line x1="12" y1="5" x2="12" y2="17"/>
+                <line x1="6" y1="20" x2="18" y2="20"/>
+              </svg>
+            </button>
+
+            <button class="btn-redondo rojo" title="Quitar foto" (click)="quitarFoto()">
+              <svg viewBox="0 0 24 24" class="icono">
+                <line x1="4" y1="7" x2="20" y2="7"/>
+                <path d="M6 7l1 13h10l1-13"/>
+                <path d="M9 7V4h6v3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pie -->
+      <div class="modal-alumno-footer">
+        <button class="btn-oscuro" (click)="guardar()">Guardar</button>
+        <button class="btn-peligro" (click)="toggleModalAgregar()">Cancelar</button>
+      </div>
+
     </div>
-  }
+  </div>
+}
 
   <!-- MODAL: NIVELES -->
   @if (mostrarModalNiveles) {

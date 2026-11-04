@@ -1,28 +1,37 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 interface Alumno {
   matricula: string;
-  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  nombres: string;
+  telefonoEmergencia: string;
+  escuela: string;
   nivel: string;
+  vigencia: string;
+  foto: string | null;
   status: 'Activo' | 'Pendiente' | 'Baja';
 }
 
 @Component({
   selector: 'app-gestion-credenciales',
-  standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterLink],
   templateUrl: './gestion-credenciales.html',
   styleUrl: './gestion-credenciales.css',
 })
 export class GestionCredenciales {
   alumnos: Alumno[] = [
-    { matricula: '970103035', nombre: 'AGUILAR MONTOYA VICTOR HUGO',
-      nivel: 'Lic. en Contaduría Pública', status: 'Activo' },
-    { matricula: '201510101270', nombre: 'ALONSO MÉNDEZ VÍCTOR MANUEL',
-      nivel: 'Lic. en Ciencias de la Comunicación', status: 'Pendiente' },
-    { matricula: '201810171303', nombre: 'ANGEL MÁRQUEZ VERÓNICA',
-      nivel: 'Lic. en Psicología', status: 'Baja' },
+    { matricula: '970103035', apellidoPaterno: 'AGUILAR', apellidoMaterno: 'MONTOYA',
+      nombres: 'VICTOR HUGO', telefonoEmergencia: '', escuela: '',
+      nivel: 'Lic. en Contaduría Pública', vigencia: '', foto: null, status: 'Activo' },
+    { matricula: '201510101270', apellidoPaterno: 'ALONSO', apellidoMaterno: 'MÉNDEZ',
+      nombres: 'VÍCTOR MANUEL', telefonoEmergencia: '', escuela: '',
+      nivel: 'Lic. en Ciencias de la Comunicación', vigencia: '', foto: null, status: 'Pendiente' },
+    { matricula: '201810171303', apellidoPaterno: 'ANGEL', apellidoMaterno: 'MÁRQUEZ',
+      nombres: 'VERÓNICA', telefonoEmergencia: '', escuela: '',
+      nivel: 'Lic. en Psicología', vigencia: '', foto: null, status: 'Baja' },
   ];
 
   filtro = '';
@@ -30,25 +39,31 @@ export class GestionCredenciales {
   get alumnosFiltrados() {
     const f = this.filtro.toLowerCase();
     return this.alumnos.filter(a =>
-      a.nombre.toLowerCase().includes(f) || a.matricula.includes(f));
+      this.nombreCompleto(a).toLowerCase().includes(f) || a.matricula.includes(f));
+  }
+
+  nombreCompleto(a: Alumno) {
+    return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`.trim();
   }
 
   mostrarModalAgregar = false;
-  mostrarModalNiveles = false;
-  mostrarModalBitacora = false;
 
-  toggleModalAgregar()  { this.mostrarModalAgregar  = !this.mostrarModalAgregar; }
-  toggleModalNiveles()  { this.mostrarModalNiveles  = !this.mostrarModalNiveles; }
-  toggleModalBitacora() { this.mostrarModalBitacora = !this.mostrarModalBitacora; }
+  toggleModalAgregar() {
+    this.mostrarModalAgregar = !this.mostrarModalAgregar;
+  }
 
   nuevo: Alumno = this.alumnoVacio();
 
   private alumnoVacio(): Alumno {
-    return { matricula: '', nombre: '', nivel: '', status: 'Activo' };
+    return {
+      matricula: '', apellidoPaterno: '', apellidoMaterno: '', nombres: '',
+      telefonoEmergencia: '', escuela: '', nivel: '', vigencia: '',
+      foto: null, status: 'Activo',
+    };
   }
 
   guardar() {
-    if (!this.nuevo.matricula || !this.nuevo.nombre) return;
+    if (!this.nuevo.matricula || !this.nuevo.nombres || !this.nuevo.apellidoPaterno) return;
     this.alumnos.push({ ...this.nuevo });
     this.nuevo = this.alumnoVacio();
     this.toggleModalAgregar();
@@ -56,6 +71,24 @@ export class GestionCredenciales {
 
   eliminar(matricula: string) {
     this.alumnos = this.alumnos.filter(a => a.matricula !== matricula);
+  }
+
+  generarCredencial() {
+    console.log('Generar credencial de:', this.nuevo);
+  }
+
+  seleccionarFoto(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    if (!archivo) return;
+
+    const lector = new FileReader();
+    lector.onload = () => (this.nuevo.foto = lector.result as string);
+    lector.readAsDataURL(archivo);
+  }
+
+  quitarFoto() {
+    this.nuevo.foto = null;
   }
 
   claseBadge(status: string) {
