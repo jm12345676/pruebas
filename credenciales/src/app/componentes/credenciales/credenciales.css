@@ -165,3 +165,13 @@
 
 .btn-gris { background-color: #888; }
 .btn-azul { background-color: #174276; }
+
+/* --- IMAGENES DE ALUMNOS --- */
+.foto-alumno {
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -1,26 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 @Component({
   selector: 'app-credenciales',
+  standalone: true,
+  imports: [],
   templateUrl: './credenciales.html',
-  styleUrls: ['./credenciales.css']
+  styleUrl: './credenciales.css'
 })
-export class Credenciales {
-  // Controlan la visibilidad de los elementos dinámicos de las vistas
-  mostrarFormatos: boolean = false;
-  mostrarAlerta: boolean = false;
+export class CredencialesComponent {
+  // Estado reactivo con Signals
+  fotoAlumno = signal<string>('/img/Pocoyo_opagangan (1).webp');
+  mostrarFormatos = signal<boolean>(false);
+  mostrarAlerta = signal<boolean>(false);
 
-  // Alterna la caja central de selección de formatos al hacer clic
-  toggleFormatos() {
-    this.mostrarFormatos = !this.mostrarFormatos;
+  // Funciones de actualización
+  toggleFormatos(): void {
+    this.mostrarFormatos.update(val => !val);
   }
 
-  // Funciones para abrir y cerrar el modal de advertencia
-  abrirAlerta() {
-    this.mostrarAlerta = true;
+  abrirAlerta(): void {
+    this.mostrarAlerta.set(true);
   }
 
-  cerrarAlerta() {
-    this.mostrarAlerta = false;
+  cerrarAlerta(): void {
+    this.mostrarAlerta.set(false);
   }
 }
