@@ -9,7 +9,8 @@ import { Component, signal } from '@angular/core';
 })
 export class CredencialesComponent {
   // Estado reactivo con Signals
-  fotoAlumno = signal<string>('/img/Pocoyo_opagangan (1).webp');
+  fotoTrasera = signal<string>('/img/gddghdhtdhyt.png');
+  fotoAlumno = signal<string>('/img/group 1959');
   mostrarFormatos = signal<boolean>(false);
   mostrarAlerta = signal<boolean>(false);
 
