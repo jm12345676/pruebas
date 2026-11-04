@@ -8,6 +8,18 @@
   box-sizing: border-box;
 }
 
+/* ---------- Íconos SVG ---------- */
+.icono {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
 /* ---------- Encabezado ---------- */
 .encabezado {
   display: flex;
@@ -27,11 +39,9 @@
 .titulos p {
   margin: 2px 0 0;
   font-size: 1.05rem;
-  font-weight: 400;
   color: #64748b;
 }
 
-/* Buscador */
 .buscador {
   flex: 1;
   display: flex;
@@ -42,9 +52,8 @@
   background: #fff;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
+  color: #334155;
 }
-
-.buscador mat-icon { color: #334155; }
 
 .buscador input {
   flex: 1;
@@ -55,7 +64,6 @@
   font-size: 1rem;
 }
 
-/* Botones oscuros del encabezado */
 .acciones-header {
   display: flex;
   gap: 14px;
@@ -79,7 +87,21 @@
 }
 
 .btn-oscuro:hover { background: #1e293b; }
-.btn-oscuro mat-icon { font-size: 20px; width: 20px; height: 20px; }
+
+.btn-peligro {
+  height: 38px;
+  padding: 0 14px;
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-peligro:hover { background: #dc2626; }
 
 /* ---------- Tarjeta ---------- */
 .tarjeta {
@@ -109,7 +131,6 @@
   color: #475569;
 }
 
-/* Anchos de columna */
 .col-matricula { width: 14%; }
 .col-nombre    { width: 28%; }
 .col-nivel     { width: 28%; }
@@ -162,9 +183,96 @@
 }
 
 .btn-icono:hover { background: #f1f5f9; }
-.btn-icono mat-icon { font-size: 16px; width: 16px; height: 16px; }
+.btn-icono .icono { width: 16px; height: 16px; }
 
-/* El ojo cambia de color según el estatus */
 .ver-activo    { color: #3b82f6; }
 .ver-pendiente { color: #0f172a; }
 .ver-baja      { color: #ef4444; }
+
+/* ---------- Modales ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #0f172a;
+}
+
+.btn-cerrar {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+}
+
+/* ---------- Formularios ---------- */
+.fila-dos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.campo label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.campo input,
+.campo select {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+}
+
+.campo input:focus,
+.campo select:focus { border-color: #3b82f6; }
