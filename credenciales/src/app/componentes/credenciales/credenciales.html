@@ -1,44 +1,53 @@
 <div class="contenedor-principal">
-  <!-- Sección Izquierda: Vista Previa -->
+  <!-- Sección Izquierda: Vista Previa de Credenciales -->
   <div class="seccion-previa">
     <div class="credenciales-grid">
+      
+      <!-- RECUADRO FRENTE -->
       <div class="credencial">
         <div class="cred-header">Frente</div>
-        <div class="cred-cuerpo">
-          <img [src]="alumno?.foto || fotoAlumno()" alt="Foto del Alumno" class="foto-alumno">
-
-          <div class="datos-alumno">
-            <p><strong>ALUMNO</strong></p>
-            <p>{{ alumno?.apellidoPaterno }} {{ alumno?.apellidoMaterno }} {{ alumno?.nombres }}</p>
-            <p>{{ alumno?.nivel }}</p>
-            <p>Matrícula: {{ alumno?.matricula }}</p>
-          </div>
+        <div class="cred-cuerpo-img">
+          <!-- Uso de ngSrc con dimensiones requeridas en Angular moderno -->
+          <img 
+            [ngSrc]="imagenFrente()" 
+            width="200" 
+            height="320" 
+            alt="Credencial Frente" 
+            class="plantilla-credencial"
+            priority>
         </div>
       </div>
 
+      <!-- RECUADRO REVERSO -->
       <div class="credencial">
         <div class="cred-header">Reverso</div>
-        <div class="cred-cuerpo">
-          <div class="firma-placeholder"></div>
-          <div class="codigo-barras-placeholder"></div>
+        <div class="cred-cuerpo-img">
+          <img 
+            [ngSrc]="imagenReverso()" 
+            width="200" 
+            height="320" 
+            alt="Credencial Reverso" 
+            class="plantilla-credencial">
         </div>
       </div>
-    </div>
 
-    <button class="btn-guardar" (click)="abrirAlerta()">Guardar Plantilla</button>
+    </div>
+    
+    <button class="btn-guardar" type="button" (click)="abrirAlerta()">Guardar Plantilla</button>
   </div>
 
   <!-- Sección Derecha: Panel de Control -->
   <div class="seccion-controles">
     <div class="etiqueta-estado">PAGO PENDIENTE</div>
-    <button class="btn-accion">IMPRIMIR CREDENCIAL</button>
-    <button class="btn-accion">CAMBIAR MÉDICA</button>
-
+    <button class="btn-accion" type="button">IMPRIMIR CREDENCIAL</button>
+    <button class="btn-accion" type="button">CAMBIAR VIGENCIA</button>
+    
     <div class="botones-secundarios">
-      <button class="btn-mitad" (click)="toggleFormatos()">DISEÑO FORMATO</button>
-      <button class="btn-mitad">ELIMINAR FORMATO</button>
+      <button class="btn-mitad" type="button" (click)="toggleFormatos()">CAMBIAR FORMATO</button>
+      <button class="btn-mitad" type="button">CAMBIAR CODIGO</button>
     </div>
 
+    <!-- Control de flujo nativo @if evaluando la Signal -->
     @if (mostrarFormatos()) {
       <div class="panel-formatos">
         <p class="titulo-formatos">Selecciona el modelo que desees</p>
@@ -57,7 +66,7 @@
     </div>
   </div>
 
-  <!-- Modal superpuesto -->
+  <!-- Modal de Alerta con control de flujo moderno -->
   @if (mostrarAlerta()) {
     <div class="fondo-oscuro">
       <div class="caja-alerta">
@@ -65,8 +74,8 @@
         <p class="alerta-texto">Este alumno no ha pagado el alta académica.</p>
         <p class="alerta-texto">¿Deseas continuar?</p>
         <div class="alerta-botones">
-          <button class="btn-gris" (click)="cerrarAlerta()">Cancelar</button>
-          <button class="btn-azul" (click)="cerrarAlerta()">Continuar</button>
+          <button class="btn-gris" type="button" (click)="cerrarAlerta()">Cancelar</button>
+          <button class="btn-azul" type="button" (click)="cerrarAlerta()">Continuar</button>
         </div>
       </div>
     </div>

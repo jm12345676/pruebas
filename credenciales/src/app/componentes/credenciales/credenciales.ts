@@ -14,10 +14,8 @@ export class CredencialesComponent implements OnInit {
   matricula = '';
 
   // FOTOGRAFÍA DEL ALUMNO
-  fotoAlumno = signal<string>('/img/foto-alumno.png');
-
-  // IMAGEN DE LA PARTE TRASERA
-  fotoTrasera = signal<string>('/img/credencial-trasera.png');
+  imagenFrente = signal<string>('/img/Group 1959.png');
+  imagenReverso = signal<string>('/img/gddghdhtdhyt.png');
 
   // CONTROLAR LA VENTANA DE FORMATOS
   mostrarFormatos = signal<boolean>(false);
