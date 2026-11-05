@@ -1,12 +1,9 @@
 import { Routes } from '@angular/router';
-
 import { GestionCredenciales } from './componentes/gestion-credenciales/gestion-credenciales';
-
 import { CredencialesComponent } from './componentes/credenciales/credenciales';
-
 import { Niveles } from './componentes/niveles/niveles';
-
 import { BitacoraComponent } from './componentes/bitacora/bitacora';
+import { CrearAlumno } from './componentes/crearalumnos/crearalumnos';
 
 export const routes: Routes = [
 
@@ -19,6 +16,8 @@ export const routes: Routes = [
   { path: 'niveles', component: Niveles },
 
   { path: 'bitacora', component:BitacoraComponent},
+
+  {path: 'crearalumnos', component:CrearAlumno },
 
   { path: '**', redirectTo: 'inicio' }
 
