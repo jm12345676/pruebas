@@ -1,10 +1,11 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-credenciales',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './credenciales.html',
   styleUrl: './credenciales.css'
 })

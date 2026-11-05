@@ -1,5 +1,10 @@
 <div class="contenedor-principal">
-  <!-- Sección Izquierda: Vista Previa de Credenciales -->
+  <!-- Botón Regresar ubicado en la esquina superior izquierda de toda la pantalla -->
+  <a routerLink="/inicio" class="btn-regresar">
+    <span class="flecha">&#8592;</span> Regresar
+  </a>
+
+  <!-- Sección Izquierda: Vista Previa -->
   <div class="seccion-previa">
     <div class="credenciales-grid">
       
@@ -7,14 +12,7 @@
       <div class="credencial">
         <div class="cred-header">Frente</div>
         <div class="cred-cuerpo-img">
-          <!-- Uso de ngSrc con dimensiones requeridas en Angular moderno -->
-          <img 
-            [src]="imagenFrente()" 
-            width="200" 
-            height="320" 
-            alt="Credencial Frente" 
-            class="plantilla-credencial"
-            priority>
+          <img [src]="imagenFrente()" alt="Credencial Frente" class="plantilla-credencial">
         </div>
       </div>
 
@@ -22,12 +20,7 @@
       <div class="credencial">
         <div class="cred-header">Reverso</div>
         <div class="cred-cuerpo-img">
-          <img 
-            [ngSrc]="imagenReverso()" 
-            width="200" 
-            height="320" 
-            alt="Credencial Reverso" 
-            class="plantilla-credencial">
+          <img [src]="imagenReverso()" alt="Credencial Reverso" class="plantilla-credencial">
         </div>
       </div>
 
@@ -47,15 +40,12 @@
       <button class="btn-mitad" type="button">CAMBIAR CODIGO</button>
     </div>
 
-    <!-- Control de flujo nativo @if evaluando la Signal -->
     @if (mostrarFormatos()) {
       <div class="panel-formatos">
-        <p class="titulo-formatos">Selecciona el modelo que desees</p>
+        <p class="titulo-formatos">Seleccione el diseño que desee</p>
         <div class="rejilla-formatos">
           <div class="formato-item">Diseño 1</div>
           <div class="formato-item">Diseño 2</div>
-          <div class="formato-item">Diseño 3</div>
-          <div class="formato-item">Diseño 4</div>
         </div>
       </div>
     }
@@ -66,7 +56,7 @@
     </div>
   </div>
 
-  <!-- Modal de Alerta con control de flujo moderno -->
+  <!-- Modal -->
   @if (mostrarAlerta()) {
     <div class="fondo-oscuro">
       <div class="caja-alerta">
