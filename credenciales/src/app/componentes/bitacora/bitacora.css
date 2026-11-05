@@ -18,16 +18,23 @@
 .btn-regresar {
   background-color: #1e2837;
   color: #ffffff;
-  padding: 10px 22px;
+  padding: 9px 20px;
   border-radius: 25px;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  box-shadow: 0 5px 5px rgba(0,0,0,0.15);
   transition: background-color 0.2s ease;
+}
+
+.flecha {
+  font-size: 20px; /* Tamaño de la flecha */
+  font-weight: bold;
+  position: relative;
+  top: -3px;
 }
 
 .btn-regresar:hover {
@@ -55,7 +62,7 @@
   background-color: #d92525;
   color: #ffffff;
   border: none;
-  padding: 10px 20px;
+  padding: 9.5px 15px;
   border-radius: 25px;
   font-size: 14px;
   font-weight: 700;

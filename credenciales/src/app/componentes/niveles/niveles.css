@@ -50,8 +50,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 52px;
-  padding: 0 18px;
+  height: 40px;
+  padding: 0 12px;
   background: #1e293b;
   color: #fff;
   border: none;
@@ -74,9 +74,9 @@
 }
 
 .btn-pildora.grande {
-  height: 51px;
-  padding: 0 24px;
-  font-size: 1.3rem;
+  height: 43px;
+  padding: 0 22px;
+  font-size: 1.1rem;
 }
 
 

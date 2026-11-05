@@ -40,7 +40,7 @@
   left: 30px;
   background-color: #1e2837;
   color: #ffffff;
-  padding: 9px 20px;
+  padding: 10px 20px;
   border-radius: 25px;
   text-decoration: none;
   font-size: 13px;
@@ -53,24 +53,23 @@
   z-index: 10;
 }
 
+.flecha {
+  font-size: 20px; /* Tamaño de la flecha */
+  font-weight: bold;
+  position: relative;
+  top: -3px;
+}
+
+
 .btn-regresar:hover {
   background-color: #111722;
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
-.flecha {
-  font-size: 15px;
-}
-
-
 .btn-regresar:hover {
   background-color: #0f2d52;
   transform: translateY(-1px);
-}
-
-.flecha {
-  font-size: 14px;
 }
 
 /* Panel derecho (botones y controles) */
