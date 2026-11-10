@@ -1,5 +1,3 @@
-export class Crearalumnos {}
-
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -26,6 +24,20 @@ interface Alumno {
 export class CrearAlumno {
   private router = inject(Router);
 
+  // Listas del desplegable (edítalas a tu gusto)
+  escuelas = [
+    'Escuela de Negocios',
+    'Escuela de Humanidades',
+    'Escuela de Educación',
+  ];
+
+  niveles = [
+    'Maestría en Docencia de la Lengua Inglesa',
+    'Maestría en Pedagogía',
+    'Licenciatura en Contaduría Pública',
+    'Licenciatura en Psicología',
+  ];
+
   nuevo: Alumno = {
     matricula: '', apellidoPaterno: '', apellidoMaterno: '', nombres: '',
     telefonoEmergencia: '', escuela: '', nivel: '', vigencia: '',
@@ -35,7 +47,6 @@ export class CrearAlumno {
   guardar() {
     if (!this.nuevo.matricula || !this.nuevo.nombres || !this.nuevo.apellidoPaterno) return;
     console.log('Alumno guardado:', this.nuevo);
-    // Más adelante aquí se enviará a un servicio o a la base de datos
     this.router.navigate(['/inicio']);
   }
 
@@ -47,7 +58,6 @@ export class CrearAlumno {
     const input = event.target as HTMLInputElement;
     const archivo = input.files?.[0];
     if (!archivo) return;
-
     const lector = new FileReader();
     lector.onload = () => (this.nuevo.foto = lector.result as string);
     lector.readAsDataURL(archivo);

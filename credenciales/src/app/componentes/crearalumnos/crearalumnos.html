@@ -52,11 +52,21 @@
         </div>
         <div class="campo">
           <label>Escuela</label>
-          <input type="text" [(ngModel)]="nuevo.escuela">
+          <select [(ngModel)]="nuevo.escuela">
+            <option value=" " disabled> Selecciona una escuela </option>
+            @for (e of escuelas; track e) {
+              <option value="e">{{e}}</option>
+            }
+          </select>
         </div>
         <div class="campo">
           <label>Nivel</label>
-          <input type="text" [(ngModel)]="nuevo.nivel">
+          <select [(ngModel)]="nuevo.nivel">
+            <option value="" disabled>Selecciona un nivel</option>
+            @for(n of niveles; track n) {
+              <option value="n">{{n}}</option>
+            }
+          </select>
         </div>
         <div class="campo">
           <label>Vigencia</label>

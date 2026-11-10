@@ -104,7 +104,8 @@
   color: #1e293b;
 }
 
-.campo input {
+.campo input,
+.campo select {
   height: 35px;
   padding: 0 14px;
   background: #f8fafc;
@@ -113,10 +114,13 @@
   outline: none;
   font-family: inherit;
   font-size: 1rem;
+  color: #1e293b;
 }
 
-.campo input:focus { border-color: #3b82f6; }
-
+.campo input:focus,
+.campo select:focus {
+  border-color: #3b82f6;
+}
 /* ---------- Foto ---------- */
 .foto-zona {
   display: flex;
