@@ -24,7 +24,6 @@ interface Alumno {
 export class CrearAlumno {
   private router = inject(Router);
 
-  // Listas del desplegable (edítalas a tu gusto)
   escuelas = [
     'Escuela de Negocios',
     'Escuela de Humanidades',
@@ -37,6 +36,8 @@ export class CrearAlumno {
     'Licenciatura en Contaduría Pública',
     'Licenciatura en Psicología',
   ];
+
+  arrastrando = false;
 
   nuevo: Alumno = {
     matricula: '', apellidoPaterno: '', apellidoMaterno: '', nombres: '',
@@ -54,16 +55,40 @@ export class CrearAlumno {
     console.log('Generar credencial de:', this.nuevo);
   }
 
+  // ---------- Foto ----------
   seleccionarFoto(event: Event) {
     const input = event.target as HTMLInputElement;
     const archivo = input.files?.[0];
-    if (!archivo) return;
-    const lector = new FileReader();
-    lector.onload = () => (this.nuevo.foto = lector.result as string);
-    lector.readAsDataURL(archivo);
+    if (archivo) this.leerArchivo(archivo);
+    input.value = ''; // permite volver a elegir la misma imagen
   }
 
   quitarFoto() {
     this.nuevo.foto = null;
+  }
+
+  // ---------- Arrastrar y soltar ----------
+  alArrastrar(event: DragEvent) {
+    event.preventDefault();
+    this.arrastrando = true;
+  }
+
+  alSalir(event: DragEvent) {
+    event.preventDefault();
+    this.arrastrando = false;
+  }
+
+  alSoltar(event: DragEvent) {
+    event.preventDefault();
+    this.arrastrando = false;
+    const archivo = event.dataTransfer?.files?.[0];
+    if (archivo) this.leerArchivo(archivo);
+  }
+
+  private leerArchivo(archivo: File) {
+    if (!['image/jpeg', 'image/png'].includes(archivo.type)) return; // solo JPG y PNG
+    const lector = new FileReader();
+    lector.onload = () => (this.nuevo.foto = lector.result as string);
+    lector.readAsDataURL(archivo);
   }
 }

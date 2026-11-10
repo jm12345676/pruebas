@@ -1,121 +1,125 @@
 <div class="pagina">
 
-  <!-- ENCABEZADO -->
-  <header class="encabezado-pagina">
-    <a class="btn-pildora" routerLink="/inicio">
-      <svg viewBox="0 0 24 24" class="icono">
-        <line x1="20" y1="12" x2="12" y2="12"/>
-        <polyline points="10,6 4,12 10,18"/>
-      </svg>
-      Regresar
-    </a>
-
-    <h1>Crear alumno</h1>
-
-    <button class="btn-credencial" (click)="generarCredencial()">
-      <svg viewBox="0 0 24 24" class="icono">
-        <rect x="2" y="5" width="20" height="14" rx="3"/>
-        <circle cx="8" cy="11" r="2"/>
-        <path d="M5 16c.5-1.5 5.5-1.5 6 0"/>
-        <line x1="14" y1="10" x2="19" y2="10"/>
-        <line x1="14" y1="14" x2="19" y2="14"/>
-      </svg>
-      Generar credencial
-    </button>
-  </header>
-
   <!-- TARJETA -->
   <section class="tarjeta">
+    <h1 class="encabezado-pagina h1">Crear alumno</h1>
     <div class="cuerpo">
 
       <!-- FORMULARIO -->
       <div class="formulario">
+
+        <h3 class="seccion">Datos personales</h3>
+
         <div class="campo">
-          <label>Apellido materno</label>
-          <input type="text" [(ngModel)]="nuevo.apellidoMaterno">
+          <label for="apMaterno">Apellido materno</label>
+          <input id="apMaterno" type="text" [(ngModel)]="nuevo.apellidoMaterno">
         </div>
         <div class="campo">
-          <label>Apellido paterno</label>
-          <input type="text" [(ngModel)]="nuevo.apellidoPaterno">
+          <label for="apPaterno">Apellido paterno</label>
+          <input id="apPaterno" type="text" [(ngModel)]="nuevo.apellidoPaterno">
         </div>
         <div class="campo">
-          <label>Nombre(s)</label>
-          <input type="text" [(ngModel)]="nuevo.nombres">
+          <label for="nombres">Nombre(s)</label>
+          <input id="nombres" type="text" [(ngModel)]="nuevo.nombres">
         </div>
         <div class="campo">
-          <label>Matricula</label>
-          <input type="text" [(ngModel)]="nuevo.matricula">
+          <label for="telefono">Teléfono de emergencia</label>
+          <input id="telefono" type="tel" [(ngModel)]="nuevo.telefonoEmergencia">
+        </div>
+
+        <h3 class="seccion">Datos escolares</h3>
+
+        <div class="campo">
+          <label for="matricula">Matrícula</label>
+          <input id="matricula" type="text" [(ngModel)]="nuevo.matricula">
         </div>
         <div class="campo">
-          <label>Telefono de emergencia</label>
-          <input type="tel" [(ngModel)]="nuevo.telefonoEmergencia">
-        </div>
-        <div class="campo">
-          <label>Escuela</label>
-          <select [(ngModel)]="nuevo.escuela">
-            <option value=" " disabled> Selecciona una escuela </option>
+          <label for="escuela">Escuela</label>
+          <select id="escuela" [(ngModel)]="nuevo.escuela">
+            <option value="" disabled>Seleccione una escuela</option>
             @for (e of escuelas; track e) {
-              <option value="e">{{e}}</option>
+              <option [value]="e">{{ e }}</option>
             }
           </select>
         </div>
         <div class="campo">
-          <label>Nivel</label>
-          <select [(ngModel)]="nuevo.nivel">
-            <option value="" disabled>Selecciona un nivel</option>
-            @for(n of niveles; track n) {
-              <option value="n">{{n}}</option>
+          <label for="nivel">Nivel</label>
+          <select id="nivel" [(ngModel)]="nuevo.nivel">
+            <option value="" disabled>Seleccione un nivel</option>
+            @for (n of niveles; track n) {
+              <option [value]="n">{{ n }}</option>
             }
           </select>
         </div>
         <div class="campo">
-          <label>Vigencia</label>
-          <input type="date" [(ngModel)]="nuevo.vigencia">
+          <label for="vigencia">Vigencia</label>
+          <input id="vigencia" type="date" [(ngModel)]="nuevo.vigencia">
         </div>
       </div>
 
       <!-- ZONA DE FOTOGRAFÍA -->
       <div class="foto-zona">
+        <h3 class="foto-titulo">Fotografía del alumno</h3>
 
-        <div class="foto-caja">
+        <!-- El input está oculto; el recuadro y el botón azul lo activan -->
+        <input
+          #archivo
+          type="file"
+          accept="image/png, image/jpeg"
+          hidden
+          (change)="seleccionarFoto($event)">
+
+        <div
+          class="foto-caja"
+          [class.arrastrando]="arrastrando"
+          [class.con-foto]="nuevo.foto"
+          (click)="archivo.click()"
+          (dragover)="alArrastrar($event)"
+          (dragleave)="alSalir($event)"
+          (drop)="alSoltar($event)">
+
           @if (nuevo.foto) {
-            <img [src]="nuevo.foto" alt="Foto del alumno">
+            <img [src]="nuevo.foto" alt="Vista previa de la fotografía del alumno">
           } @else {
             <svg viewBox="0 0 100 100" class="foto-placeholder">
               <circle cx="50" cy="50" r="50"/>
               <circle cx="50" cy="38" r="14" fill="#f8fafc"/>
               <path d="M22 78c4-16 52-16 56 0 -10 12 -46 12 -56 0z" fill="#f8fafc"/>
             </svg>
+            <p class="foto-texto">Haz clic o arrastra una imagen aquí</p>
+            <p class="foto-formatos">Formatos permitidos: JPG y PNG</p>
           }
         </div>
 
         <!-- BOTONES DE FOTOGRAFÍA -->
         <div class="foto-botones">
-          <input
-            #archivo
-            type="file"
-            accept="image/*"
-            hidden
-            (change)="seleccionarFoto($event)">
-
-          <button class="btn-redondo azul" title="Subir foto" (click)="archivo.click()">
+          <button class="btn-foto azul" title="Subir foto" (click)="archivo.click()">
             <svg viewBox="0 0 24 24" class="icono">
               <polyline points="6,11 12,5 18,11"/>
               <line x1="12" y1="5" x2="12" y2="17"/>
               <line x1="6" y1="20" x2="18" y2="20"/>
             </svg>
+            Subir
           </button>
 
-          <button class="btn-redondo rojo" title="Quitar foto" (click)="quitarFoto()">
+          <button class="btn-foto rojo" title="Quitar foto" (click)="quitarFoto()">
             <svg viewBox="0 0 24 24" class="icono">
               <line x1="4" y1="7" x2="20" y2="7"/>
               <path d="M6 7l1 13h10l1-13"/>
               <path d="M9 7V4h6v3"/>
             </svg>
+            Eliminar
           </button>
         </div>
-
       </div>
+
+    </div>
+
+    <!-- PIE -->
+    <div class="pie">
+      <button class="btn-oscuro" (click)="guardar()">Guardar</button>
+      <a class="btn-peligro" routerLink="/inicio">Cancelar</a>
     </div>
   </section>
+
 </div>
