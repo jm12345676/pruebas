@@ -25,13 +25,11 @@ export class CrearAlumno {
   private router = inject(Router);
 
   escuelas = [
-    'Escuela de Negocios',
-    'Escuela de Humanidades',
-    'Escuela de Educación',
+    'Ives',
+    'Matri',
   ];
 
   niveles = [
-    'Maestría en Docencia de la Lengua Inglesa',
     'Maestría en Pedagogía',
     'Licenciatura en Contaduría Pública',
     'Licenciatura en Psicología',
@@ -86,9 +84,11 @@ export class CrearAlumno {
   }
 
   private leerArchivo(archivo: File) {
-    if (!['image/jpeg', 'image/png'].includes(archivo.type)) return; // solo JPG y PNG
-    const lector = new FileReader();
-    lector.onload = () => (this.nuevo.foto = lector.result as string);
-    lector.readAsDataURL(archivo);
+  if (!['image/jpeg', 'image/png'].includes(archivo.type)) return;
+
+  // Libera la foto anterior de la memoria
+  if (this.nuevo.foto) URL.revokeObjectURL(this.nuevo.foto);
+
+  this.nuevo.foto = URL.createObjectURL(archivo);
   }
 }

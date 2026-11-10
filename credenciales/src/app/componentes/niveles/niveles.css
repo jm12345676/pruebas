@@ -1,4 +1,3 @@
-
 /* ---------- PÁGINA ---------- */
 .pagina {
   min-height: 100vh;
@@ -8,7 +7,6 @@
   color: #475569;
   box-sizing: border-box;
 }
-
 
 /* ---------- ICONOS ---------- */
 .icono {
@@ -22,11 +20,7 @@
   flex-shrink: 0;
 }
 
-.icono.grande {
-  width: 32px;
-  height: 32px;
-}
-
+.icono.grande { width: 32px; height: 32px; }
 
 /* ---------- ENCABEZADO ---------- */
 .encabezado-niveles {
@@ -44,14 +38,13 @@
   text-align: center;
 }
 
-
-/* ---------- BOTONES PRINCIPALES ---------- */
 .btn-pildora {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   height: 40px;
-  padding: 0 12px;
+  padding: 0 14px;
+  width: fit-content;
   background: #1e293b;
   color: #fff;
   border: none;
@@ -61,24 +54,21 @@
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
-  width: fit-content;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
 }
 
 .btn-pildora:hover {
   background: #334155;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.2);
 }
 
-.encabezado-niveles .btn-pildora:last-child {
-  justify-self: end;
-}
+.encabezado-niveles .btn-pildora:last-child { justify-self: end; }
 
 .btn-pildora.grande {
-  height: 40px;
   padding: 0 22px;
-  font-size: 1.1 rem;
+  font-size: 1.1rem;
 }
-
 
 /* ---------- TARJETA ---------- */
 .tarjeta {
@@ -87,7 +77,6 @@
   padding: 28px 20px 10px;
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.15);
 }
-
 
 /* ---------- TABLA ---------- */
 .tabla {
@@ -109,25 +98,11 @@
   color: #475569;
 }
 
-.col-nombre {
-  width: 34%;
-}
-
-.col-abrev {
-  width: 16%;
-}
-
-.col-rvoe {
-  width: 18%;
-}
-
-.col-tipo {
-  width: 18%;
-}
-
-.col-acciones {
-  width: 14%;
-}
+.col-nombre   { width: 34%; }
+.col-abrev    { width: 16%; }
+.col-rvoe     { width: 18%; }
+.col-tipo     { width: 18%; }
+.col-acciones { width: 14%; }
 
 .tabla td {
   height: 47px;
@@ -137,19 +112,9 @@
   border-bottom: 1px solid #cbd5e1;
 }
 
-.tabla td.tenue {
-  color: #94a3b8;
-}
-
-.tabla tbody tr:hover {
-  background: #f8fafc;
-}
-
-.vacio {
-  text-align: center;
-  color: #94a3b8;
-}
-
+.tabla td.tenue { color: #94a3b8; }
+.tabla tbody tr:hover { background: #f8fafc; }
+.vacio { text-align: center; color: #94a3b8; }
 
 /* ---------- BOTÓN EDITAR ---------- */
 .btn-editar {
@@ -168,194 +133,168 @@
   transition: background 0.2s;
 }
 
-.btn-editar:hover {
-  background: #2a5fa0;
-}
-
-.btn-editar .icono {
-  width: 18px;
-  height: 18px;
-}
-
+.btn-editar:hover { background: #2a5fa0; }
+.btn-editar .icono { width: 18px; height: 18px; }
 
 /* ---------- MODAL ---------- */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   z-index: 1000;
-  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.5);
+  animation: aparecer 0.2s ease-out;
 }
 
-
-/* ---------- VENTANA PRINCIPAL ---------- */
 .modal-nivel {
-  background: white;
-  width: 900px;
-  max-width: 100%;
-  padding: 35px 65px 25px;
-  border-radius: 45px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 36px 48px 32px;
   box-sizing: border-box;
-  box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
+  background: #fff;
+  border-radius: 32px;
+  box-shadow:
+    0 2px 6px rgba(15, 23, 42, 0.06),
+    0 24px 60px rgba(15, 23, 42, 0.25);
+  animation: entrada-modal 0.3s ease-out;
 }
 
+@keyframes aparecer {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
 
-/* ---------- ENCABEZADO DEL MODAL ---------- */
+@keyframes entrada-modal {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .modal-header {
+  margin-bottom: 28px;
+  padding-bottom: 16px;
   text-align: center;
-  border-bottom: 5px solid #f1f5f9;
-  padding-bottom: 20px;
+  border-bottom: 3px solid #f1f5f9;
 }
 
 .modal-header h2 {
-  color: #1e293b;
-  font-size: 36px;
   margin: 0;
+  font-size: 2rem;
   font-weight: 700;
+  color: #1e293b;
 }
-
-
-/* ---------- CUERPO DEL MODAL ---------- */
-.modal-body {
-  padding-top: 35px;
-}
-
-
-/* ---------- FORMULARIO ---------- */
-.formulario {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 65px;
-  row-gap: 25px;
-}
-
 
 /* ---------- CAMPOS ---------- */
+.formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 23px 36px;
+}
+
 .campo {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1px;
 }
 
 .campo label {
-  font-size: 24px;
-  color: #26364f;
+  font-size: 0.99rem;
+  font-weight: 650;
+  color: #334155;
 }
 
 .campo input {
   width: 100%;
   height: 48px;
+  padding: 0 16px;
   box-sizing: border-box;
-  border: 2px solid #cbd5e1;
-  border-radius: 16px;
   background: #f8fafc;
-  padding: 0 15px;
-  font-size: 17px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
   outline: none;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #1e293b;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
+
+.campo input:hover { border-color: #94a3b8; }
 
 .campo input:focus {
-  border-color: #294d80;
-  background: white;
+  background: #fff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
 }
 
-
-/* ---------- PIE DEL MODAL ---------- */
+/* ---------- BOTONES DEL MODAL ---------- */
 .modal-footer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  gap: 15px;
-  margin-top: 40px;
+  gap: 14px;
+  margin-top: 34px;
 }
 
-
-/* ---------- BOTÓN GUARDAR ---------- */
-.btn-guardar {
-  display: flex;
+.btn-guardar,
+.btn-cancelar {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  background: #294d80;
-  color: white;
+  gap: 8px;
+  height: 44px;
+  padding: 0 28px;
   border: none;
-  border-radius: 25px;
-  padding: 10px 22px;
-  font-size: 18px;
-  font-weight: bold;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+}
+
+.btn-guardar {
+  background: #1e4b82;
+  color: #fff;
+  font-weight: 700;
 }
 
 .btn-guardar:hover {
-  background: #1e3a65;
+  background: #2a5fa0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(30, 75, 130, 0.3);
 }
 
-
-/* ---------- BOTÓN CANCELAR ---------- */
 .btn-cancelar {
   background: #e2e8f0;
-  color: #1e293b;
-  border: none;
-  border-radius: 35px;
-  padding: 12px 25px;
-  font-size: 16px;
-  cursor: pointer;
+  color: #475569;
+  font-weight: 500;
 }
 
+.btn-cancelar:hover {
+  background: #cbd5e1;
+  transform: translateY(-1px);
+}
 
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 700px) {
-
-  .pagina {
-    padding: 15px;
-  }
+  .pagina { padding: 15px; }
 
   .encabezado-niveles {
     grid-template-columns: 1fr;
     gap: 15px;
+    justify-items: center;
   }
 
-  .encabezado-niveles h1 {
-    grid-row: 1;
-  }
+  .encabezado-niveles h1 { grid-row: 1; }
+  .encabezado-niveles .btn-pildora:last-child { justify-self: center; }
 
-  .encabezado-niveles .btn-pildora {
-    justify-self: center;
-  }
+  .modal-nivel { padding: 26px 22px 24px; border-radius: 24px; }
+  .formulario { grid-template-columns: 1fr; gap: 18px; }
+  .modal-header h2 { font-size: 1.6rem; }
+  .modal-footer { flex-wrap: wrap; }
 
-  .modal-nivel {
-    padding: 25px;
-    border-radius: 25px;
-    max-height: 90vh;
-    overflow-y: auto;
-  }
-
-  .formulario {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .modal-header h2 {
-    font-size: 27px;
-  }
-
-  .campo label {
-    font-size: 18px;
-  }
-
-  .modal-footer {
-    flex-wrap: wrap;
-  }
-
-  .tarjeta {
-    overflow-x: auto;
-  }
-
-  .tabla {
-    min-width: 650px;
-  }
+  .tarjeta { overflow-x: auto; }
+  .tabla { min-width: 650px; }
 }

@@ -11,12 +11,12 @@
         <h3 class="seccion">Datos personales</h3>
 
         <div class="campo">
-          <label for="apMaterno">Apellido materno</label>
-          <input id="apMaterno" type="text" [(ngModel)]="nuevo.apellidoMaterno">
-        </div>
-        <div class="campo">
           <label for="apPaterno">Apellido paterno</label>
           <input id="apPaterno" type="text" [(ngModel)]="nuevo.apellidoPaterno">
+        </div>
+        <div class="campo">
+          <label for="apMaterno">Apellido materno</label>
+          <input id="apMaterno" type="text" [(ngModel)]="nuevo.apellidoMaterno">
         </div>
         <div class="campo">
           <label for="nombres">Nombre(s)</label>
@@ -92,16 +92,8 @@
         </div>
 
         <!-- BOTONES DE FOTOGRAFÍA -->
+      @if (nuevo.foto) {
         <div class="foto-botones">
-          <button class="btn-foto azul" title="Subir foto" (click)="archivo.click()">
-            <svg viewBox="0 0 24 24" class="icono">
-              <polyline points="6,11 12,5 18,11"/>
-              <line x1="12" y1="5" x2="12" y2="17"/>
-              <line x1="6" y1="20" x2="18" y2="20"/>
-            </svg>
-            Subir
-          </button>
-
           <button class="btn-foto rojo" title="Quitar foto" (click)="quitarFoto()">
             <svg viewBox="0 0 24 24" class="icono">
               <line x1="4" y1="7" x2="20" y2="7"/>
@@ -111,6 +103,7 @@
             Eliminar
           </button>
         </div>
+      }
       </div>
 
     </div>

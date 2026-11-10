@@ -102,106 +102,53 @@
 
 
   <!-- MODAL PARA CREAR NIVEL -->
+   <!-- MODAL PARA CREAR / EDITAR NIVEL -->
   @if (mostrarModalAgregar) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-nivel" (click)="$event.stopPropagation()">
 
-    <div class="modal-overlay">
-
-      <div class="modal-nivel">
-
-        <!-- ENCABEZADO DEL MODAL -->
         <div class="modal-header">
-
-          <h2>Crear nivel</h2>
-
+          <h2>{{ editando ? 'Editar nivel' : 'Crear nivel' }}</h2>
         </div>
 
-
-        <!-- CUERPO DEL MODAL -->
         <div class="modal-body">
-
           <div class="formulario">
 
-            <!-- DESCRIPCIÓN -->
             <div class="campo">
-
-              <label>Descripción</label>
-
-              <input
-                type="text"
-                [(ngModel)]="nuevoNivel.nombre">
-
+              <label for="descripcion">Descripción</label>
+              <input id="descripcion" type="text" [(ngModel)]="nuevoNivel.nombre">
             </div>
 
-
-            <!-- ABREVIATURA -->
             <div class="campo">
-
-              <label>Abreviatura</label>
-
-              <input
-                type="text"
-                [(ngModel)]="nuevoNivel.abreviatura">
-
+              <label for="abreviatura">Abreviatura</label>
+              <input id="abreviatura" type="text" [(ngModel)]="nuevoNivel.abreviatura">
             </div>
 
-
-            <!-- ACUERDO -->
             <div class="campo">
-
-              <label>Acuerdo</label>
-
-              <input
-                type="text"
-                [(ngModel)]="nuevoNivel.rvoe">
-
+              <label for="RVOE">RVOE</label>
+              <input id="RVOE" type="text" [(ngModel)]="nuevoNivel.rvoe">
             </div>
 
-
-            <!-- TIPO DE RVOE -->
             <div class="campo">
-
-              <label>Tipo de RVOE</label>
-
-              <input
-                type="text"
-                [(ngModel)]="nuevoNivel.tipoRvoe">
-
+              <label for="tipoRvoe">Tipo de RVOE</label>
+              <input id="tipoRvoe" type="text" [(ngModel)]="nuevoNivel.tipoRvoe">
             </div>
 
           </div>
-
         </div>
 
-
-        <!-- BOTÓN GUARDAR -->
         <div class="modal-footer">
-
-          <button
-            class="btn-guardar"
-            (click)="guardarNivel()">
-
+          <button class="btn-guardar" (click)="guardarNivel()">
             <svg viewBox="0 0 24 24" class="icono">
               <polyline points="4 12 10 18 21 5"/>
             </svg>
-
             Guardar
-
           </button>
-
-          <button
-            class="btn-cancelar"
-            (click)="cerrarModal()">
-
-            Cancelar
-
-          </button>
-
+          <button class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
         </div>
 
       </div>
-
     </div>
-
   }
 
 </div>

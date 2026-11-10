@@ -197,7 +197,7 @@
 .foto-zona {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 15px;
 }
 
 .foto-titulo {
@@ -251,7 +251,7 @@
 .foto-placeholder {
   width: 38%;
   fill: #cbd5e1;
-  margin-bottom: 8px;
+  margin-bottom: px;
 }
 
 .foto-texto {
@@ -272,9 +272,20 @@
 /* Botones de foto */
 .foto-botones {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: 1fr;
 }
+.foto-caja.con-foto:hover::after {
+  content: 'Haz clic para cambiar';
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 10px;
+  background: rgba(15, 23, 42, 0.65);
+  color: #fff;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.foto-caja { position: relative; }
 
 .btn-foto {
   display: inline-flex;
@@ -323,9 +334,9 @@
   cursor: pointer;
 }
 
-.btn-oscuro  { background: #1E293B; }
+.btn-oscuro  { background: #3b82f6; }
 .btn-peligro { background: #ef4444; }
-.btn-oscuro:hover  { background: #1e293b; }
+.btn-oscuro:hover  { background: #2073f8; }
 .btn-peligro:hover { background: #dc2626; }
 
 /* ---------- Responsivo ---------- */
