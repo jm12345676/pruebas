@@ -50,19 +50,19 @@ export class CrearAlumno {
   }
 
   generarCredencial() {
-    console.log('Generar credencial de:', this.nuevo);
+    this.router.navigate(['/credencial']);
   }
 
+  quitarFoto() {
+    if (this.nuevo.foto) URL.revokeObjectURL(this.nuevo.foto);
+    this.nuevo.foto = null;
+  }
   // ---------- Foto ----------
   seleccionarFoto(event: Event) {
     const input = event.target as HTMLInputElement;
     const archivo = input.files?.[0];
     if (archivo) this.leerArchivo(archivo);
     input.value = ''; // permite volver a elegir la misma imagen
-  }
-
-  quitarFoto() {
-    this.nuevo.foto = null;
   }
 
   // ---------- Arrastrar y soltar ----------

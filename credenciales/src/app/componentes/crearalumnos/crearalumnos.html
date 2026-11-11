@@ -1,118 +1,182 @@
 <div class="pagina">
 
-  <!-- TARJETA -->
-  <section class="tarjeta">
-    <h1 class="encabezado-pagina h1">Crear alumno</h1>
-    <div class="cuerpo">
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+    <a class="btn-regresar" routerLink="/inicio">
+      <svg viewBox="0 0 24 24" class="icono">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="10,6 4,12 10,18"/>
+      </svg>
+      Regresar
+    </a>
 
-      <!-- FORMULARIO -->
-      <div class="formulario">
+    <h1>Crear alumno</h1>
 
-        <h3 class="seccion">Datos personales</h3>
+    <button class="btn-credencial" (click)="generarCredencial()">
+      <svg viewBox="0 0 24 24" class="icono">
+        <rect x="2" y="5" width="20" height="14" rx="3"/>
+        <circle cx="8" cy="11" r="2"/>
+        <path d="M5 16c.5-1.5 5.5-1.5 6 0"/>
+        <line x1="14" y1="10" x2="19" y2="10"/>
+        <line x1="14" y1="14" x2="19" y2="14"/>
+      </svg>
+      Generar credencial
+    </button>
+  </header>
 
-        <div class="campo">
-          <label for="apPaterno">Apellido paterno</label>
-          <input id="apPaterno" type="text" [(ngModel)]="nuevo.apellidoPaterno">
-        </div>
-        <div class="campo">
-          <label for="apMaterno">Apellido materno</label>
-          <input id="apMaterno" type="text" [(ngModel)]="nuevo.apellidoMaterno">
-        </div>
-        <div class="campo">
-          <label for="nombres">Nombre(s)</label>
-          <input id="nombres" type="text" [(ngModel)]="nuevo.nombres">
-        </div>
-        <div class="campo">
-          <label for="telefono">Teléfono de emergencia</label>
-          <input id="telefono" type="tel" [(ngModel)]="nuevo.telefonoEmergencia">
-        </div>
+  <div class="layout">
 
-        <h3 class="seccion">Datos escolares</h3>
+    <!-- COLUMNA IZQUIERDA: FORMULARIOS -->
+    <div class="columna-formularios">
 
-        <div class="campo">
-          <label for="matricula">Matrícula</label>
-          <input id="matricula" type="text" [(ngModel)]="nuevo.matricula">
-        </div>
-        <div class="campo">
-          <label for="escuela">Escuela</label>
-          <select id="escuela" [(ngModel)]="nuevo.escuela">
-            <option value="" disabled>Seleccione una escuela</option>
-            @for (e of escuelas; track e) {
-              <option [value]="e">{{ e }}</option>
-            }
-          </select>
-        </div>
-        <div class="campo">
-          <label for="nivel">Nivel</label>
-          <select id="nivel" [(ngModel)]="nuevo.nivel">
-            <option value="" disabled>Seleccione un nivel</option>
-            @for (n of niveles; track n) {
-              <option [value]="n">{{ n }}</option>
-            }
-          </select>
-        </div>
-        <div class="campo">
-          <label for="vigencia">Vigencia</label>
-          <input id="vigencia" type="date" [(ngModel)]="nuevo.vigencia">
-        </div>
-      </div>
-
-      <!-- ZONA DE FOTOGRAFÍA -->
-      <div class="foto-zona">
-        <h3 class="foto-titulo">Fotografía del alumno</h3>
-
-        <!-- El input está oculto; el recuadro y el botón azul lo activan -->
-        <input
-          #archivo
-          type="file"
-          accept="image/png, image/jpeg"
-          hidden
-          (change)="seleccionarFoto($event)">
-
-        <div
-          class="foto-caja"
-          [class.arrastrando]="arrastrando"
-          [class.con-foto]="nuevo.foto"
-          (click)="archivo.click()"
-          (dragover)="alArrastrar($event)"
-          (dragleave)="alSalir($event)"
-          (drop)="alSoltar($event)">
-
-          @if (nuevo.foto) {
-            <img [src]="nuevo.foto" alt="Vista previa de la fotografía del alumno">
-          } @else {
-            <svg viewBox="0 0 100 100" class="foto-placeholder">
-              <circle cx="50" cy="50" r="50"/>
-              <circle cx="50" cy="38" r="14" fill="#f8fafc"/>
-              <path d="M22 78c4-16 52-16 56 0 -10 12 -46 12 -56 0z" fill="#f8fafc"/>
-            </svg>
-            <p class="foto-texto">Haz clic o arrastra una imagen aquí</p>
-            <p class="foto-formatos">Formatos permitidos: JPG y PNG</p>
-          }
-        </div>
-
-        <!-- BOTONES DE FOTOGRAFÍA -->
-      @if (nuevo.foto) {
-        <div class="foto-botones">
-          <button class="btn-foto rojo" title="Quitar foto" (click)="quitarFoto()">
+      <!-- DATOS PERSONALES -->
+      <section class="tarjeta">
+        <div class="tarjeta-header">
+          <span class="icono-caja">
             <svg viewBox="0 0 24 24" class="icono">
-              <line x1="4" y1="7" x2="20" y2="7"/>
-              <path d="M6 7l1 13h10l1-13"/>
-              <path d="M9 7V4h6v3"/>
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 21c1-5 15-5 16 0"/>
             </svg>
-            Eliminar
-          </button>
+          </span>
+          <div>
+            <h2>Datos personales</h2>
+            <p>Información básica del alumno</p>
+          </div>
         </div>
-      }
+
+        <div class="grid-campos">
+          <div class="campo">
+            <label for="apPaterno">Apellido paterno</label>
+            <input id="apPaterno" type="text" [(ngModel)]="nuevo.apellidoPaterno">
+          </div>
+          <div class="campo">
+            <label for="apMaterno">Apellido materno</label>
+            <input id="apMaterno" type="text"  [(ngModel)]="nuevo.apellidoMaterno">
+          </div>
+          <div class="campo">
+            <label for="nombres">Nombre(s)</label>
+            <input id="nombres" type="text" [(ngModel)]="nuevo.nombres">
+          </div>
+          <div class="campo">
+            <label for="telefono">Teléfono de emergencia</label>
+            <input id="telefono" type="tel" placeholder="10 dígitos" [(ngModel)]="nuevo.telefonoEmergencia">
+          </div>
+        </div>
+      </section>
+
+      <!-- DATOS ESCOLARES -->
+      <section class="tarjeta">
+        <div class="tarjeta-header">
+          <span class="icono-caja">
+            <svg viewBox="0 0 24 24" class="icono">
+              <polygon points="12,4 23,9 12,14 1,9"/>
+              <path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>
+            </svg>
+          </span>
+          <div>
+            <h2>Datos escolares</h2>
+          </div>
+        </div>
+
+        <div class="grid-campos">
+          <div class="campo">
+            <label for="matricula">Matrícula</label>
+            <input id="matricula" type="text" [(ngModel)]="nuevo.matricula">
+          </div>
+          <div class="campo">
+            <label for="escuela">Escuela</label>
+            <select id="escuela" [(ngModel)]="nuevo.escuela">
+              <option value="" disabled>Seleccione una escuela</option>
+              @for (e of escuelas; track e) {
+                <option [value]="e">{{ e }}</option>
+              }
+            </select>
+          </div>
+          <div class="campo">
+            <label for="nivel">Nivel</label>
+            <select id="nivel" [(ngModel)]="nuevo.nivel">
+              <option value="" disabled>Seleccione un nivel</option>
+              @for (n of niveles; track n) {
+                <option [value]="n">{{ n }}</option>
+              }
+            </select>
+          </div>
+          <div class="campo">
+            <label for="vigencia">Vigencia</label>
+            <input id="vigencia" type="date" [(ngModel)]="nuevo.vigencia">
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- COLUMNA DERECHA: FOTOGRAFÍA -->
+    <aside class="tarjeta">
+      <div class="tarjeta-header">
+        <span class="icono-caja">
+          <svg viewBox="0 0 24 24" class="icono">
+            <path d="M3 8a2 2 0 0 1 2-2h2l2-2h6l2 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </span>
+        <div>
+          <h2>Fotografía</h2>
+          <p>Se usará en la credencial</p>
+        </div>
       </div>
 
-    </div>
+      <!-- Input oculto: el recuadro y el botón de subir lo activan -->
+      <input
+        #archivo
+        type="file"
+        accept="image/png, image/jpeg"
+        hidden
+        (change)="seleccionarFoto($event)">
 
-    <!-- PIE -->
-    <div class="pie">
-      <button class="btn-oscuro" (click)="guardar()">Guardar</button>
-      <a class="btn-peligro" routerLink="/inicio">Cancelar</a>
-    </div>
-  </section>
+      <div
+        class="foto-caja"
+        [class.arrastrando]="arrastrando"
+        [class.con-foto]="nuevo.foto"
+        (click)="archivo.click()"
+        (dragover)="alArrastrar($event)"
+        (dragleave)="alSalir($event)"
+        (drop)="alSoltar($event)">
+
+        @if (nuevo.foto) {
+          <img [src]="nuevo.foto" alt="Vista previa de la fotografía del alumno">
+        } @else {
+          <svg viewBox="0 0 100 100" class="foto-placeholder">
+            <circle cx="50" cy="50" r="50"/>
+            <circle cx="50" cy="38" r="14" fill="#f1f5f9"/>
+            <path d="M22 78c4-16 52-16 56 0 -10 12 -46 12 -56 0z" fill="#f1f5f9"/>
+          </svg>
+          <p class="foto-texto">Haz clic o arrastra una imagen aquí</p>
+          <p class="foto-formatos">Formatos permitidos: JPG y PNG</p>
+        }
+      </div>
+
+      <div class="foto-botones">
+        <button type="button" class="btn-foto azul" title="Subir foto" (click)="archivo.click()">
+          <svg viewBox="0 0 24 24" class="icono">
+            <polyline points="6,11 12,5 18,11"/>
+            <line x1="12" y1="5" x2="12" y2="17"/>
+            <line x1="6" y1="20" x2="18" y2="20"/>
+          </svg>
+          Subir
+        </button>
+
+        <button type="button" class="btn-foto rojo" title="Quitar foto"
+                [disabled]="!nuevo.foto" (click)="quitarFoto()">
+          <svg viewBox="0 0 24 24" class="icono">
+            <line x1="4" y1="7" x2="20" y2="7"/>
+            <path d="M6 7l1 13h10l1-13"/>
+            <path d="M9 7V4h6v3"/>
+          </svg>
+          Eliminar
+        </button>
+      </div>
+
+      <p class="foto-nota">El botón Eliminar se activa cuando hay una foto.</p>
+    </aside>
+  </div>
 
 </div>
