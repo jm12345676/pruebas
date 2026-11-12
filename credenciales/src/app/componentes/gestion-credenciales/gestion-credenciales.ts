@@ -34,25 +34,43 @@ export class GestionCredenciales {
   }
 
   alumnos: Alumno[] = [
-    { matricula: '970103035', apellidoPaterno: 'AGUILAR', apellidoMaterno: 'MONTOYA',
-      nombres: 'VICTOR HUGO', telefonoEmergencia: '', escuela: '',
+    { matricula: '20260303567', apellidoPaterno: 'Salvador', apellidoMaterno: 'Montolla',
+      nombres: 'Victor Hugo', telefonoEmergencia: '', escuela: '',
       nivel: 'Lic. en Contaduría Pública', vigencia: '', foto: null, status: 'Activo' },
-    { matricula: '201510101270', apellidoPaterno: 'ALONSO', apellidoMaterno: 'MÉNDEZ',
-      nombres: 'VÍCTOR MANUEL', telefonoEmergencia: '', escuela: '',
+    { matricula: '20151010127', apellidoPaterno: 'Comi', apellidoMaterno: 'ALba',
+      nombres: 'Ester', telefonoEmergencia: '', escuela: '',
       nivel: 'Lic. en Ciencias de la Comunicación', vigencia: '', foto: null, status: 'Pendiente' },
-    { matricula: '201810171303', apellidoPaterno: 'ANGEL', apellidoMaterno: 'MÁRQUEZ',
-      nombres: 'VERÓNICA', telefonoEmergencia: '', escuela: '',
+    { matricula: '20181017130', apellidoPaterno: 'Torres', apellidoMaterno: 'Perez',
+      nombres: 'Victoria Emilia', telefonoEmergencia: '', escuela: '',
       nivel: 'Lic. en Psicología', vigencia: '', foto: null, status: 'Baja' },
   ];
 
   filtro = '';
 
-  get alumnosFiltrados() {
-    const f = this.filtro.toLowerCase();
-    return this.alumnos.filter(a =>
-      this.nombreCompleto(a).toLowerCase().includes(f) || a.matricula.includes(f));
-  }
+get alumnosFiltrados() {
+  const f = this.filtro.toLowerCase().trim();
 
+  return this.alumnos.filter(a => {
+    const nombre = this.nombreCompleto(a).toLowerCase();
+    const matricula = a.matricula.toLowerCase();
+
+    const palabras = nombre.split(' ');
+
+    const coincideNombre = palabras.some(palabra =>
+      palabra.startsWith(f)
+    );
+
+    const coincideIniciales = palabras
+      .map(palabra => palabra[0])
+      .join('')
+      .includes(f.replace(/\s/g, ''));
+
+    return nombre.includes(f) ||
+           matricula.includes(f) ||
+           coincideNombre ||
+           coincideIniciales;
+  });
+}
   nombreCompleto(a: Alumno) {
     return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`.trim();
   }

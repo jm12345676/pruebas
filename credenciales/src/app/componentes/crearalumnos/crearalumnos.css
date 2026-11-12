@@ -1,7 +1,7 @@
 /* ---------- Página ---------- */
 .pagina {
-  min-height: 100vh;
-  padding: 28px 32px 40px;
+  min-height: 90vh;
+  padding: 28px 32px 22px;
   background: #f1f5f9;
   font-family: 'Montserrat', system-ui, sans-serif;
   color: #475569;
@@ -83,7 +83,7 @@
 /* ---------- Layout ---------- */
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
+  grid-template-columns: minmax(0, 1fr) 372px;
   gap: 20px;
   align-items: start;
   max-width: 1280px;
@@ -211,17 +211,17 @@
 /* ---------- Fotografía ---------- */
 .foto-caja {
   position: relative;
-  width: 100%;
+  width: 96%;
   aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 15px;
   padding: 20px;
   box-sizing: border-box;
   background: #f1f5f9;
-  border: 2.5px dashed #cbd5e1;
+  border: 2px dashed #cbd5e1;
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
@@ -265,14 +265,14 @@
 .foto-texto {
   margin: 0;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 900;
   color: #334155;
   text-align: center;
 }
 
 .foto-formatos {
   margin: 0;
-  font-size: 0.78rem;
+  font-size: 0.98rem;
   color: #94a3b8;
   text-align: center;
 }
@@ -280,8 +280,8 @@
 .foto-botones {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 13px;
+  margin-top: 28px;
 }
 
 .btn-foto {
@@ -301,7 +301,7 @@
 }
 
 .foto-nota {
-  margin: 12px 0 0;
+  margin: 19px 0 0;
   font-size: 0.78rem;
   color: #94a3b8;
   text-align: center;

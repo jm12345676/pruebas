@@ -1,60 +1,84 @@
 <div class="bitacora-container">
-  <!-- Encabezado superior con navegación y acciones principales -->
+
+  <!-- ENCABEZADO: botón | título | botón -->
   <header class="header-bitacora">
-    <a routerLink="/credenciales" class="btn-regresar">
-      <span class="flecha">&#8592;</span> Regresar
+    <a routerLink="/inicio" class="btn-regresar btn-animado">
+      <svg class="icono" viewBox="0 0 24 24">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="10,6 4,12 10,18"/>
+      </svg>
+      Regresar
     </a>
 
     <div class="titulos-header">
-      <h1 class="titulo-principal">Bitacora de credenciales</h1>
-      <span class="subtitulo">Gestión de credenciales</span>
+      <h1 class="titulo-principal">Bitácora de credenciales</h1>
+      <span class="subtitulo">Historial de credenciales generadas</span>
     </div>
 
-    <button class="btn-borrar-todos" (click)="borrarTodos()">
-      <svg class="icono-trash" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+    <button class="btn-borrar-todos btn-animado"
+            [disabled]="registros().length === 0"
+            (click)="toggleConfirmacion()">
+      <svg class="icono" viewBox="0 0 24 24">
+        <line x1="4" y1="7" x2="20" y2="7"/>
+        <path d="M6 7l1 13h10l1-13"/>
+        <path d="M9 7V4h6v3"/>
       </svg>
-      Borrar todos los registros
+      Borrar todos
     </button>
   </header>
 
-  <!-- Tarjeta blanca principal que envuelve la tabla -->
+  <!-- TARJETA CON TABLA -->
   <main class="card-tabla">
     <table class="tabla-bitacora">
       <thead>
         <tr>
-          <th>Fecha y hora</th>
-          <th>Usuario</th>
-          <th>Matricula</th>
-          <th>Nombre completo</th>
-          <th class="col-center">Borrar</th>
+          <th class="th-fecha">Fecha y hora</th>
+          <th class="th-usuario">Usuario</th>
+          <th class="th-matricula">Matrícula</th>
+          <th class="th-nombre">Nombre completo</th>
+          <th class="th-acciones col-centro">Acciones</th>
         </tr>
       </thead>
-      <tbody>
-        <!-- Bucle moderno @for en Angular v17+ -->
+
+<tbody>
         @for (item of registros(); track item.id) {
           <tr>
-            <td class="col-fecha">{{ item.fechaHora }}</td>
-            <td class="col-usuario">{{ item.usuario }}</td>
-            <td class="col-matricula">{{ item.matricula }}</td>
-            <td class="col-nombre">{{ item.nombreCompleto }}</td>
-            <td class="col-center">
-              <button class="btn-borrar-item" (click)="borrarRegistro(item.id)">
-                <svg class="icono-trash-sm" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+            <td>{{ item.fechaHora }}</td>
+            <td>{{ item.usuario }}</td>
+            <td>{{ item.matricula }}</td>
+            <td>{{ item.nombreCompleto }}</td>
+            <td class="col-centro">
+              <button class="btn-borrar-item btn-animado" title="Borrar registro"
+                      (click)="borrarRegistro(item.id)">
+                <svg class="icono" viewBox="0 0 24 24">
+                  <line x1="4" y1="7" x2="20" y2="7"/>
+                  <path d="M6 7l1 13h10l1-13"/>
+                  <path d="M9 7V4h6v3"/>
                 </svg>
-                Borrar registro
               </button>
             </td>
           </tr>
         } @empty {
           <tr>
-            <td colspan="5" class="sin-registros">
-              No hay registros en la bitácora actualmente.
-            </td>
+            <td colspan="5" class="sin-registros">No hay registros en la bitácora</td>
           </tr>
         }
       </tbody>
     </table>
   </main>
+
+  <!-- MODAL DE CONFIRMACIÓN -->
+  @if (mostrarConfirmacion()) {
+    <div class="modal-overlay" (click)="toggleConfirmacion()">
+      <div class="modal-confirmar" (click)="$event.stopPropagation()">
+        <h2>¿Borrar todos los registros?</h2>
+        <p>Se eliminarán {{ registros().length }} registros. Esta acción no se puede deshacer.</p>
+        <div class="modal-botones">
+          <button class="btn-cancelar btn-animado" (click)="toggleConfirmacion()">Cancelar</button>
+          <button class="btn-borrar-todos btn-animado" (click)="borrarTodos()">Sí, borrar</button>
+        </div>
+      </div>
+    </div>
+  }
+
 </div>

@@ -21,6 +21,20 @@
 }
 
 /* ---------- Encabezado ---------- */
+.btn-animado {
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+}
+
+.btn-animado:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+}
+
+.btn-animado:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 .encabezado {
   display: flex;
   align-items: center;

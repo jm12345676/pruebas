@@ -1,173 +1,237 @@
-/* Layout general del módulo */
+/* ---------- Página ---------- */
 .bitacora-container {
-  padding: 30px;
-  background-color: #f7f9fc;
   min-height: 100vh;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding: 30px 30px 40px;
+  background: #f8fafc;
+  font-family: 'Montserrat', system-ui, sans-serif;
+  color: #475569;
   box-sizing: border-box;
 }
 
-/* Encabezado */
+.icono {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+/* ---------- Animación de botones ---------- */
+.btn-animado {
+  transition: transform 0.15s, box-shadow 0.15s, background 0.2s;
+}
+
+.btn-animado:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+}
+
+.btn-animado:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ---------- Encabezado: botón | título | botón ---------- */
 .header-bitacora {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 28px;
 }
 
-.btn-regresar {
-  background-color: #1e2837;
-  color: #ffffff;
-  padding: 9px 20px;
-  border-radius: 25px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 5px 5px rgba(0,0,0,0.15);
-  transition: background-color 0.2s ease;
-}
+.header-bitacora > :first-child { justify-self: start; }
+.header-bitacora > :last-child  { justify-self: end; }
 
-.flecha {
-  font-size: 24px; /* Tamaño de la flecha */
-  font-weight: normal; 
-  position: relative;
-  top: -3px;
-}
-
-.btn-regresar:hover {
-  background-color: #111722;
-}
-
-.titulos-header {
-  text-align: center;
-}
+.titulos-header { text-align: center; }
 
 .titulo-principal {
   margin: 0;
-  font-size: 26px;
-  font-weight: 800;
-  color: #2b3a4a;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #475569;
 }
 
 .subtitulo {
-  font-size: 14px;
-  color: #94a3b8;
-  font-weight: 500;
+  display: block;
+  margin-top: 4px;
+  font-size: 1.05rem;
+  color: #64748b;
 }
 
-.btn-borrar-todos {
-  background-color: #d92525;
-  color: #ffffff;
-  border: none;
-  padding: 9.5px 15px;
-  border-radius: 25px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+/* ---------- Botones ---------- */
+.btn-regresar,
+.btn-borrar-todos,
+.btn-cancelar {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  box-shadow: 0 2px 6px rgba(217, 37, 37, 0.3);
-  transition: background-color 0.2s ease;
+  width: 144px;
+  height: 38px;
+  padding: 0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.btn-borrar-todos:hover {
-  background-color: #b91c1c;
-}
+.btn-regresar { background: #0f172a; }
+.btn-regresar:hover { background: #1e293b; }
 
-/* Tarjeta y Tabla */
+.btn-borrar-todos { background: #ef4444; }
+.btn-borrar-todos:hover:not(:disabled) { background: #dc2626; }
+.btn-borrar-todos:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn-cancelar { background: #e2e8f0; color: #1e293b; }
+.btn-cancelar:hover { background: #cbd5e1; }
+
+/* ---------- Tarjeta y tabla ---------- */
 .card-tabla {
-  background: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-  padding: 20px;
-  overflow-x: auto;
+  display: block;
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px 20px 12px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 }
 
 .tabla-bitacora {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
   text-align: left;
 }
 
-.tabla-bitacora th {
-  padding: 16px 20px;
-  font-size: 18px;
-  font-weight: 500;
-  color: #64748b;
-  border-bottom: 2px solid #f1f5f9;
+.tabla-bitacora thead tr {
+  background: #f1f5f9;
+  border-bottom: 2px solid #cbd5e1;
 }
+
+.tabla-bitacora th {
+  padding: 14px 20px;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #475569;
+}
+
+.tabla-bitacora thead th:first-child { border-top-left-radius: 12px; }
+.tabla-bitacora thead th:last-child  { border-top-right-radius: 12px; }
+
+.th-fecha     { width: 20%; }
+.th-usuario   { width: 16%; }
+.th-matricula { width: 18%; }
+.th-nombre    { width: 30%; }
+.th-acciones  { width: 16%; }
 
 .tabla-bitacora td {
-  padding: 14px 20px;
-  font-size: 1.4cap;
+  height: 47px;
+  padding: 0 20px;
+  font-size: 0.95rem;
   color: #334155;
-  border-bottom: 1px solid #f8fafc;
-  vertical-align: middle;
+  border-bottom: 1px solid #cbd5e1;
 }
 
-.col-fecha {
-  color: #475569;
-  font-size: 12px;
-}
+.tabla-bitacora tbody tr:hover { background: #f8fafc; }
+.tabla-bitacora tbody tr.fila-vacia:hover { background: transparent; }
 
-.col-usuario {
-  font-weight: 600;
-  color: #334155;
+.sin-registros {
+  height: 120px;
+  text-align: center;
+  color: #94a3b8;
 }
-
-.col-matricula {
-  color: #475569;
-  font-size: 13px;
-}
-
-.col-nombre {
-  font-weight: 600;
-  color: #1e293b;
-}
-
-.col-center {
+.col-centro {
   text-align: center;
 }
-
-/* Botón individual de borrado */
+/* ---------- Botón de borrar por fila ---------- */
 .btn-borrar-item {
-  background-color: #d92525;
-  color: #ffffff;
-  border: none;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  transition: transform 0.1s ease, background-color 0.2s ease;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: #fff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 .btn-borrar-item:hover {
-  background-color: #b91c1c;
-  transform: scale(1.02);
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
 }
 
-/* Iconos SVG integrados */
-.icono-trash {
-  width: 18px;
-  height: 18px;
+.btn-borrar-item .icono { width: 16px; height: 16px; }
+
+/* ---------- Modal ---------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(15, 23, 42, 0.5);
+  z-index: 1000;
 }
 
-.icono-trash-sm {
-  width: 14px;
-  height: 14px;
-}
-
-.sin-registros {
+.modal-confirmar {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 24px;
   text-align: center;
-  padding: 40px;
-  color: #94a3b8;
-  font-size: 15px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.25);
 }
+
+.modal-confirmar h2 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: #0f172a;
+}
+
+.modal-confirmar p {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #64748b;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ---------- Pantallas pequeñas ---------- */
+@media (max-width: 900px) {
+  .bitacora-container { padding: 16px; }
+
+  .header-bitacora {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    justify-items: center;
+  }
+
+  .titulos-header { grid-row: 1; }
+  .header-bitacora > :first-child,
+  .header-bitacora > :last-child { justify-self: center; }
+
+  .buscador { max-width: none; }
+  .card-tabla { overflow-x: auto; }
+  .tabla-bitacora { min-width: 760px; }
+}
+
+.tabla-bitacora tbody tr:last-child td { border-bottom: none; }
