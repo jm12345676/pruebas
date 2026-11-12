@@ -86,7 +86,7 @@
 }
 
 .tabla thead tr {
-  background: #f8fafc;
+  background: #f1f5f9;
   border-bottom: 2px solid #cbd5e1;
 }
 
@@ -108,7 +108,7 @@
   height: 47px;
   padding: 0 20px;
   font-size: 1rem;
-  color: #0f172a;
+  color: #334155;
   border-bottom: 1px solid #cbd5e1;
 }
 
