@@ -63,7 +63,6 @@
 }
 
 /* ---------- Botones ---------- */
-.btn-regresar,
 .btn-borrar-todos,
 .btn-cancelar {
   display: inline-flex;
@@ -71,6 +70,23 @@
   justify-content: center;
   gap: 8px;
   width: 144px;
+  height: 38px;
+  padding: 0;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-regresar{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 110px;
   height: 38px;
   padding: 0;
   color: #fff;

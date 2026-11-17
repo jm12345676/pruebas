@@ -48,7 +48,7 @@
   background: #1e293b;
   color: #fff;
   border: none;
-  border-radius: 999px;
+  border-radius: 11px;
   font-family: inherit;
   font-size: 1rem;
   font-weight: 700;
@@ -111,20 +111,19 @@
 .btn-editar {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  height: 32px;
-  padding: 0 12px;
-  background: #1e4b82;
-  color: #fff;
-  border: none;
-  border-radius: 999px;
+  height: 30px;
+  padding: 0 9px;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #c0c0c0;
+  border-radius: 10px;
   font-family: inherit;
   font-size: 0.8rem;
   cursor: pointer;
   transition: background 0.2s;
 }
 
-.btn-editar:hover { background: #2a5fa0; }
+.btn-editar:hover { background: #c4c4c4; }
 .btn-editar .icono { width: 18px; height: 18px; }
 
 /* ---------- MODAL ---------- */
