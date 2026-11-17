@@ -1,5 +1,5 @@
 <div class="contenedor-principal">
-  <!-- Botón Regresar ubicado en la esquina superior izquierda de toda la pantalla -->
+  <!-- Botón Regresar -->
   <a routerLink="/inicio" class="btn-regresar">
     <span class="flecha">&#8592;</span> Regresar
   </a>
@@ -8,11 +8,26 @@
   <div class="seccion-previa">
     <div class="credenciales-grid">
       
-      <!-- RECUADRO FRENTE -->
-      <div class="credencial">
+      <!-- RECUADRO FRENTE CON DATOS -->
+      <div class="credencial credencial-frente-contenedor">
         <div class="cred-header">Frente</div>
         <div class="cred-cuerpo-img">
           <img [src]="imagenFrente()" alt="Credencial Frente" class="plantilla-credencial">
+          
+          <!-- FOTO DEL ESTUDIANTE -->
+          <div class="foto-estudiante">
+            <img [src]="fotografiaAlumno()" alt="Foto del alumno">
+          </div>
+
+          <!-- DATOS DEL ESTUDIANTE -->
+          <div class="datos-estudiante">
+            <h2 class="nombre">{{ estudiante().nombre }}</h2>
+            <p class="dato"><strong>Matrícula:</strong> {{ estudiante().matricula }}</p>
+            <p class="dato"><strong>Nivel:</strong> {{ estudiante().nivel }}</p>
+            <p class="dato"><strong>R.V.O.E.:</strong> {{ estudiante().rvoe }}</p>
+            <p class="dato"><strong>Vigencia:</strong> {{ estudiante().vigencia }}</p>
+          </div>
+
         </div>
       </div>
 

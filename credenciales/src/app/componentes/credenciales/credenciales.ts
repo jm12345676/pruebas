@@ -1,51 +1,62 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-credenciales',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterLink],
   templateUrl: './credenciales.html',
   styleUrl: './credenciales.css'
 })
 export class CredencialesComponent implements OnInit {
 
-  alumno: any = null;
   matricula = '';
 
-  // FOTOGRAFÍA DEL ALUMNO
+  // DATOS DEL ESTUDIANTE USANDO SIGNALS
+  estudiante = signal({
+    nombre: 'MARIO ALBERTO PÉREZ GÓMEZ',
+    matricula: '20240918',
+    nivel: 'Licenciatura',
+    rvoe: '20221456 de fecha 12/08/2022',
+    vigencia: 'Ago 2024 - Jul 2025'
+  });
+
+  // FOTOGRAFÍAS Y DISEÑO
   imagenFrente = signal<string>('/img/Group 2029.png');
   imagenReverso = signal<string>('/img/Group 2030.png');
+  fotografiaAlumno = signal<string>('/img/estudiante.png'); // Ajusta la ruta de la foto si es necesario
 
-  // CONTROLAR LA VENTANA DE FORMATOS
+  // CONTROLADORES DE VISTA
   mostrarFormatos = signal<boolean>(false);
-
-  // CONTROLAR LA ALERTA
   mostrarAlerta = signal<boolean>(false);
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit() {
-    // Obtener la matrícula de la dirección
-    this.matricula =
-      this.route.snapshot.paramMap.get('matricula') ?? '';
+    this.matricula = this.route.snapshot.paramMap.get('matricula') ?? '';
 
-    // Recibir los datos del alumno
-    this.alumno = history.state.alumno ?? null;
+    // Si pasas datos por history.state, los tomamos; si no, se queda con el valor por defecto
+    const alumnoState = history.state.alumno;
+    if (alumnoState) {
+      this.estudiante.set({
+        nombre: alumnoState.nombre ?? this.estudiante().nombre,
+        matricula: alumnoState.matricula ?? this.matricula,
+        nivel: alumnoState.nivel ?? this.estudiante().nivel,
+        rvoe: alumnoState.rvoe ?? this.estudiante().rvoe,
+        vigencia: alumnoState.vigencia ?? this.estudiante().vigencia
+      });
+    }
   }
 
-  // ABRIR Y CERRAR FORMATOS
   toggleFormatos(): void {
     this.mostrarFormatos.update(valor => !valor);
   }
 
-  // ABRIR ALERTA
   abrirAlerta(): void {
     this.mostrarAlerta.set(true);
   }
 
-  // CERRAR ALERTA
   cerrarAlerta(): void {
     this.mostrarAlerta.set(false);
   }
