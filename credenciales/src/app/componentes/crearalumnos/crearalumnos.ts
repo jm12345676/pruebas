@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { not } from 'rxjs/internal/util/not';
 
 interface Alumno {
   matricula: string;
@@ -47,7 +46,7 @@ export class CrearAlumno {
   guardar() {
     if (!this.nuevo.matricula || !this.nuevo.nombres || !this.nuevo.apellidoPaterno) return;
     console.log('Alumno guardado:', this.nuevo);
-    this.router.navigate(['/inicio']);
+    this.router.navigate(['/credencial']);
   }
 
   generarCredencial() {
