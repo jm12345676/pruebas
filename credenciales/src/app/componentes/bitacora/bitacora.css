@@ -2,7 +2,7 @@
 .bitacora-container {
   min-height: 100vh;
   padding: 30px 30px 40px;
-  background: #f8fafc;
+  background: #ffffff;
   font-family: 'Montserrat', system-ui, sans-serif;
   color: #475569;
   box-sizing: border-box;
@@ -102,27 +102,27 @@
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 }
 
-.tabla-bitacora {
+.tabla {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
   text-align: left;
 }
 
-.tabla-bitacora thead tr {
+.tabla thead tr {
   background: #f1f5f9;
   border-bottom: 2px solid #cbd5e1;
 }
 
-.tabla-bitacora th {
+.tabla th {
   padding: 14px 20px;
   font-size: 1.25rem;
   font-weight: 400;
   color: #475569;
 }
 
-.tabla-bitacora thead th:first-child { border-top-left-radius: 12px; }
-.tabla-bitacora thead th:last-child  { border-top-right-radius: 12px; }
+.tabla thead th:first-child { border-top-left-radius: 12px; }
+.tabla thead th:last-child  { border-top-right-radius: 12px; }
 
 .th-fecha     { width: 20%; }
 .th-usuario   { width: 16%; }
@@ -130,7 +130,7 @@
 .th-nombre    { width: 30%; }
 .th-acciones  { width: 16%; }
 
-.tabla-bitacora td {
+.tabla td {
   height: 47px;
   padding: 0 20px;
   font-size: 0.95rem;
@@ -138,8 +138,8 @@
   border-bottom: 1px solid #cbd5e1;
 }
 
-.tabla-bitacora tbody tr:hover { background: #f8fafc; }
-.tabla-bitacora tbody tr.fila-vacia:hover { background: transparent; }
+.tabla tbody tr:hover { background: #03294e; }
+.tabla tbody tr.fila-vacia:hover { background: transparent; }
 
 .sin-registros {
   height: 120px;
@@ -235,3 +235,67 @@
 }
 
 .tabla-bitacora tbody tr:last-child td { border-bottom: none; }
+
+/* ================= EFECTO VIDRIO ================= */
+
+.tabla-simple.vidrio {
+  --vidrio-rgb: transparent;
+
+  background: rgba(var(--vidrio-rgb), 0.10);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 24px;
+  overflow: hidden; 
+  box-shadow:
+    0 8px 32px rgba(var(--vidrio-rgb), 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);   /* brillo del borde superior */
+  padding: 14px px 14px;
+}
+
+/* Encabezado tabla */
+.tabla-simple.vidrio .tabla thead tr {
+  background: #f1f5f9;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.tabla-simple.vidrio .tabla th { 
+  background: #f1f5f9;         
+  color: #394352;
+  padding: 12px 16px;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+.tabla tbody tr:hover
+.tabla-simple.vidrio .tabla td {
+  color: #334155;
+  border-top: 1px solid #cbd5e1;
+}
+
+.tabla-simple.vidrio .tabla tbody tr:hover {
+  background: rgba(239, 239, 240, 0.45);
+}
+
+.tabla-simple.vidrio .tabla {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.tabla-simple.vidrio .tabla th:first-child { border-radius: 999px 0 0 999px; }
+.tabla-simple.vidrio .tabla th:last-child  { border-radius: 0 999px 999px 0; }
+
+.tabla-simple.vidrio .tabla tbody tr:last-child td {
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.tabla-simple.vidrio .tabla tbody tr:first-child td:first-child {
+  border-top-left-radius: 14px;
+}
+
+.tabla-simple.vidrio .tabla tbody tr:first-child td:last-child {
+  border-top-right-radius: 14px;
+}
+
+.tabla-simple.vidrio .tabla tbody tr:first-child td {
+  border-top: none;
+}
