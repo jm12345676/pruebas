@@ -19,8 +19,7 @@
   align-items: center;
   gap: 8px;
   padding: 9px 20px;
-  border: 0;
-  border-radius: 25px;
+  border-radius: 11px;
   background: #1e2837;
   color: #fff;
   box-shadow: 0 4px 10px rgb(0 0 0 / 25%);
@@ -29,7 +28,8 @@
   text-decoration: none;
 }
 
-.btn-regresar:hover {
+.btn-regresar:hover,
+.btn-guardar:hover {
   background: #111722;
 }
 
@@ -39,7 +39,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 22px;
   padding: 28px;
   border: 2px solid #1e2837;
@@ -70,7 +69,6 @@
 }
 
 .cred-header {
-  height: 18px;
   flex: 0 0 18px;
   margin-bottom: 6px;
   color: #1e293b;
@@ -86,7 +84,6 @@
   margin: 0 auto;
   overflow: hidden;
   border-radius: 10px;
-  box-sizing: border-box;
   isolation: isolate;
 }
 
@@ -96,10 +93,16 @@
   z-index: 1;
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: fill;
   pointer-events: none;
   user-select: none;
+}
+
+/* Sube únicamente la gráfica del reverso (rúbrica) sin mover el logo ni los textos */
+.capa-datos-reverso ~ .img-fondo-plantilla,
+.credencial-card:last-child .img-fondo-plantilla {
+  top: -10px;
+  height: calc(100% + 10px);
 }
 
 .capa-datos-frente,
@@ -110,6 +113,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
   box-sizing: border-box;
   text-align: center;
 }
@@ -118,27 +122,20 @@
    FRENTE
    ========================================= */
 .capa-datos-frente {
-  justify-content: space-between;
-  padding: 140px 14px 10px;
+  padding: 164px 12px 6px;
 }
 
 .contenedor-foto {
-  width: 92px;
-  height: 104px;
-  flex: 0 0 104px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 88px;
+  flex: 0 0 98px;
   overflow: hidden;
-  border: 2px solid #ffffff;
+  border: 2px solid #fff;
   background: #cbd5e1;
-  box-shadow: none;
 }
 
 .foto-estudiante {
   width: 100%;
   height: 100%;
-  display: block;
   object-fit: cover;
 }
 
@@ -148,89 +145,90 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
-  padding-top: 4px;
+  justify-content: space-between;
+  padding-top: 5px;
+}
+
+.etiqueta-rol,
+.vigencia-titulo,
+.vigencia-valor {
+  color: #000;
 }
 
 .etiqueta-rol {
-  color: #0B2859;
   font-size: 15.5px;
   font-weight: 900;
   letter-spacing: 0.6px;
-  line-height: 1.05;
+  line-height: 1;
+}
+
+.nombre-alumno,
+.matricula-alumno {
+  color: #0B2859;
+  font-weight: 800;
 }
 
 .nombre-alumno {
   width: 100%;
-  color: #0B2859;
-  font-size: 11.5px;
-  font-weight: 800;
-  line-height: 1.18;
+  font-size: 11.8px;
+  line-height: 1.12;
   text-transform: uppercase;
   overflow-wrap: break-word;
 }
 
 .matricula-alumno {
-  color: #0B2859;
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 12.2px;
   letter-spacing: 0.3px;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .carrera-alumno {
-  color: #111111;
-  font-size: 11px;
+  color: #111;
+  font-size: 11.2px;
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.08;
 }
 
 .rvoe-alumno {
-  color: #222222;
-  font-size: 9.5px;
+  color: #222;
+  font-size: 9.8px;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.05;
 }
 
 .bloque-vigencia {
   display: flex;
   flex-direction: column;
   align-items: center;
-  line-height: 1.05;
+  line-height: 1.02;
 }
 
 .vigencia-titulo {
-  color: #0B2859;
-  font-size: 9.5px;
+  font-size: 9.8px;
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
 .vigencia-valor {
-  color: #111111;
-  font-size: 12px;
-  font-weight: 900;
   margin-top: 1px;
+  font-size: 12.4px;
+  font-weight: 900;
 }
 
 /* ==========================================
-   REVERSO - BLOQUE DE FIRMA MÁS ABAJO
+   REVERSO - NOMBRE EN SU POSICIÓN ORIGINAL
    ========================================== */
 .capa-datos-reverso {
-  justify-content: space-between;
-  padding: 58px 14px 10px;
+  padding: 55px 10px 6px;
 }
 
 .texto-acreditacion {
   width: 100%;
   margin: 0;
-  padding-left: 0;
-  box-sizing: border-box;
-  color: #111111;
-  font-size: 9px;
+  color: #111;
+  font-size: 9.6px;
   font-weight: 600;
-  line-height: 1.35;
-  text-align: center;
+  line-height: 1.28;
 }
 
 .bloque-firma {
@@ -241,94 +239,116 @@
 }
 
 .autoridad-nombre {
-  margin: 0;
-  color: #111111;
-  font-size: 11px;
+  color: #111;
+  font-size: 11.8px;
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.12;
 }
 
 .autoridad-cargo {
   margin-top: 2px;
-  color: #222222;
-  font-size: 8.5px;
+  color: #222;
+  font-size: 9.2px;
   font-weight: 600;
-  line-height: 1.15;
+  line-height: 1.12;
 }
 
 .contenedor-codigo-barras {
-  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -2px;
+  margin-top: -3px;
 }
 
 .img-codigo-barras {
-  width: 186px;
-  height: 42px;
-  display: block;
+  width: 184px;
+  height: 34px;
   object-fit: fill;
   mix-blend-mode: multiply;
+}
+
+.codigo-num,
+.qr-credencial-box {
+  background: #fff;
+  color: #000;
+  font-weight: 800;
 }
 
 .codigo-num {
   position: relative;
   z-index: 3;
-  margin-top: -12px;
+  margin-top: -11px;
   padding: 1px 8px;
-  background: #ffffff;
-  color: #000000;
-  font-size: 10.5px;
-  font-weight: 800;
+  font-size: 10.8px;
   letter-spacing: 0.8px;
-  line-height: 1.1;
+  line-height: 1.08;
+}
+
+.qr-credencial-box {
+  padding: 4px 12px;
+  border: 1.5px solid #000;
+  font-size: 9px;
 }
 
 .info-emergencia {
   width: 100%;
-  color: #111111;
-  line-height: 1.24;
+  color: #111;
+  line-height: 1.14;
 }
 
 .emergencia-titulo {
   margin: 0;
-  font-size: 9px;
+  font-size: 9.2px;
   font-weight: 600;
 }
 
 .emergencia-tel {
   display: block;
   margin: 1px 0;
-  color: #000000;
-  font-size: 10.5px;
+  color: #000;
+  font-size: 10.8px;
   font-weight: 800;
 }
 
 .direccion-txt {
   margin: 1px 0 0;
-  color: #222222;
-  font-size: 7.4px;
+  color: #222;
+  font-size: 7.5px;
   font-weight: 600;
+}
+
+.pie-contacto-esquinas {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 2px 0;
+  box-sizing: border-box;
+  color: #000;
+  font-size: 7.5px;
+  font-weight: 700;
 }
 
 /* ==========================================
    BOTÓN GUARDAR Y PANEL DE CONTROLES
    ========================================== */
-.btn-guardar {
-  min-width: 170px;
-  padding: 10px 26px;
+.btn-guardar,
+.btn-accion,
+.btn-mitad,
+.btn-aplicar-vigencia,
+.btn-gris,
+.btn-azul {
   border: 0;
-  border-radius: 6px;
-  background: #1e2837;
   color: #fff;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
-  font-weight: 600;
   cursor: pointer;
 }
 
-.btn-guardar:hover {
-  background: #111722;
+.btn-guardar {
+  min-width: 170px;
+  padding: 10px 26px;
+  border-radius: 6px;
+  background: #1e2837;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
+  font-weight: 600;
 }
 
 .seccion-controles {
@@ -353,11 +373,9 @@
 }
 
 .btn-accion,
-.btn-mitad {
-  border: 0;
-  color: #fff;
+.btn-mitad,
+.btn-aplicar-vigencia {
   font-weight: 700;
-  cursor: pointer;
 }
 
 .btn-accion {
@@ -367,22 +385,27 @@
   background: #174276;
 }
 
-.btn-accion:hover {
+.btn-accion:hover,
+.btn-aplicar-vigencia:hover {
   background: #0f2d52;
 }
 
-.botones-secundarios {
+.botones-secundarios,
+.fila-input-vigencia {
   display: flex;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-mitad {
   flex: 1;
-  min-width: 0;
   padding: 10px;
   border-radius: 4px;
   background: #6b7280;
   font-size: 11px;
+}
+
+.btn-mitad:hover {
+  background: #4b5563;
 }
 
 .panel-formatos,
@@ -407,23 +430,62 @@
   margin: 0;
   font-size: 12px;
   font-weight: 700;
-  text-align: center;
+}
+
+.fila-input-vigencia {
+  width: 100%;
+}
+
+.input-vigencia {
+  flex: 1;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.btn-aplicar-vigencia {
+  padding: 7px 14px;
+  border-radius: 6px;
+  background: #174276;
+  font-size: 12px;
 }
 
 .rejilla-formatos {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
 .formato-item {
   padding: 15px 5px;
+  border: 2px solid transparent;
   border-radius: 6px;
   background: #f1f5f9;
   font-size: 12px;
   font-weight: 600;
-  text-align: center;
+  cursor: pointer;
+}
+
+.formato-item.activo,
+.codigo-activo {
+  border-color: #174276;
+  background: #dbeafe;
+  color: #174276;
+  font-weight: 800;
+}
+
+.opcion-codigo {
+  padding: 10px 16px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 .fondo-oscuro {
@@ -434,13 +496,11 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  box-sizing: border-box;
   background: rgb(0 0 0 / 60%);
 }
 
 .caja-alerta {
   width: min(420px, 100%);
-  box-sizing: border-box;
   padding: 25px 35px;
   border: 2px solid #174276;
   border-radius: 12px;
@@ -465,10 +525,7 @@
 .btn-azul {
   min-width: 95px;
   padding: 8px 18px;
-  border: 0;
   border-radius: 15px;
-  color: #fff;
-  cursor: pointer;
 }
 
 .btn-gris {
@@ -490,13 +547,10 @@
   .seccion-controles {
     width: 100%;
     max-width: none;
+    min-width: 0;
   }
 
   .seccion-previa {
     padding: 20px 12px;
-  }
-
-  .seccion-controles {
-    min-width: 0;
   }
 }

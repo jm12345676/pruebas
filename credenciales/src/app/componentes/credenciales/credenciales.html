@@ -1,33 +1,19 @@
 <div class="contenedor-principal">
-  <a routerLink="/inicio" class="btn-regresar">
-    <span class="flecha">&#8592;</span> Regresar
-  </a>
+  <a routerLink="/inicio" class="btn-regresar no-print">&#8592; Regresar</a>
 
   <main class="seccion-previa">
-    <div class="credenciales-grid">
+    <div #areaImpresion class="credenciales-grid">
       <!-- FRENTE -->
       <article class="credencial-card">
-        <div class="cred-header">Frente</div>
+        <div class="cred-header no-print">Frente</div>
 
         <div class="lienzo-credencial">
-          <img
-            [src]="fondoFrente"
-            class="img-fondo-plantilla"
-            alt="Plantilla frontal"
-            draggable="false"
-            (error)="onErrorImagen($event)"
-          >
+          <img [src]="fondoFrente" class="img-fondo-plantilla" alt="Plantilla frontal" draggable="false" (error)="onErrorImagen($event)">
 
           <div class="capa-datos-frente">
             <div class="contenedor-foto">
               @if (alumno().foto) {
-                <img
-                  [src]="alumno().foto"
-                  class="foto-estudiante"
-                  alt="Foto del alumno"
-                  draggable="false"
-                  (error)="onErrorImagen($event)"
-                >
+                <img [src]="alumno().foto" class="foto-estudiante" alt="Foto del alumno" draggable="false" (error)="onErrorImagen($event)">
               }
             </div>
 
@@ -48,22 +34,16 @@
 
       <!-- REVERSO -->
       <article class="credencial-card">
-        <div class="cred-header">Reverso</div>
+        <div class="cred-header no-print">Reverso</div>
 
         <div class="lienzo-credencial">
-          <img
-            [src]="fondoReverso"
-            class="img-fondo-plantilla"
-            alt="Plantilla reversa"
-            draggable="false"
-            (error)="onErrorImagen($event)"
-          >
+          <img [src]="fondoReverso" class="img-fondo-plantilla" alt="Plantilla reversa" draggable="false" (error)="onErrorImagen($event)">
 
           <div class="capa-datos-reverso">
             <p class="texto-acreditacion">
               Esta credencial lo acredita como alumno<br>
               de la Universidad IVES<br>
-              Incorporada a la
+              Incorporada a la SEP y SEV
             </p>
 
             <div class="bloque-firma">
@@ -72,14 +52,12 @@
             </div>
 
             <div class="contenedor-codigo-barras">
-              <img
-                [src]="codigoBarras"
-                class="img-codigo-barras"
-                alt="Código de barras"
-                draggable="false"
-                (error)="onErrorImagen($event)"
-              >
-              <span class="codigo-num">{{ alumno().matricula }}</span>
+              @if (tipoCodigo() === 'BARRAS') {
+                <img [src]="codigoBarras" class="img-codigo-barras" alt="Código de barras" draggable="false" (error)="onErrorImagen($event)">
+                <span class="codigo-num">{{ alumno().matricula }}</span>
+              } @else {
+                <div class="qr-credencial-box">QR {{ alumno().matricula }}</div>
+              }
             </div>
 
             <div class="info-emergencia">
@@ -88,93 +66,68 @@
               <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
               <p class="direccion-txt">Tel. (228) 812.34.56</p>
             </div>
+
+            <div class="pie-contacto-esquinas">
+              <span>www.ives.edu.mx</span>
+              <span>informes&#64;ives.edu.mx</span>
+            </div>
           </div>
         </div>
       </article>
     </div>
 
-    <button
-      type="button"
-      class="btn-guardar"
-      (click)="abrirAlerta()"
-    >
+    <button type="button" class="btn-guardar no-print" (click)="mostrarAlerta.set(true)">
       Guardar plantilla
     </button>
   </main>
 
-  <aside class="seccion-controles">
+  <aside class="seccion-controles no-print">
     <div class="etiqueta-estado">PAGO PENDIENTE</div>
 
-    <button type="button" class="btn-accion">
-      IMPRIMIR CREDENCIAL
-    </button>
+    <button type="button" class="btn-accion" (click)="imprimirCredencial()">IMPRIMIR CREDENCIAL</button>
+    <button type="button" class="btn-accion" (click)="togglePanel('VIGENCIA')">CAMBIAR VIGENCIA</button>
 
-    <button type="button" class="btn-accion">
-      CAMBIAR VIGENCIA
-    </button>
+    @if (panelActivo() === 'VIGENCIA') {
+      <section class="panel-formatos">
+        <p class="titulo-formatos">Nueva vigencia (Ej. AGO 2028)</p>
+        <div class="fila-input-vigencia">
+          <input #inputVigencia type="text" class="input-vigencia" [value]="alumno().vigencia" (keyup.enter)="actualizarVigencia(inputVigencia.value)">
+          <button type="button" class="btn-aplicar-vigencia" (click)="actualizarVigencia(inputVigencia.value)">OK</button>
+        </div>
+      </section>
+    }
 
     <div class="botones-secundarios">
-      <button
-        type="button"
-        class="btn-mitad"
-        (click)="toggleFormatos()"
-      >
-        CAMBIAR FORMATO
-      </button>
-
-      <button type="button" class="btn-mitad">
-        CAMBIAR CÓDIGO
-      </button>
+      <button type="button" class="btn-mitad" (click)="togglePanel('FORMATOS')">CAMBIAR FORMATO</button>
+      <button type="button" class="btn-mitad" (click)="alternarCodigo()">CAMBIAR CÓDIGO</button>
     </div>
 
-    @if (mostrarFormatos()) {
+    @if (panelActivo() === 'FORMATOS') {
       <section class="panel-formatos">
-        <p class="titulo-formatos">
-          Seleccione el diseño que desee
-        </p>
-
+        <p class="titulo-formatos">Seleccione el diseño que desee</p>
         <div class="rejilla-formatos">
-          <div class="formato-item">Diseño 1</div>
-          <div class="formato-item">Diseño 2</div>
+          <button type="button" class="formato-item" [class.activo]="disenoActivo() === 1" (click)="seleccionarDiseno(1)">Diseño 1</button>
+          <button type="button" class="formato-item" [class.activo]="disenoActivo() === 2" (click)="seleccionarDiseno(2)">Diseño 2</button>
         </div>
       </section>
     }
 
     <div class="panel-codigos">
-      <div class="qr-placeholder">QR</div>
-      <div class="barras-placeholder">||||||||||</div>
+      <button type="button" class="opcion-codigo" [class.codigo-activo]="tipoCodigo() === 'QR'" (click)="alternarCodigo('QR')">QR</button>
+      <button type="button" class="opcion-codigo" [class.codigo-activo]="tipoCodigo() === 'BARRAS'" (click)="alternarCodigo('BARRAS')">||||||||||</button>
     </div>
   </aside>
 
   @if (mostrarAlerta()) {
-    <div class="fondo-oscuro" role="dialog" aria-modal="true">
+    <div class="fondo-oscuro no-print" role="dialog" aria-modal="true">
       <div class="caja-alerta">
-        <h3 class="alerta-titulo">
-          ¡Alumno sin alta académica!
-        </h3>
-
-        <p class="alerta-texto">
-          Este alumno no ha pagado el alta académica.
-        </p>
-
-        <p class="alerta-texto">¿Deseas continuar?</p>
+        <h3 class="alerta-titulo">¡Alumno sin alta académica!</h3>
+        <p>Este alumno no ha pagado el alta académica.</p>
+        <p>¿Deseas continuar?</p>
 
         <div class="alerta-botones">
-          <button
-            type="button"
-            class="btn-gris"
-            (click)="cerrarAlerta()"
-          >
-            Cancelar
-          </button>
-
-          <button
-            type="button"
-            class="btn-azul"
-            (click)="cerrarAlerta()"
-          >
-            Continuar
-          </button>
+          <button type="button" class="btn-gris" (click)="mostrarAlerta.set(false)">Cancelar</button>
+          <button type="button" class="btn-azul" (click)="mostrarAlerta.set(false)">Continuar</button>
         </div>
       </div>
     </div>
