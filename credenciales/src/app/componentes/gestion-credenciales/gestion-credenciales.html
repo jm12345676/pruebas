@@ -1,100 +1,175 @@
-<div class="contenedor-principal">
-  <!-- Botón Regresar ubicado en la esquina superior izquierda -->
-  <a routerLink="/inicio" class="btn-regresar">
-    <span class="flecha">&#8592;</span> Regresar
-  </a>
+<div class="pagina">
 
-  <!-- Sección Izquierda: Vista Previa de la Credencial -->
-  <div class="seccion-previa">
-    <div class="credenciales-grid">
-      
-      <!-- RECUADRO FRENTE CON DATOS -->
-      <div class="credencial credencial-frente-contenedor">
-        <div class="cred-header">Frente</div>
-        <div class="cred-cuerpo-img">
-          <img [src]="imagenFrente()" alt="Credencial Frente" class="plantilla-credencial">
-          
-          <!-- FOTO DEL ESTUDIANTE -->
-          <div class="foto-estudiante">
-            <img [src]="fotografiaAlumno()" alt="Foto del alumno">
-          </div>
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
 
-          <!-- DATOS DEL ESTUDIANTE -->
-          <div class="datos-estudiante">
-            <div class="campo-bloque">
-              <span class="etiqueta-principal">ALUMNO</span>
-              <h2 class="nombre">{{ estudiante().nombre }}</h2>
-            </div>
-            
-            <p class="dato">{{ estudiante().matricula }}</p>
-            <p class="dato">{{ estudiante().nivel }}</p>
-            
-            <div class="campo-bloque-rvoe">
-              <span class="etiqueta-negrita">R.V.O.E</span>
-              <span class="valor-texto">{{ estudiante().rvoe }}</span>
-            </div>
+    <!-- TÍTULOS -->
+    <div class="titulos">
+      <h1>Gestion de credenciales</h1>
+      <p>Gestion de alumnos</p>
+    </div>
 
-            <div class="campo-bloque-vigencia">
-              <span class="etiqueta-negrita">VIGENCIA:</span>
-              <span class="valor-texto">{{ estudiante().vigencia }}</span>
-            </div>
-          </div>
+    <!-- BUSCADOR -->
+    <div class="buscador">
 
-        </div>
-      </div>
+      <svg viewBox="0 0 24 24" class="icono">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="16.5" y1="16.5" x2="21" y2="21"/>
+      </svg>
 
-      <!-- RECUADRO REVERSO -->
-      <div class="credencial">
-        <div class="cred-header">Reverso</div>
-        <div class="cred-cuerpo-img">
-          <img [src]="imagenReverso()" alt="Credencial Reverso" class="plantilla-credencial">
-        </div>
+      <input type="text" [(ngModel)]="filtro">
+
+    </div>
+
+    <!-- BOTONES DEL ENCABEZADO -->
+    <div class="acciones-header">
+
+      <a class="btn-oscuro btn-animado" routerLink="/crearalumnos">
+        <svg viewBox="0 0 24 24" class="icono">
+          <rect x="4" y="4" width="16" height="16" rx="3"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+        Crear alumno
+      </a>
+
+      <a class="btn-oscuro btn-animado" routerLink="/niveles">
+
+        <svg viewBox="0 0 24 24" class="icono">
+          <polygon points="12,3 22,8 12,13 2,8"/>
+          <polyline points="2,12 12,17 22,12"/>
+          <polyline points="2,16 12,21 22,16"/>
+        </svg>
+
+        Ver niveles
+
+      </a>
+
+      <a class="btn-oscuro btn-animado" routerLink="/bitacora">
+
+        <svg viewBox="0 0 24 24" class="icono">
+          <rect x="5" y="4" width="14" height="17" rx="2"/>
+          <line x1="9" y1="9" x2="15" y2="9"/>
+          <polyline points="9,15 11,17 15,13"/>
+        </svg>
+
+        Ver bitacora
+
+      </a>
+
+    </div>
+
+  </header>
+
+
+  <!-- TARJETA CON TABLA -->
+  <section class="tabla-simple vidrio">
+
+    <table class="tabla">
+
+      <thead>
+        <tr>
+          <th class="col-matricula">Matricula</th>
+          <th class="col-nombre">Nombre</th>
+          <th class="col-nivel">Nivel</th>
+          <th class="col-estatus">Estatus</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        @for (a of alumnosFiltrados; track a.matricula) {
+
+          <tr>
+
+            <td>{{ a.matricula }}</td>
+
+            <td>{{ nombreCompleto(a) }}</td>
+
+            <td>{{ a.nivel }}</td>
+
+            <td>
+              <span [class]="'badge ' + claseBadge(a.status)">
+                {{ a.status }}
+              </span>
+            </td>
+
+            <td>
+
+              <div class="botones-fila">
+
+                <!-- VER DETALLE -->
+                <button
+                  class="btn-icono"
+                  title="Ver detalle"
+                  (click)="VerDetalle(a)">
+
+                  <svg viewBox="0 0 24 24" class="icono">
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+
+                <!-- EDITAR -->
+                <button class="btn-icono" title="Editar">
+
+                  <svg viewBox="0 0 24 24" class="icono">
+                    <path d="M4 20l4-1 11-11-3-3L5 16z"/>
+                    <line x1="14" y1="7" x2="17" y2="10"/>
+                  </svg>
+
+                </button>
+
+                <!-- ELIMINAR -->
+                <button
+                  class="btn-icono"
+                  title="Eliminar"
+                  (click)="eliminar(a.matricula)">
+
+                  <svg viewBox="0 0 24 24" class="icono">
+                    <line x1="4" y1="7" x2="20" y2="7"/>
+                    <path d="M6 7l1 13h10l1-13"/>
+                    <path d="M9 7V4h6v3"/>
+                  </svg>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        } @empty {
+
+          <tr>
+            <td colspan="5" class="vacio">
+              No hay alumnos registrados
+            </td>
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </section>
+
+
+  <!-- MODAL: CREAR ALUMNO -->
+  @if (mostrarModalAgregar) {
+
+    <div class="modal-overlay">
+
+      <div class="modal-alumno">
+
+        
       </div>
 
     </div>
-    
-    <button class="btn-guardar" type="button" (click)="abrirAlerta()">Guardar Plantilla</button>
-  </div>
 
-  <!-- Sección Derecha: Panel de Control -->
-  <div class="seccion-controles">
-    <div class="etiqueta-estado">PAGO PENDIENTE</div>
-    <button class="btn-accion" type="button">IMPRIMIR CREDENCIAL</button>
-    <button class="btn-accion" type="button">CAMBIAR VIGENCIA</button>
-    
-    <div class="botones-secundarios">
-      <button class="btn-mitad" type="button" (click)="toggleFormatos()">CAMBIAR FORMATO</button>
-      <button class="btn-mitad" type="button">CAMBIAR CODIGO</button>
-    </div>
-
-    @if (mostrarFormatos()) {
-      <div class="panel-formatos">
-        <p class="titulo-formatos">Seleccione el diseño que desee</p>
-        <div class="rejilla-formatos">
-          <div class="formato-item">Diseño 1</div>
-          <div class="formato-item">Diseño 2</div>
-        </div>
-      </div>
-    }
-
-    <div class="panel-codigos">
-      <div class="qr-placeholder">QR</div>
-      <div class="barras-placeholder">||||||||||</div>
-    </div>
-  </div>
-
-  <!-- Modal de Alerta -->
-  @if (mostrarAlerta()) {
-    <div class="fondo-oscuro">
-      <div class="caja-alerta">
-        <h3 class="alerta-titulo">¡Alumno sin alta académica!</h3>
-        <p class="alerta-texto">Este alumno no ha pagado el alta académica.</p>
-        <p class="alerta-texto">¿Deseas continuar?</p>
-        <div class="alerta-botones">
-          <button class="btn-gris" type="button" (click)="cerrarAlerta()">Cancelar</button>
-          <button class="btn-azul" type="button" (click)="cerrarAlerta()">Continuar</button>
-        </div>
-      </div>
-    </div>
   }
+
 </div>

@@ -46,11 +46,11 @@ export class CrearAlumno {
   guardar() {
     if (!this.nuevo.matricula || !this.nuevo.nombres || !this.nuevo.apellidoPaterno) return;
     console.log('Alumno guardado:', this.nuevo);
-    this.router.navigate(['/credencial']);
+    this.router.navigate(['/credencial/20260303567']);
   }
 
   generarCredencial() {
-    this.router.navigate(['/credencial']);
+    this.router.navigate(['/credencial/20260303567']);
   }
 
   quitarFoto() {
