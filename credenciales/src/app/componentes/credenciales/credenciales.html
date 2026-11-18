@@ -1,82 +1,180 @@
 <div class="contenedor-principal">
-  <!-- Botón Regresar -->
   <a routerLink="/inicio" class="btn-regresar">
     <span class="flecha">&#8592;</span> Regresar
   </a>
 
-  <!-- Sección Izquierda: Vista Previa -->
-  <div class="seccion-previa">
+  <main class="seccion-previa">
     <div class="credenciales-grid">
-      
-      <!-- RECUADRO FRENTE CON DATOS -->
-      <div class="credencial credencial-frente-contenedor">
+      <!-- FRENTE -->
+      <article class="credencial-card">
         <div class="cred-header">Frente</div>
-        <div class="cred-cuerpo-img">
-          <img [src]="imagenFrente()" alt="Credencial Frente" class="plantilla-credencial">
-          
 
-          <!-- DATOS DEL ESTUDIANTE -->
-          <div class="datos-estudiante">
-            <h2 class="nombre">{{ estudiante().nombre }}</h2>
-            <p class="dato"><strong>Matrícula:</strong> {{ estudiante().matricula }}</p>
-            <p class="dato"><strong>Nivel:</strong> {{ estudiante().nivel }}</p>
-            <p class="dato"><strong>R.V.O.E.:</strong> {{ estudiante().rvoe }}</p>
-            <p class="dato"><strong>Vigencia:</strong> {{ estudiante().vigencia }}</p>
+        <div class="lienzo-credencial">
+          <img
+            [src]="fondoFrente"
+            class="img-fondo-plantilla"
+            alt="Plantilla frontal"
+            draggable="false"
+            (error)="onErrorImagen($event)"
+          >
+
+          <div class="capa-datos-frente">
+            <div class="contenedor-foto">
+              @if (alumno().foto) {
+                <img
+                  [src]="alumno().foto"
+                  class="foto-estudiante"
+                  alt="Foto del alumno"
+                  draggable="false"
+                  (error)="onErrorImagen($event)"
+                >
+              }
+            </div>
+
+            <div class="bloque-textos-frente">
+              <div class="etiqueta-rol">ALUMNO</div>
+              <div class="nombre-alumno">{{ alumno().nombre }}</div>
+              <div class="matricula-alumno">{{ alumno().matricula }}</div>
+              <div class="carrera-alumno">{{ alumno().carrera }}</div>
+              <div class="rvoe-alumno">R.V.O.E. &nbsp;{{ alumno().rvoe }}</div>
+              <div class="bloque-vigencia">
+                <span class="vigencia-titulo">VIGENCIA:</span>
+                <span class="vigencia-valor">{{ alumno().vigencia }}</span>
+              </div>
+            </div>
           </div>
-
         </div>
-      </div>
+      </article>
 
-      <!-- RECUADRO REVERSO -->
-      <div class="credencial">
+      <!-- REVERSO -->
+      <article class="credencial-card">
         <div class="cred-header">Reverso</div>
-        <div class="cred-cuerpo-img">
-          <img [src]="imagenReverso()" alt="Credencial Reverso" class="plantilla-credencial">
+
+        <div class="lienzo-credencial">
+          <img
+            [src]="fondoReverso"
+            class="img-fondo-plantilla"
+            alt="Plantilla reversa"
+            draggable="false"
+            (error)="onErrorImagen($event)"
+          >
+
+          <div class="capa-datos-reverso">
+            <p class="texto-acreditacion">
+              Esta credencial lo acredita como alumno<br>
+              de la Universidad IVES<br>
+              Incorporada a la
+            </p>
+
+            <div class="bloque-firma">
+              <div class="autoridad-nombre">Dr. Andoni Luna Gómez</div>
+              <div class="autoridad-cargo">Vicerrector de Administración y Finanzas</div>
+            </div>
+
+            <div class="contenedor-codigo-barras">
+              <img
+                [src]="codigoBarras"
+                class="img-codigo-barras"
+                alt="Código de barras"
+                draggable="false"
+                (error)="onErrorImagen($event)"
+              >
+              <span class="codigo-num">{{ alumno().matricula }}</span>
+            </div>
+
+            <div class="info-emergencia">
+              <p class="emergencia-titulo">En caso de emergencia llamar al:</p>
+              <strong class="emergencia-tel">2821401875</strong>
+              <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
+              <p class="direccion-txt">Tel. (228) 812.34.56</p>
+            </div>
+          </div>
         </div>
-      </div>
-
+      </article>
     </div>
-    
-    <button class="btn-guardar" type="button" (click)="abrirAlerta()">Guardar Plantilla</button>
-  </div>
 
-  <!-- Sección Derecha: Panel de Control -->
-  <div class="seccion-controles">
+    <button
+      type="button"
+      class="btn-guardar"
+      (click)="abrirAlerta()"
+    >
+      Guardar plantilla
+    </button>
+  </main>
+
+  <aside class="seccion-controles">
     <div class="etiqueta-estado">PAGO PENDIENTE</div>
-    <button class="btn-accion" type="button">IMPRIMIR CREDENCIAL</button>
-    <button class="btn-accion" type="button">CAMBIAR VIGENCIA</button>
-    
+
+    <button type="button" class="btn-accion">
+      IMPRIMIR CREDENCIAL
+    </button>
+
+    <button type="button" class="btn-accion">
+      CAMBIAR VIGENCIA
+    </button>
+
     <div class="botones-secundarios">
-      <button class="btn-mitad" type="button" (click)="toggleFormatos()">CAMBIAR FORMATO</button>
-      <button class="btn-mitad" type="button">CAMBIAR CODIGO</button>
+      <button
+        type="button"
+        class="btn-mitad"
+        (click)="toggleFormatos()"
+      >
+        CAMBIAR FORMATO
+      </button>
+
+      <button type="button" class="btn-mitad">
+        CAMBIAR CÓDIGO
+      </button>
     </div>
 
     @if (mostrarFormatos()) {
-      <div class="panel-formatos">
-        <p class="titulo-formatos">Seleccione el diseño que desee</p>
+      <section class="panel-formatos">
+        <p class="titulo-formatos">
+          Seleccione el diseño que desee
+        </p>
+
         <div class="rejilla-formatos">
           <div class="formato-item">Diseño 1</div>
           <div class="formato-item">Diseño 2</div>
         </div>
-      </div>
+      </section>
     }
 
     <div class="panel-codigos">
       <div class="qr-placeholder">QR</div>
       <div class="barras-placeholder">||||||||||</div>
     </div>
-  </div>
+  </aside>
 
-  <!-- Modal -->
   @if (mostrarAlerta()) {
-    <div class="fondo-oscuro">
+    <div class="fondo-oscuro" role="dialog" aria-modal="true">
       <div class="caja-alerta">
-        <h3 class="alerta-titulo">¡Alumno sin alta académica!</h3>
-        <p class="alerta-texto">Este alumno no ha pagado el alta académica.</p>
+        <h3 class="alerta-titulo">
+          ¡Alumno sin alta académica!
+        </h3>
+
+        <p class="alerta-texto">
+          Este alumno no ha pagado el alta académica.
+        </p>
+
         <p class="alerta-texto">¿Deseas continuar?</p>
+
         <div class="alerta-botones">
-          <button class="btn-gris" type="button" (click)="cerrarAlerta()">Cancelar</button>
-          <button class="btn-azul" type="button" (click)="cerrarAlerta()">Continuar</button>
+          <button
+            type="button"
+            class="btn-gris"
+            (click)="cerrarAlerta()"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="button"
+            class="btn-azul"
+            (click)="cerrarAlerta()"
+          >
+            Continuar
+          </button>
         </div>
       </div>
     </div>

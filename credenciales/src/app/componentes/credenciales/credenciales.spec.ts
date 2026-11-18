@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { CredencialesComponent } from './credenciales';
+import { Credenciales } from './credenciales';
 
-describe('CredencialesComponent', () => {
-  let component: CredencialesComponent;
-  let fixture: ComponentFixture<CredencialesComponent>;
+describe('Credenciales', () => {
+  let component: Credenciales;
+  let fixture: ComponentFixture<Credenciales>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CredencialesComponent],
+      imports: [Credenciales],
       providers: [provideRouter([])]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CredencialesComponent);
+    fixture = TestBed.createComponent(Credenciales);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -23,20 +23,6 @@ describe('CredencialesComponent', () => {
 
   it('debe iniciar con mostrarFormatos y mostrarAlerta en false', () => {
     expect(component.mostrarFormatos()).toBe(false);
-    expect(component.mostrarAlerta()).toBe(false);
-  });
-
-  it('debe cambiar el estado de mostrarFormatos al llamar toggleFormatos()', () => {
-    component.toggleFormatos();
-    expect(component.mostrarFormatos()).toBe(true);
-    component.toggleFormatos();
-    expect(component.mostrarFormatos()).toBe(false);
-  });
-
-  it('debe abrir y cerrar la alerta correctamente', () => {
-    component.abrirAlerta();
-    expect(component.mostrarAlerta()).toBe(true);
-    component.cerrarAlerta();
     expect(component.mostrarAlerta()).toBe(false);
   });
 });

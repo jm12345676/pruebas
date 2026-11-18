@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { GestionCredenciales } from './componentes/gestion-credenciales/gestion-credenciales';
-import { CredencialesComponent } from './componentes/credenciales/credenciales';
+import { Credenciales } from './componentes/credenciales/credenciales';
 import { Niveles } from './componentes/niveles/niveles';
 import { BitacoraComponent } from './componentes/bitacora/bitacora';
 import { CrearAlumno } from './componentes/crearalumnos/crearalumnos';
@@ -11,7 +11,7 @@ export const routes: Routes = [
 
   { path: 'inicio', component: GestionCredenciales },
 
-  { path: 'credencial/:matricula', component: CredencialesComponent },
+  { path: 'credencial/:matricula', component: Credenciales },
 
   { path: 'niveles', component: Niveles },
 

@@ -1,56 +1,41 @@
-import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+export interface Alumno {
+  foto: string;
+  nombre: string;
+  matricula: string;
+  carrera: string;
+  rvoe: string;
+  vigencia: string;
+}
 
 @Component({
   selector: 'app-credenciales',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   templateUrl: './credenciales.html',
   styleUrl: './credenciales.css'
 })
-export class CredencialesComponent implements OnInit {
+export class Credenciales {
+  fondoFrente = '/img/Group%202029.png';
+  fondoReverso = '/img/Group%202030.png';
+  codigoBarras = '/img/uwu.png';
 
-  matricula = '';
-
-  // DATOS DEL ESTUDIANTE USANDO SIGNALS
-  estudiante = signal({
+  alumno = signal<Alumno>({
+    foto: '',
     nombre: 'MARIO ALBERTO PÉREZ GÓMEZ',
-    matricula: '20240918',
-    nivel: 'Licenciatura',
-    rvoe: '20221456 de fecha 12/08/2022',
-    vigencia: 'Ago 2024 - Jul 2025'
+    matricula: '20260303567',
+    carrera: 'Lic. en Contaduría Pública',
+    rvoe: 'ES183/2004',
+    vigencia: 'AGO 2027'
   });
 
-  // FOTOGRAFÍAS Y DISEÑO
-  imagenFrente = signal<string>('/img/Group 2029.png');
-  imagenReverso = signal<string>('/img/Group 2030.png');
-  fotografiaAlumno = signal<string>('/img/estudiante.png'); // Ajusta la ruta de la foto si es necesario
-
-  // CONTROLADORES DE VISTA
   mostrarFormatos = signal<boolean>(false);
   mostrarAlerta = signal<boolean>(false);
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.matricula = this.route.snapshot.paramMap.get('matricula') ?? '';
-
-    // Si pasas datos por history.state, los tomamos; si no, se queda con el valor por defecto
-    const alumnoState = history.state.alumno;
-    if (alumnoState) {
-      this.estudiante.set({
-        nombre: alumnoState.nombre ?? this.estudiante().nombre,
-        matricula: alumnoState.matricula ?? this.matricula,
-        nivel: alumnoState.nivel ?? this.estudiante().nivel,
-        rvoe: alumnoState.rvoe ?? this.estudiante().rvoe,
-        vigencia: alumnoState.vigencia ?? this.estudiante().vigencia
-      });
-    }
-  }
-
   toggleFormatos(): void {
-    this.mostrarFormatos.update(valor => !valor);
+    this.mostrarFormatos.update(v => !v);
   }
 
   abrirAlerta(): void {
@@ -59,5 +44,10 @@ export class CredencialesComponent implements OnInit {
 
   cerrarAlerta(): void {
     this.mostrarAlerta.set(false);
+  }
+
+  onErrorImagen(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
   }
 }
