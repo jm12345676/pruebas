@@ -28,7 +28,7 @@ export class Credenciales {
     foto: '',
     nombre: 'MARIO ALBERTO PÉREZ GÓMEZ',
     matricula: '20260303567',
-    carrera: 'Lic. en Contaduría Pública',
+    carrera: 'Contaduría Pública',
     rvoe: 'ES183/2004',
     vigencia: 'AGO 2027'
   });
