@@ -3,25 +3,19 @@
   <!-- ENCABEZADO -->
   <header class="encabezado">
 
-    <!-- TÍTULOS -->
     <div class="titulos">
-      <h1>Control de credenciales</h1>
-      <p>Gestión de alumnos</p>
+      <h1>Gestion de credenciales</h1>
+      <p>Gestion de alumnos</p>
     </div>
 
-    <!-- BUSCADOR -->
     <div class="buscador">
-
       <svg viewBox="0 0 24 24" class="icono">
         <circle cx="11" cy="11" r="7"/>
         <line x1="16.5" y1="16.5" x2="21" y2="21"/>
       </svg>
-
       <input type="text" [(ngModel)]="filtro">
-
     </div>
 
-    <!-- BOTONES DEL ENCABEZADO -->
     <div class="acciones-header">
 
       <a class="btn-oscuro btn-animado" routerLink="/crearalumnos">
@@ -34,27 +28,21 @@
       </a>
 
       <a class="btn-oscuro btn-animado" routerLink="/niveles">
-
         <svg viewBox="0 0 24 24" class="icono">
           <polygon points="12,3 22,8 12,13 2,8"/>
           <polyline points="2,12 12,17 22,12"/>
           <polyline points="2,16 12,21 22,16"/>
         </svg>
-
         Ver niveles
-
       </a>
 
       <a class="btn-oscuro btn-animado" routerLink="/bitacora">
-
         <svg viewBox="0 0 24 24" class="icono">
           <rect x="5" y="4" width="14" height="17" rx="2"/>
           <line x1="9" y1="9" x2="15" y2="9"/>
           <polyline points="9,15 11,17 15,13"/>
         </svg>
-
         Ver bitacora
-
       </a>
 
     </div>
@@ -62,14 +50,26 @@
   </header>
 
 
-  <!-- TARJETA CON TABLA -->
+  <!-- FILTRO POR ESTATUS -->
+  <div class="filtros-status">
+    @for (s of estados; track s) {
+      <button type="button" class="chip" [class.chip-activo]="filtroStatus === s" (click)="filtroStatus = s">
+        {{ s }}
+        @if (s === 'Baja') {
+        }
+      </button>
+    }
+  </div>
+
+
+  <!-- TABLA -->
   <section class="tabla-simple vidrio">
 
     <table class="tabla">
 
       <thead>
         <tr>
-          <th class="col-matricula">Matrícula</th>
+          <th class="col-matricula">Matricula</th>
           <th class="col-nombre">Nombre</th>
           <th class="col-nivel">Nivel</th>
           <th class="col-estatus">Estatus</th>
@@ -90,7 +90,8 @@
             <td>{{ a.nivel }}</td>
 
             <td>
-              <span [class]="'badge ' + claseBadge(a.status)">
+              <span [class]="'badge ' + claseBadge(a.status)"
+                    [title]="a.motivoBaja ? a.motivoBaja + ' (' + a.fechaBaja + ')' : ''">
                 {{ a.status }}
               </span>
             </td>
@@ -100,11 +101,7 @@
               <div class="botones-fila">
 
                 <!-- VER DETALLE -->
-                <button
-                  class="btn-icono"
-                  title="Ver detalle"
-                  (click)="VerDetalle(a)">
-
+                <button class="btn-icono" title="Ver detalle" (click)="VerDetalle(a)">
                   <svg viewBox="0 0 24 24" class="icono">
                     <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
                     <circle cx="12" cy="12" r="3"/>
@@ -113,27 +110,29 @@
 
                 <!-- EDITAR -->
                 <button class="btn-icono" title="Editar">
-
                   <svg viewBox="0 0 24 24" class="icono">
                     <path d="M4 20l4-1 11-11-3-3L5 16z"/>
                     <line x1="14" y1="7" x2="17" y2="10"/>
                   </svg>
-
                 </button>
 
-                <!-- ELIMINAR -->
-                <button
-                  class="btn-icono"
-                  title="Eliminar"
-                  (click)="eliminar(a.matricula)">
-
-                  <svg viewBox="0 0 24 24" class="icono">
-                    <line x1="4" y1="7" x2="20" y2="7"/>
-                    <path d="M6 7l1 13h10l1-13"/>
-                    <path d="M9 7V4h6v3"/>
-                  </svg>
-
-                </button>
+                <!-- BAJA / REACTIVAR -->
+                @if (a.status === 'Baja') {
+                  <button class="btn-icono" title="Reactivar alumno" (click)="reactivar(a)">
+                    <svg viewBox="0 0 24 24" class="icono">
+                      <polyline points="1,4 1,10 7,10"/>
+                      <path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/>
+                    </svg>
+                  </button>
+                } @else {
+                  <button class="btn-icono" title="Dar de baja" (click)="abrirBaja(a)">
+                    <svg viewBox="0 0 24 24" class="icono">
+                      <circle cx="9" cy="8" r="4"/>
+                      <path d="M2 21c0-4 3-6 7-6s7 2 7 6"/>
+                      <line x1="17" y1="9" x2="23" y2="9"/>
+                    </svg>
+                  </button>
+                }
 
               </div>
 
@@ -158,18 +157,31 @@
   </section>
 
 
-  <!-- MODAL: CREAR ALUMNO -->
-  @if (mostrarModalAgregar) {
+  <!-- MODAL: DAR DE BAJA -->
+  @if (alumnoBaja) {
+    <div class="modal-overlay" (click)="cerrarBaja()">
+      <div class="modal-baja" (click)="$event.stopPropagation()">
 
-    <div class="modal-overlay">
+        <h2>Dar de baja</h2>
+        <p class="modal-sub">{{ nombreCompleto(alumnoBaja) }} · {{ alumnoBaja.matricula }}</p>
 
-      <div class="modal-alumno">
+        <div class="campo">
+          <label for="motivo">Motivo de la baja</label>
+          <select id="motivo" [(ngModel)]="motivoBaja">
+            <option value="" disabled>Seleccione un motivo</option>
+            @for (m of motivos; track m) {
+              <option [value]="m">{{ m }}</option>
+            }
+          </select>
+        </div>
 
-        
+        <div class="modal-pie">
+          <button type="button" class="btn-cancelar" (click)="cerrarBaja()">Cancelar</button>
+          <button type="button" class="btn-peligro" [disabled]="!motivoBaja" (click)="confirmarBaja()">Confirmar baja</button>
+        </div>
+
       </div>
-
     </div>
-
   }
 
 </div>

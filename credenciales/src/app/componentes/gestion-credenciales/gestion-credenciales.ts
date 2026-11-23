@@ -13,6 +13,8 @@ interface Alumno {
   vigencia: string;
   foto: string | null;
   status: 'Activo' | 'Pendiente' | 'Baja';
+  fechaBaja?: string;
+  motivoBaja?: string;
 }
 
 @Component({
@@ -22,7 +24,10 @@ interface Alumno {
   styleUrl: './gestion-credenciales.css',
 })
 export class GestionCredenciales {
-  constructor(private rourter: Router) {}
+  constructor(private rourter: Router) {
+    const guardado = localStorage.getItem('alumnos');
+    if (guardado) this.alumnos = JSON.parse(guardado);
+  }
 
   VerDetalle(alumno: any) {
     this.rourter.navigate(
@@ -51,6 +56,7 @@ get alumnosFiltrados() {
   const f = this.filtro.toLowerCase().trim();
 
   return this.alumnos.filter(a => {
+     if (this.filtroStatus !== 'Todos' && a.status !== this.filtroStatus) return false;
     const nombre = this.nombreCompleto(a).toLowerCase();
     const matricula = a.matricula.toLowerCase();
 
@@ -100,6 +106,54 @@ get alumnosFiltrados() {
 
   eliminar(matricula: string) {
     this.alumnos = this.alumnos.filter(a => a.matricula !== matricula);
+  }
+
+  // ---------- Control de bajas ----------
+  estados = ['Todos', 'Activo', 'Pendiente', 'Baja'] as const;
+  filtroStatus: 'Todos' | 'Activo' | 'Pendiente' | 'Baja' = 'Todos';
+
+  motivos = [
+    'Baja voluntaria',
+    'Baja académica',
+    'Falta de pago',
+    'Cambio de escuela',
+    'Otro',
+  ];
+
+  alumnoBaja: Alumno | null = null;
+  motivoBaja = '';
+
+  get totalBajas() {
+    return this.alumnos.filter(a => a.status === 'Baja').length;
+  }
+
+  abrirBaja(alumno: Alumno) {
+    this.alumnoBaja = alumno;
+    this.motivoBaja = '';
+  }
+
+  cerrarBaja() {
+    this.alumnoBaja = null;
+  }
+
+  confirmarBaja() {
+    if (!this.alumnoBaja || !this.motivoBaja) return;
+    this.alumnoBaja.status = 'Baja';
+    this.alumnoBaja.motivoBaja = this.motivoBaja;
+    this.alumnoBaja.fechaBaja = new Date().toISOString().slice(0, 10);
+    this.guardarLocal();
+    this.cerrarBaja();
+  }
+
+  reactivar(alumno: Alumno) {
+    alumno.status = 'Activo';
+    alumno.motivoBaja = undefined;
+    alumno.fechaBaja = undefined;
+    this.guardarLocal();
+  }
+
+  private guardarLocal() {
+    localStorage.setItem('alumnos', JSON.stringify(this.alumnos));
   }
 
   generarCredencial() {
