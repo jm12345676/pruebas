@@ -99,15 +99,111 @@
 
     <div class="botones-secundarios">
       <button type="button" class="btn-mitad" (click)="togglePanel('FORMATOS')">CAMBIAR FORMATO</button>
-      <button type="button" class="btn-mitad" (click)="alternarCodigo()">CAMBIAR CÓDIGO</button>
+      <button
+        type="button"
+        class="btn-mitad"
+        [class.btn-cerrar-activo]="panelActivo() === 'AGREGAR_FORMATO'"
+        (click)="togglePanel('AGREGAR_FORMATO')">
+        {{ panelActivo() === 'AGREGAR_FORMATO' ? 'CERRAR FORMATO' : 'AGREGAR FORMATO' }}
+      </button>
     </div>
 
+    <!-- PANEL: SELECCIONAR FORMATO GUARDADO -->
     @if (panelActivo() === 'FORMATOS') {
       <section class="panel-formatos">
         <p class="titulo-formatos">Seleccione el diseño que desee</p>
         <div class="rejilla-formatos">
-          <button type="button" class="formato-item" [class.activo]="disenoActivo() === 1" (click)="seleccionarDiseno(1)">Diseño 1</button>
-          <button type="button" class="formato-item" [class.activo]="disenoActivo() === 2" (click)="seleccionarDiseno(2)">Diseño 2</button>
+          @for (item of formatos(); track item.id) {
+            <button
+              type="button"
+              class="formato-item"
+              [class.activo]="formatoActivoId() === item.id"
+              (click)="seleccionarFormato(item)">
+              {{ item.nombre }}
+            </button>
+          }
+        </div>
+
+        @if (formatoActivoEsPersonalizado()) {
+          <button type="button" class="btn-editar-formato" (click)="iniciarEdicionFormatoActivo()">
+            &#9998; Editar diseño seleccionado
+          </button>
+        }
+      </section>
+    }
+
+    <!-- PANEL: AGREGAR O EDITAR FORMATO (SOLO FRENTE) -->
+    @if (panelActivo() === 'AGREGAR_FORMATO') {
+      <section class="panel-formatos panel-nuevo-formato">
+        <div class="header-nuevo-formato">
+          <span class="titulo-formatos">
+            {{ editandoFormatoId() ? 'Editar diseño' : 'Crear nuevo diseño' }}
+          </span>
+          <span class="badge-medida">54 × 85 mm</span>
+        </div>
+
+        <div class="campo-grupo">
+          <label class="label-campo" for="nombreFormato">Nombre del diseño</label>
+          <input
+            id="nombreFormato"
+            type="text"
+            class="input-nombre-formato"
+            placeholder="Ej. Licenciatura 2026"
+            [value]="nuevoNombreFormato()"
+            (input)="nuevoNombreFormato.set($any($event.target).value)">
+        </div>
+
+        <!-- ZONA DE CARGA: SOLO FRENTE -->
+        <div class="campo-grupo">
+          <div class="fila-label-estado">
+            <span class="label-campo">Plantilla Frente</span>
+            <span class="tag-obligatorio">Requerido</span>
+          </div>
+
+          <label
+            class="dropzone-card"
+            [class.dropzone-activa]="arrastrandoSobreFrente()"
+            [class.dropzone-cargada]="nuevoFrenteBase64()"
+            (dragover)="onDragOver($event)"
+            (dragleave)="onDragLeave($event)"
+            (drop)="onDropArchivo($event)">
+
+            <input
+              type="file"
+              class="input-file-oculto"
+              accept="image/png, image/jpeg, image/webp"
+              (change)="onArchivoSeleccionado($event)">
+
+            @if (!nuevoFrenteBase64()) {
+              <div class="dropzone-vacia">
+                <span class="icono-subida">&#8679;</span>
+                <div class="textos-dropzone">
+                  <strong>Subir imagen frontal</strong>
+                  <span>Haz clic o arrastra PNG / JPG</span>
+                </div>
+              </div>
+            } @else {
+              <div class="dropzone-preview">
+                <img [src]="nuevoFrenteBase64()" alt="Vista previa frente" class="miniatura-plantilla">
+                <div class="info-archivo">
+                  <span class="nombre-archivo">{{ nombreArchivoFrente() }}</span>
+                  <span class="estado-listo">&#10003; Lista para usar</span>
+                </div>
+                <button type="button" class="btn-quitar-img" title="Quitar imagen" (click)="quitarImagen($event)">&#10005;</button>
+              </div>
+            }
+          </label>
+        </div>
+
+        @if (errorFormularioFormato()) {
+          <div class="alerta-error-formato">&#9888; {{ errorFormularioFormato() }}</div>
+        }
+
+        <div class="acciones-nuevo-formato">
+          <button type="button" class="btn-cancelar-formato" (click)="cerrarFormularioFormato()">Cerrar</button>
+          <button type="button" class="btn-accion btn-guardar-formato" (click)="guardarFormato()">
+            {{ editandoFormatoId() ? 'Actualizar diseño' : 'Guardar diseño' }}
+          </button>
         </div>
       </section>
     }
