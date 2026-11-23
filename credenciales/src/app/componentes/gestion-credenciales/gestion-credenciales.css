@@ -380,7 +380,7 @@ a.btn-oscuro {
   height: 38px;
   padding: 0 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 11px;
   background: #e2e8f0;
   color: #475569;
   font-family: inherit;
@@ -389,7 +389,21 @@ a.btn-oscuro {
   cursor: pointer;
 }
 
+.btn-peligro{
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 11px;
+  background: #1E293B;
+  color: #e7e5e5;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .btn-cancelar:hover { background: #cbd5e1; }
+.btn-peligro:hover{ background: #32435e;}
 
 .btn-peligro:disabled {
   opacity: 0.45;
