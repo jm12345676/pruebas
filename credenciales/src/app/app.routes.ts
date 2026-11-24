@@ -4,6 +4,7 @@ import { Credenciales } from './componentes/credenciales/credenciales';
 import { Niveles } from './componentes/niveles/niveles';
 import { BitacoraComponent } from './componentes/bitacora/bitacora';
 import { CrearAlumno } from './componentes/crearalumnos/crearalumnos';
+import { EditarAlumno } from './componentes/editaralumno/editaralumno';
 
 export const routes: Routes = [
 
@@ -15,9 +16,11 @@ export const routes: Routes = [
 
   { path: 'niveles', component: Niveles },
 
-  { path: 'bitacora', component:BitacoraComponent},
+  { path: 'bitacora', component: BitacoraComponent },
 
-  {path: 'crearalumnos', component:CrearAlumno },
+  {path: 'crearalumnos', component: CrearAlumno },
+
+  { path: 'editaralumno/:matricula', component: EditarAlumno },
 
   { path: '**', redirectTo: 'inicio' }
 

@@ -1,0 +1,39 @@
+/* ---------- Acciones de edición ---------- */
+
+.acciones-edicion {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  max-width: 1280px;
+  margin: 24px auto 0;
+}
+
+.btn-guardar,
+.btn-cancelar {
+  height: 42px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-guardar {
+  background: #1e4b82;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background: #16365e;
+}
+
+.btn-cancelar {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.btn-cancelar:hover {
+  background: #cbd5e1;
+}

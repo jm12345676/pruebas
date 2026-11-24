@@ -1,0 +1,208 @@
+
+<div class="pagina">
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <a class="btn-regresar" routerLink="/inicio">
+      <svg viewBox="0 0 24 24" class="icono">
+        <line x1="20" y1="12" x2="4" y2="12"/>
+        <polyline points="10,6 4,12 10,18"/>
+      </svg>
+      Regresar
+    </a>
+
+    <h1>Editar alumno</h1>
+
+    <button
+      class="btn-credencial"
+      type="button"
+      (click)="guardarCambios()">
+      Guardar cambios
+    </button>
+
+  </header>
+
+  @if (nuevo) {
+
+    <div class="layout">
+
+      <!-- DATOS PERSONALES -->
+      <div class="columna-formularios">
+
+        <section class="tarjeta">
+
+          <div class="tarjeta-header">
+            <div>
+              <h2>Datos personales</h2>
+              <p>Modifica la información del alumno</p>
+            </div>
+          </div>
+
+          <div class="grid-campos">
+
+            <div class="campo">
+              <label>Apellido paterno</label>
+              <input type="text"
+                [(ngModel)]="nuevo.apellidoPaterno">
+            </div>
+
+            <div class="campo">
+              <label>Apellido materno</label>
+              <input type="text"
+                [(ngModel)]="nuevo.apellidoMaterno">
+            </div>
+
+            <div class="campo">
+              <label>Nombre(s)</label>
+              <input type="text"
+                [(ngModel)]="nuevo.nombres">
+            </div>
+
+            <div class="campo">
+              <label>Teléfono de emergencia</label>
+              <input type="tel"
+                [(ngModel)]="nuevo.telefonoEmergencia">
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- DATOS ESCOLARES -->
+        <section class="tarjeta">
+
+          <div class="tarjeta-header">
+            <div>
+              <h2>Datos escolares</h2>
+            </div>
+          </div>
+
+          <div class="grid-campos">
+
+            <div class="campo">
+              <label>Matrícula</label>
+              <input type="text"
+                [value]="nuevo.matricula"
+                disabled>
+            </div>
+
+            <div class="campo">
+              <label>Escuela</label>
+
+              <select [(ngModel)]="nuevo.escuela">
+                <option value="" disabled>
+                  Seleccione una escuela
+                </option>
+
+                @for (e of escuelas; track e) {
+                  <option [value]="e">{{ e }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="campo">
+              <label>Nivel</label>
+
+              <select [(ngModel)]="nuevo.nivel">
+                <option value="" disabled>
+                  Seleccione un nivel
+                </option>
+
+                @for (n of niveles; track n) {
+                  <option [value]="n">{{ n }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="campo">
+              <label>Vigencia</label>
+              <input type="date"
+                [(ngModel)]="nuevo.vigencia">
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+      <!-- FOTOGRAFÍA -->
+      <aside class="tarjeta">
+
+        <div class="tarjeta-header">
+          <div>
+            <h2>Fotografía</h2>
+            <p>Fotografía actual del alumno</p>
+          </div>
+        </div>
+
+        <div class="foto-caja"
+          (click)="archivo.click()">
+
+          @if (nuevo.foto) {
+
+            <img [src]="nuevo.foto"
+              alt="Fotografía del alumno">
+
+          } @else {
+
+            <p>No hay fotografía registrada</p>
+
+          }
+
+        </div>
+
+        <input
+          #archivo
+          type="file"
+          accept="image/png, image/jpeg"
+          hidden
+          (change)="seleccionarFoto($event)">
+
+        <div class="foto-botones">
+
+          <button
+            type="button"
+            class="btn-foto azul"
+            (click)="archivo.click()">
+            Cambiar foto
+          </button>
+
+          <button
+            type="button"
+            class="btn-foto rojo"
+            [disabled]="!nuevo.foto"
+            (click)="quitarFoto()">
+            Eliminar foto
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- BOTONES INFERIORES -->
+    <div class="acciones-edicion">
+
+      <button
+        type="button"
+        class="btn-cancelar"
+        routerLink="/inicio">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-guardar"
+        (click)="guardarCambios()">
+        Guardar cambios
+      </button>
+
+    </div>
+
+  }
+
+</div>
+<p>editarnivel works!</p>

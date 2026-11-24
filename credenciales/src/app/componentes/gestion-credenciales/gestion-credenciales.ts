@@ -81,6 +81,9 @@ get alumnosFiltrados() {
     return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`.trim();
   }
 
+  editar(alumno: Alumno) {
+  this.rourter.navigate(['/editaralumno', alumno.matricula]);
+  }
   mostrarModalAgregar = false;
 
   toggleModalAgregar() {
