@@ -1,6 +1,8 @@
+
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import diccionario from '../../diccionario/diccionario.json';
 
 interface Alumno {
   matricula: string;
@@ -19,18 +21,52 @@ interface Alumno {
 
 @Component({
   selector: 'app-gestion-credenciales',
+  standalone: true,
   imports: [FormsModule, RouterLink],
   templateUrl: './gestion-credenciales.html',
   styleUrl: './gestion-credenciales.css',
 })
 export class GestionCredenciales {
-  constructor(private rourter: Router) {
+
+  // Datos provenientes del archivo diccionario.json
+  alumnosDiccionario = diccionario.alumno;
+
+  // Lista que alimenta la tabla
+  alumnos: Alumno[] = [];
+
+  constructor(private router: Router) {
     const guardado = localStorage.getItem('alumnos');
-    if (guardado) this.alumnos = JSON.parse(guardado);
+
+    if (guardado) {
+      this.alumnos = JSON.parse(guardado);
+    } else {
+      this.cargarAlumnosDiccionario();
+    }
   }
 
-  VerDetalle(alumno: any) {
-    this.rourter.navigate(
+  // ---------- CARGAR ALUMNOS DEL JSON ----------
+
+  cargarAlumnosDiccionario() {
+    this.alumnos = this.alumnosDiccionario.map(a => ({
+      matricula: a.matricula,
+      apellidoPaterno: '',
+      apellidoMaterno: '',
+      nombres: a.nombre,
+      telefonoEmergencia: '',
+      escuela: '',
+      nivel: a.carrera,
+      vigencia: '',
+      foto: null,
+      status: 'Activo'
+    }));
+
+    this.guardarLocal();
+  }
+
+  // ---------- VER DETALLE ----------
+
+  VerDetalle(alumno: Alumno) {
+    this.router.navigate(
       ['/credencial', alumno.matricula],
       {
         state: { alumno: alumno }
@@ -38,52 +74,63 @@ export class GestionCredenciales {
     );
   }
 
-  alumnos: Alumno[] = [
-    { matricula: '20260303567', apellidoPaterno: 'Salvador', apellidoMaterno: 'Montolla',
-      nombres: 'Victor Hugo', telefonoEmergencia: '', escuela: '',
-      nivel: 'Lic. en Contaduría Pública', vigencia: '', foto: null, status: 'Activo' },
-    { matricula: '20151010127', apellidoPaterno: 'Comi', apellidoMaterno: 'ALba',
-      nombres: 'Ester', telefonoEmergencia: '', escuela: '',
-      nivel: 'Lic. en Ciencias de la Comunicación', vigencia: '', foto: null, status: 'Pendiente' },
-    { matricula: '20181017130', apellidoPaterno: 'Torres', apellidoMaterno: 'Perez',
-      nombres: 'Victoria Emilia', telefonoEmergencia: '', escuela: '',
-      nivel: 'Lic. en Psicología', vigencia: '', foto: null, status: 'Baja' },
-  ];
+  // ---------- EDITAR ----------
+
+  editar(alumno: Alumno) {
+    this.router.navigate(['/editaralumno', alumno.matricula]);
+  }
+
+  // ---------- BUSCADOR ----------
 
   filtro = '';
 
-get alumnosFiltrados() {
-  const f = this.filtro.toLowerCase().trim();
+  get alumnosFiltrados() {
+    const f = this.filtro.toLowerCase().trim();
+    const consultaIniciales = f.replace(/\s/g, '');
 
-  return this.alumnos.filter(a => {
-     if (this.filtroStatus !== 'Todos' && a.status !== this.filtroStatus) return false;
-    const nombre = this.nombreCompleto(a).toLowerCase();
-    const matricula = a.matricula.toLowerCase();
+    return this.alumnos.filter(a => {
 
-    const palabras = nombre.split(' ');
+      if (
+        this.filtroStatus !== 'Todos' &&
+        a.status !== this.filtroStatus
+      ) {
+        return false;
+      }
 
-    const coincideNombre = palabras.some(palabra =>
-      palabra.startsWith(f)
-    );
+      const nombre = this.nombreCompleto(a).toLowerCase();
+      const matricula = a.matricula.toLowerCase();
 
-    const coincideIniciales = palabras
-      .map(palabra => palabra[0])
-      .join('')
-      .includes(f.replace(/\s/g, ''));
+      const palabras = nombre.split(/\s+/).filter(Boolean);
 
-    return nombre.includes(f) ||
-           matricula.includes(f) ||
-           coincideNombre ||
-           coincideIniciales;
-  });
-}
+      const coincideNombre = palabras.some(palabra =>
+        palabra.startsWith(f)
+      );
+
+      const iniciales = palabras
+        .map(palabra => palabra[0])
+        .join('');
+
+      const coincideIniciales = iniciales.includes(consultaIniciales);
+
+      if (!f) {
+        return true;
+      }
+
+      return nombre.includes(f) ||
+        matricula.includes(f) ||
+        coincideNombre ||
+        coincideIniciales;
+    });
+  }
+
   nombreCompleto(a: Alumno) {
-    return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`.trim();
+    return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`
+      .trim()
+      .replace(/\s+/g, ' ');
   }
 
-  editar(alumno: Alumno) {
-  this.rourter.navigate(['/editaralumno', alumno.matricula]);
-  }
+  // ---------- AGREGAR ALUMNOS ----------
+
   mostrarModalAgregar = false;
 
   toggleModalAgregar() {
@@ -94,25 +141,60 @@ get alumnosFiltrados() {
 
   private alumnoVacio(): Alumno {
     return {
-      matricula: '', apellidoPaterno: '', apellidoMaterno: '', nombres: '',
-      telefonoEmergencia: '', escuela: '', nivel: '', vigencia: '',
-      foto: null, status: 'Activo',
+      matricula: '',
+      apellidoPaterno: '',
+      apellidoMaterno: '',
+      nombres: '',
+      telefonoEmergencia: '',
+      escuela: '',
+      nivel: '',
+      vigencia: '',
+      foto: null,
+      status: 'Activo',
     };
   }
 
   guardar() {
-    if (!this.nuevo.matricula || !this.nuevo.nombres || !this.nuevo.apellidoPaterno) return;
+    if (
+      !this.nuevo.matricula ||
+      !this.nuevo.nombres ||
+      !this.nuevo.apellidoPaterno
+    ) {
+      alert('Completa los campos obligatorios');
+      return;
+    }
+
+    const existe = this.alumnos.some(
+      a => a.matricula === this.nuevo.matricula
+    );
+
+    if (existe) {
+      alert('Ya existe un alumno con esa matrícula');
+      return;
+    }
+
     this.alumnos.push({ ...this.nuevo });
+
+    this.guardarLocal();
+
     this.nuevo = this.alumnoVacio();
     this.toggleModalAgregar();
   }
 
+  // ---------- ELIMINAR ----------
+
   eliminar(matricula: string) {
-    this.alumnos = this.alumnos.filter(a => a.matricula !== matricula);
+    this.alumnos = this.alumnos.filter(
+      a => a.matricula !== matricula
+    );
+
+    this.guardarLocal();
   }
 
-  // ---------- Control de bajas ----------
+  // ---------- FILTRO POR ESTATUS ----------
+
   estados = ['Todos', 'Activo', 'Pendiente', 'Baja'] as const;
+
   filtroStatus: 'Todos' | 'Activo' | 'Pendiente' | 'Baja' = 'Todos';
 
   motivos = [
@@ -123,11 +205,16 @@ get alumnosFiltrados() {
     'Otro',
   ];
 
+  // ---------- CONTROL DE BAJAS ----------
+
   alumnoBaja: Alumno | null = null;
+
   motivoBaja = '';
 
   get totalBajas() {
-    return this.alumnos.filter(a => a.status === 'Baja').length;
+    return this.alumnos.filter(
+      a => a.status === 'Baja'
+    ).length;
   }
 
   abrirBaja(alumno: Alumno) {
@@ -140,10 +227,17 @@ get alumnosFiltrados() {
   }
 
   confirmarBaja() {
-    if (!this.alumnoBaja || !this.motivoBaja) return;
+    if (!this.alumnoBaja || !this.motivoBaja) {
+      return;
+    }
+
     this.alumnoBaja.status = 'Baja';
     this.alumnoBaja.motivoBaja = this.motivoBaja;
-    this.alumnoBaja.fechaBaja = new Date().toISOString().slice(0, 10);
+
+    this.alumnoBaja.fechaBaja = new Date()
+      .toISOString()
+      .slice(0, 10);
+
     this.guardarLocal();
     this.cerrarBaja();
   }
@@ -152,24 +246,41 @@ get alumnosFiltrados() {
     alumno.status = 'Activo';
     alumno.motivoBaja = undefined;
     alumno.fechaBaja = undefined;
+
     this.guardarLocal();
   }
 
+  // ---------- GUARDAR EN LOCALSTORAGE ----------
+
   private guardarLocal() {
-    localStorage.setItem('alumnos', JSON.stringify(this.alumnos));
+    localStorage.setItem(
+      'alumnos',
+      JSON.stringify(this.alumnos)
+    );
   }
+
+  // ---------- GENERAR CREDENCIAL ----------
 
   generarCredencial() {
     console.log('Generar credencial de:', this.nuevo);
   }
 
+  // ---------- FOTOGRAFÍAS ----------
+
   seleccionarFoto(event: Event) {
     const input = event.target as HTMLInputElement;
     const archivo = input.files?.[0];
-    if (!archivo) return;
+
+    if (!archivo) {
+      return;
+    }
 
     const lector = new FileReader();
-    lector.onload = () => (this.nuevo.foto = lector.result as string);
+
+    lector.onload = () => {
+      this.nuevo.foto = lector.result as string;
+    };
+
     lector.readAsDataURL(archivo);
   }
 
@@ -177,12 +288,15 @@ get alumnosFiltrados() {
     this.nuevo.foto = null;
   }
 
+  // ---------- CLASES VISUALES ----------
+
   claseBadge(status: string) {
     const mapa: Record<string, string> = {
       Activo: 'badge-activo',
       Pendiente: 'badge-pendiente',
       Baja: 'badge-baja',
     };
+
     return mapa[status] ?? '';
   }
 

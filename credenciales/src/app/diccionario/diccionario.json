@@ -1,0 +1,74 @@
+{
+  "alumno": [
+    {
+      "nombre": "José Alejandro Hernández Contreras de la Cruz",
+      "matricula": "2023110001",
+      "carrera": "Ingeniería Industrial y de Sistemas"
+    },
+    {
+      "nombre": "María Fernanda Domínguez Villarreal Ochoa",
+      "matricula": "2023110002",
+      "carrera": "Ingeniería en Electrónica y de Comunicaciones"
+    },
+    {
+      "nombre": "Luis Eduardo Castañeda Montiel Rodríguez",
+      "matricula": "2023110003",
+      "carrera": "Ingeniería en Sistemas Computacionales"
+    },
+    {
+      "nombre": "Carlos Iván Maldonado Escobedo Barrientos",
+      "matricula": "2023110004",
+      "carrera": "Ingeniería Mecánica"
+    },
+    {
+      "nombre": "Daniela Guadalupe Rivera Santiago Fuentes",
+      "matricula": "2023110005",
+      "carrera": "Diseño Gráfico"
+    },
+    {
+      "nombre": "Miguel Ángel Zamora Cabrera Valdivia",
+      "matricula": "2023110006",
+      "carrera": "Ingeniería Civil"
+    },
+    {
+      "nombre": "Valeria Alejandra Ordóñez Barragán Leyva",
+      "matricula": "2023110007",
+      "carrera": "Arquitectura"
+    },
+    {
+      "nombre": "Andrea Sofía Mendoza Quintanilla Paredes",
+      "matricula": "2023110008",
+      "carrera": "Ciencias de la Comunicación"
+    },
+    {
+      "nombre": "Paola Itzel Ramírez Villalobos Cárdenas",
+      "matricula": "2023110009",
+      "carrera": "Psicología"
+    },
+    {
+      "nombre": "Juan Pablo Gutiérrez Altamirano Solís",
+      "matricula": "2023110010",
+      "carrera": "Pedagogía"
+    },
+    {
+      "nombre": "Karla Jimena Ledesma Aguilar Montealegre",
+      "matricula": "2023110011",
+      "carrera": "Administración de Empresas"
+    },
+    {
+      "nombre": "Roberto Emmanuel Salazar Echeverría Núñez",
+      "matricula": "2023110012",
+      "carrera": "Contaduría Pública"
+    },
+    {
+      "nombre": "Ximena Abigail Cervantes Rosales Orozco",
+      "matricula": "2023110013",
+      "carrera": "Mercadotecnia"
+    },
+    {
+      "nombre": "Diego Armando Treviño Camacho Villaseñor",
+      "matricula": "2023110014",
+      "carrera": "Derecho"
+    }
+  ]
+}
