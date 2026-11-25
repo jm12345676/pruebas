@@ -448,17 +448,18 @@
 }
 
 /* ==========================================
-   REVERSO HORIZONTAL (DOS COLUMNAS LIMPIAS)
+   REVERSO HORIZONTAL (BLANCO Y NEGRO)
    ========================================== */
 .card-horizontal .capa-datos-reverso {
   display: grid;
-  grid-template-columns: 1.12fr 0.88fr;
-  grid-template-rows: auto 1fr auto;
-  align-items: center;
+  grid-template-columns: 1.08fr 0.92fr;
+  grid-template-rows: auto 1fr auto auto;
+  align-items: stretch;
   column-gap: 10px;
-  padding: 0 14px 7px;
-  border-bottom: 6px solid #0B2859;
+  padding: 0 14px 8px;
+  border-bottom: 6px solid #000000;
   background: #ffffff;
+  color: #000000;
 }
 
 .card-horizontal .parche-firma-anterior {
@@ -471,22 +472,16 @@
   padding: 6px 14px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #0B2859;
-  border-bottom: 3px solid #d4af37;
-}
-
-.sello-ives-horizontal {
-  color: #ffffff;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.8px;
+  justify-content: flex-end;
+  background: #000000;
+  border-bottom: 2px solid #9ca3af;
 }
 
 .sub-ives-horizontal {
-  color: #fde047;
-  font-size: 8.5px;
+  color: #ffffff;
+  font-size: 9.2px;
   font-weight: 700;
+  letter-spacing: 0.3px;
 }
 
 .card-horizontal .columna-izq-reverso {
@@ -495,9 +490,9 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 6px 4px 4px 0;
+  padding: 6px 8px 4px 0;
   box-sizing: border-box;
-  border-right: 1px solid #e2e8f0;
+  border-right: 1px solid #d1d5db;
 }
 
 .card-horizontal .columna-der-reverso {
@@ -506,67 +501,107 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 6px 0 4px 4px;
+  padding: 6px 0 4px 6px;
   box-sizing: border-box;
 }
 
 .card-horizontal .texto-acreditacion {
   font-size: 9px;
-  line-height: 1.24;
+  line-height: 1.2;
+  margin: 0;
+  color: #000000;
 }
 
 .card-horizontal .bloque-firma {
-  margin-top: 2px;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
 }
 
 .card-horizontal .img-firma-autoridad {
-  width: 148px;
-  height: 50px;
+  width: 196px !important;
+  height: 70px !important;
   margin-bottom: 3px;
+  object-fit: contain;
+  filter: grayscale(100%) contrast(1.35);
 }
 
 .card-horizontal .autoridad-nombre {
-  font-size: 10.6px;
+  font-size: 12.8px !important;
+  font-weight: 800;
   line-height: 1.14;
+  color: #000000;
 }
 
 .card-horizontal .autoridad-cargo {
-  font-size: 8.6px;
+  margin-top: 2px;
+  font-size: 10px !important;
+  font-weight: 600;
+  color: #111111;
+}
+
+.card-horizontal .contenedor-codigo-barras {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 2px 0;
 }
 
 .card-horizontal .img-qr-credencial {
-  width: 72px;
-  height: 72px;
-  margin: 0;
+  width: 112px !important;
+  height: 112px !important;
+  margin: 0 auto;
+  display: block;
 }
 
 .card-horizontal .img-codigo-barras {
-  width: 152px;
-  height: 46px;
+  width: 170px !important;
+  height: 56px !important;
 }
 
 .card-horizontal .info-emergencia {
-  margin-top: 2px;
+  margin-top: 0;
+  color: #000000;
 }
 
 .card-horizontal .emergencia-titulo {
-  font-size: 8.4px;
+  font-size: 8.6px;
 }
 
 .card-horizontal .emergencia-tel {
-  font-size: 10px;
+  font-size: 10.8px;
+  color: #000000;
 }
 
-.card-horizontal .direccion-txt {
-  font-size: 7px;
-  line-height: 1.15;
+/* Dirección a lo largo encima de la línea gris divisoria */
+.barra-direccion-horizontal {
+  grid-column: 1 / -1;
+  width: 100%;
+  padding: 4px 0 4px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1.5px solid #9ca3af;
+  color: #000000;
+  font-size: 8.6px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.1px;
 }
 
+/* www y correo debajo de la línea y separados de la franja negra inferior */
 .card-horizontal .pie-contacto-esquinas {
   grid-column: 1 / -1;
-  padding-top: 3px;
-  border-top: 1px solid #e2e8f0;
-  font-size: 7.5px;
+  padding: 4px 2px 3px;
+  color: #000000;
+  font-size: 9.2px;
+  font-weight: 800;
 }
 
 /* ==========================================

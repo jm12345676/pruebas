@@ -43,10 +43,9 @@
             <!-- Parche limpio que oculta la firma vieja incrustada en la plantilla vertical -->
             <div class="parche-firma-anterior" aria-hidden="true"></div>
 
-            <!-- Cabecera institucional limpia solo en modo horizontal -->
+            <!-- Cabecera institucional en blanco y negro solo en modo horizontal -->
             @if (orientacion() === 'HORIZONTAL') {
               <div class="cabecera-horizontal-reverso">
-                <span class="sello-ives-horizontal">UNIVERSIDAD IVES</span>
                 <span class="sub-ives-horizontal">Incorporada a la SEP y SEV</span>
               </div>
             }
@@ -93,11 +92,21 @@
               <div class="info-emergencia">
                 <p class="emergencia-titulo">En caso de emergencia llamar al:</p>
                 <strong class="emergencia-tel">2821401875</strong>
-                <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
-                <p class="direccion-txt">Tel. (228) 812.34.56</p>
+                @if (orientacion() === 'VERTICAL') {
+                  <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
+                  <p class="direccion-txt">Tel. (228) 812.34.56</p>
+                }
               </div>
             </div>
 
+            <!-- Dirección extendida a lo largo en modo horizontal (arriba de la línea gris) -->
+            @if (orientacion() === 'HORIZONTAL') {
+              <div class="barra-direccion-horizontal">
+                Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver. &bull; Tel. (228) 812.34.56
+              </div>
+            }
+
+            <!-- Contacto en esquinas debajo de la línea -->
             <div class="pie-contacto-esquinas">
               <span>www.ives.edu.mx</span>
               <span>informes&#64;ives.edu.mx</span>
