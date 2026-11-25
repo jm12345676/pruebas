@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, computed, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export interface Alumno {
@@ -14,7 +14,6 @@ export interface FormatoCredencial {
   id: string;
   nombre: string;
   frente: string;
-  esPersonalizado?: boolean;
 }
 
 @Component({
@@ -29,7 +28,7 @@ export class Credenciales implements OnInit {
 
   readonly codigoBarras = '/img/uwu.png';
   readonly fondoReverso = '/img/Group%202030.png';
-  private readonly STORAGE_KEY = 'ives_formatos_credenciales';
+  private readonly API_URL = 'http://localhost:3001/api/formatos';
 
   formatos = signal<FormatoCredencial[]>([
     {
@@ -40,26 +39,21 @@ export class Credenciales implements OnInit {
     {
       id: 'diseno-2',
       nombre: 'Diseño 2',
-      frente: '/img/Group%201959.png'
+      frente: this.crearPlantillaAlternativaLimpia()
     }
   ]);
 
   formatoActivoId = signal<string>('diseno-1');
   fondoFrente = '/img/Group%202029.png';
 
-  // Detecta si el formato seleccionado es personalizado (para mostrar el botón de Editar)
-  formatoActivoEsPersonalizado = computed(() => {
-    const actual = this.formatos().find(f => f.id === this.formatoActivoId());
-    return !!actual?.esPersonalizado;
-  });
-
-  // Estados para crear / editar formato
+  // Estados para crear / editar cualquier formato
   editandoFormatoId = signal<string | null>(null);
   nuevoNombreFormato = signal<string>('');
   nuevoFrenteBase64 = signal<string>('');
   nombreArchivoFrente = signal<string>('');
   arrastrandoSobreFrente = signal<boolean>(false);
   errorFormularioFormato = signal<string>('');
+  guardando = signal<boolean>(false);
 
   alumno = signal<Alumno>({
     foto: '',
@@ -78,15 +72,85 @@ export class Credenciales implements OnInit {
     this.cargarFormatosGuardados();
   }
 
-  private cargarFormatosGuardados(): void {
+  /**
+   * Genera una plantilla alternativa limpia (534x824px -> proporción 54x85mm)
+   * sin textos incrustados para que los datos del alumno no se encimen.
+   */
+  private crearPlantillaAlternativaLimpia(): string {
+    if (typeof document === 'undefined') return '/img/Group%202029.png';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 534;
+    canvas.height = 824;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '/img/Group%202029.png';
+
+    // Fondo blanco limpio en la zona inferior de textos
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 534, 824);
+
+    // Cabecera azul marino institucional (deja libre la zona de foto y textos)
+    const grad = ctx.createLinearGradient(0, 0, 534, 340);
+    grad.addColorStop(0, '#0B2859');
+    grad.addColorStop(1, '#174276');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(534, 0);
+    ctx.lineTo(534, 295);
+    ctx.quadraticCurveTo(267, 355, 0, 295);
+    ctx.closePath();
+    ctx.fill();
+
+    // Franja dorada decorativa bajo la curva
+    ctx.strokeStyle = '#d4af37';
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.moveTo(0, 299);
+    ctx.quadraticCurveTo(267, 359, 534, 299);
+    ctx.stroke();
+
+    // Texto superior institucional
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('UNIVERSIDAD IVES', 267, 95);
+
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'bold 17px Arial, sans-serif';
+    ctx.fillText('CREDENCIAL OFICIAL', 267, 130);
+
+    // Pie sutil institucional
+    ctx.fillStyle = '#0B2859';
+    ctx.fillRect(0, 810, 534, 14);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  private async cargarFormatosGuardados(): Promise<void> {
     try {
-      const guardados = localStorage.getItem(this.STORAGE_KEY);
-      if (guardados) {
-        const personalizados: FormatoCredencial[] = JSON.parse(guardados);
-        this.formatos.update(base => [...base, ...personalizados]);
+      const resp = await fetch(this.API_URL).catch(() => fetch('/img/formatos/formatos.json'));
+      if (resp && resp.ok) {
+        const guardados: FormatoCredencial[] = await resp.json();
+        if (!Array.isArray(guardados) || guardados.length === 0) return;
+
+        this.formatos.update(actuales => {
+          const mapa = new Map<string, FormatoCredencial>(actuales.map(f => [f.id, f]));
+          // Si Diseño 1 o Diseño 2 fueron editados previamente, los actualiza; los nuevos los agrega
+          for (const item of guardados) {
+            mapa.set(item.id, item);
+          }
+          return Array.from(mapa.values());
+        });
+
+        // Sincronizar la vista previa si el diseño activo fue editado
+        const activo = this.formatos().find(f => f.id === this.formatoActivoId());
+        if (activo) {
+          this.fondoFrente = activo.frente;
+        }
       }
-    } catch (e) {
-      console.error('Error al cargar formatos guardados:', e);
+    } catch {
+      console.warn('No se encontraron formatos guardados en el servidor aún.');
     }
   }
 
@@ -106,7 +170,6 @@ export class Credenciales implements OnInit {
       return;
     }
 
-    // Si estaba abierto el formulario de agregar/editar y cambia a otro panel, restaura la vista previa
     if (this.panelActivo() === 'AGREGAR_FORMATO') {
       this.restaurarVistaPreviaActual();
     }
@@ -114,14 +177,17 @@ export class Credenciales implements OnInit {
     this.panelActivo.update(actual => (actual === panel ? 'NINGUNO' : panel));
   }
 
+  // Ahora permite editar CUALQUIER formato seleccionado (Diseño 1, Diseño 2 o personalizados)
   iniciarEdicionFormatoActivo(): void {
     const actual = this.formatos().find(f => f.id === this.formatoActivoId());
-    if (!actual || !actual.esPersonalizado) return;
+    if (!actual) return;
 
     this.editandoFormatoId.set(actual.id);
     this.nuevoNombreFormato.set(actual.nombre);
     this.nuevoFrenteBase64.set(actual.frente);
-    this.nombreArchivoFrente.set('Imagen actual guardada');
+    this.nombreArchivoFrente.set(
+      actual.frente.startsWith('data:') ? `${actual.nombre}.png` : actual.frente.split('/').pop() || 'Plantilla actual'
+    );
     this.errorFormularioFormato.set('');
     this.panelActivo.set('AGREGAR_FORMATO');
   }
@@ -137,10 +203,7 @@ export class Credenciales implements OnInit {
   seleccionarFormato(formato: FormatoCredencial): void {
     this.formatoActivoId.set(formato.id);
     this.fondoFrente = formato.frente;
-    // Si es un formato base (Diseño 1 o 2), cerramos el panel; si es personalizado lo dejamos abierto por si quiere darle a "Editar"
-    if (!formato.esPersonalizado) {
-      this.panelActivo.set('NINGUNO');
-    }
+    // Mantiene abierto el panel de formatos para que puedas ver cuál elegiste y pulsar "Editar" si deseas
   }
 
   onDragOver(event: DragEvent): void {
@@ -162,7 +225,7 @@ export class Credenciales implements OnInit {
 
     const file = event.dataTransfer?.files?.[0];
     if (file && file.type.startsWith('image/')) {
-      this.procesarImagen(file);
+      this.procesarImagenComoPng(file);
     }
   }
 
@@ -171,18 +234,29 @@ export class Credenciales implements OnInit {
     const file = input.files?.[0];
     if (!file) return;
 
-    this.procesarImagen(file);
+    this.procesarImagenComoPng(file);
     input.value = '';
   }
 
-  private procesarImagen(file: File): void {
+  private procesarImagenComoPng(file: File): void {
     this.errorFormularioFormato.set('');
     const reader = new FileReader();
     reader.onload = () => {
-      const resultado = reader.result as string;
-      this.nuevoFrenteBase64.set(resultado);
-      this.nombreArchivoFrente.set(file.name);
-      this.fondoFrente = resultado;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          const pngBase64 = canvas.toDataURL('image/png');
+          this.nuevoFrenteBase64.set(pngBase64);
+          this.nombreArchivoFrente.set(file.name.replace(/\.[^.]+$/, '') + '.png');
+          this.fondoFrente = pngBase64;
+        }
+      };
+      img.src = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
@@ -210,7 +284,7 @@ export class Credenciales implements OnInit {
     this.panelActivo.set('NINGUNO');
   }
 
-  guardarFormato(): void {
+  async guardarFormato(): Promise<void> {
     const nombre = this.nuevoNombreFormato().trim();
     const frente = this.nuevoFrenteBase64();
     const idEnEdicion = this.editandoFormatoId();
@@ -225,47 +299,44 @@ export class Credenciales implements OnInit {
       return;
     }
 
-    let listaActualizada: FormatoCredencial[];
-    let formatoGuardado: FormatoCredencial;
-
-    if (idEnEdicion) {
-      // Actualizar formato existente
-      formatoGuardado = {
-        id: idEnEdicion,
-        nombre,
-        frente,
-        esPersonalizado: true
-      };
-      listaActualizada = this.formatos().map(f => (f.id === idEnEdicion ? formatoGuardado : f));
-    } else {
-      // Crear nuevo formato
-      formatoGuardado = {
-        id: 'custom-' + Date.now(),
-        nombre,
-        frente,
-        esPersonalizado: true
-      };
-      listaActualizada = [...this.formatos(), formatoGuardado];
-    }
-
-    const soloPersonalizados = listaActualizada.filter(f => f.esPersonalizado);
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(soloPersonalizados));
-    } catch (e) {
-      this.errorFormularioFormato.set('La imagen es muy pesada para guardarse localmente.');
-      return;
-    }
-
-    this.formatos.set(listaActualizada);
-    this.formatoActivoId.set(formatoGuardado.id);
-    this.fondoFrente = formatoGuardado.frente;
-
-    this.editandoFormatoId.set(null);
-    this.nuevoNombreFormato.set('');
-    this.nuevoFrenteBase64.set('');
-    this.nombreArchivoFrente.set('');
+    this.guardando.set(true);
     this.errorFormularioFormato.set('');
-    this.panelActivo.set('NINGUNO');
+
+    try {
+      const respuesta = await fetch(this.API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: idEnEdicion,
+          nombre,
+          imagenBase64: frente
+        })
+      });
+
+      if (!respuesta.ok) {
+        throw new Error('Error en el servidor');
+      }
+
+      const formatoGuardado: FormatoCredencial = await respuesta.json();
+
+      const listaActualizada = idEnEdicion
+        ? this.formatos().map(f => (f.id === idEnEdicion ? formatoGuardado : f))
+        : [...this.formatos(), formatoGuardado];
+
+      this.formatos.set(listaActualizada);
+      this.formatoActivoId.set(formatoGuardado.id);
+      this.fondoFrente = formatoGuardado.frente;
+
+      this.editandoFormatoId.set(null);
+      this.nuevoNombreFormato.set('');
+      this.nuevoFrenteBase64.set('');
+      this.nombreArchivoFrente.set('');
+      this.panelActivo.set('NINGUNO');
+    } catch {
+      this.errorFormularioFormato.set('Enciende el servidor con: node server-formatos.js');
+    } finally {
+      this.guardando.set(false);
+    }
   }
 
   alternarCodigo(tipo?: 'BARRAS' | 'QR'): void {

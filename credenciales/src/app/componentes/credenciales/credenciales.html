@@ -75,6 +75,10 @@
         </div>
       </article>
     </div>
+
+    <button type="button" class="btn-guardar no-print" (click)="mostrarAlerta.set(true)">
+      Guardar plantilla
+    </button>
   </main>
 
   <aside class="seccion-controles no-print">
@@ -104,7 +108,7 @@
       </button>
     </div>
 
-    <!-- PANEL: SELECCIONAR FORMATO GUARDADO -->
+    <!-- PANEL: SELECCIONAR O EDITAR CUALQUIER FORMATO -->
     @if (panelActivo() === 'FORMATOS') {
       <section class="panel-formatos">
         <p class="titulo-formatos">Seleccione el diseño que desee</p>
@@ -120,11 +124,9 @@
           }
         </div>
 
-        @if (formatoActivoEsPersonalizado()) {
-          <button type="button" class="btn-editar-formato" (click)="iniciarEdicionFormatoActivo()">
-            &#9998; Editar diseño seleccionado
-          </button>
-        }
+        <button type="button" class="btn-editar-formato" (click)="iniciarEdicionFormatoActivo()">
+          &#9998; Editar diseño seleccionado
+        </button>
       </section>
     }
 
@@ -197,8 +199,8 @@
 
         <div class="acciones-nuevo-formato">
           <button type="button" class="btn-cancelar-formato" (click)="cerrarFormularioFormato()">Cerrar</button>
-          <button type="button" class="btn-accion btn-guardar-formato" (click)="guardarFormato()">
-            {{ editandoFormatoId() ? 'Actualizar diseño' : 'Guardar diseño' }}
+          <button type="button" class="btn-accion btn-guardar-formato" [disabled]="guardando()" (click)="guardarFormato()">
+            {{ guardando() ? 'Guardando...' : (editandoFormatoId() ? 'Actualizar diseño' : 'Guardar diseño') }}
           </button>
         </div>
       </section>
