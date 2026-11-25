@@ -14,6 +14,7 @@ export interface FormatoCredencial {
   id: string;
   nombre: string;
   frente: string;
+  orientacion?: 'VERTICAL' | 'HORIZONTAL';
 }
 
 @Component({
@@ -29,20 +30,40 @@ export class Credenciales implements OnInit {
   readonly codigoBarras = '/img/uwu.png';
   readonly fondoReverso = '/img/Group%202030.png';
   readonly firmaAutoridad = '/img/uwuowo.jpeg';
-  private readonly API_URL = 'http://localhost:3001/api/formatos';
+  private readonly STORAGE_KEY = 'ives_formatos_credenciales_v1';
+
+  orientacion = signal<'VERTICAL' | 'HORIZONTAL'>('VERTICAL');
 
   formatos = signal<FormatoCredencial[]>([
     {
       id: 'diseno-1',
       nombre: 'Diseño 1',
-      frente: '/img/Group%202029.png'
+      frente: '/img/Group%202029.png',
+      orientacion: 'VERTICAL'
     },
     {
       id: 'diseno-2',
       nombre: 'Diseño 2',
-      frente: this.crearPlantillaAlternativaLimpia()
+      frente: this.crearPlantillaAlternativaLimpia(),
+      orientacion: 'VERTICAL'
+    },
+    {
+      id: 'diseno-h-1',
+      nombre: 'Diseño 1',
+      frente: this.crearPlantillaHorizontalDiseno1(),
+      orientacion: 'HORIZONTAL'
+    },
+    {
+      id: 'diseno-h-2',
+      nombre: 'Diseño 2',
+      frente: this.crearPlantillaHorizontalLimpia(),
+      orientacion: 'HORIZONTAL'
     }
   ]);
+
+  formatosFiltrados = computed(() =>
+    this.formatos().filter(f => (f.orientacion ?? 'VERTICAL') === this.orientacion())
+  );
 
   formatoActivoId = signal<string>('diseno-1');
   fondoFrente = '/img/Group%202029.png';
@@ -73,7 +94,93 @@ export class Credenciales implements OnInit {
   });
 
   ngOnInit(): void {
+    this.cargarPlantillaHorizontalDesdeBase();
     this.cargarFormatosGuardados();
+  }
+
+  cambiarOrientacion(nueva: 'VERTICAL' | 'HORIZONTAL'): void {
+    if (this.orientacion() === nueva) return;
+
+    this.orientacion.set(nueva);
+    if (this.panelActivo() === 'AGREGAR_FORMATO') {
+      this.cerrarFormularioFormato();
+    }
+
+    const disponibles = this.formatosFiltrados();
+    if (disponibles.length > 0) {
+      this.seleccionarFormato(disponibles[0]);
+    }
+  }
+
+  private cargarPlantillaHorizontalDesdeBase(): void {
+    if (typeof document === 'undefined') return;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 824;
+      canvas.height = 534;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 824, 534);
+
+      const altoHeader = 162;
+      const srcH = Math.round(img.height * 0.43);
+      ctx.drawImage(img, 0, 0, img.width, srcH, 0, 0, 824, altoHeader);
+
+      ctx.fillStyle = '#d4af37';
+      ctx.fillRect(0, altoHeader, 824, 5);
+
+      ctx.fillStyle = '#0B2859';
+      ctx.fillRect(0, 522, 824, 12);
+
+      const dataUrl = canvas.toDataURL('image/png');
+      this.formatos.update(lista =>
+        lista.map(f =>
+          f.id === 'diseno-h-1' && !f.frente.startsWith('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAzo')
+            ? { ...f, frente: dataUrl }
+            : f
+        )
+      );
+
+      if (this.formatoActivoId() === 'diseno-h-1') {
+        const actual = this.formatos().find(f => f.id === 'diseno-h-1');
+        if (actual) this.fondoFrente = actual.frente;
+      }
+    };
+    img.src = '/img/Group%202029.png';
+  }
+
+  private crearPlantillaHorizontalDiseno1(): string {
+    if (typeof document === 'undefined') return '/img/Group%202029.png';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 824;
+    canvas.height = 534;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '/img/Group%202029.png';
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 824, 534);
+
+    ctx.fillStyle = '#0B2859';
+    ctx.fillRect(0, 0, 824, 162);
+
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(0, 162, 824, 5);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('IVES  |  #SOMOS LINCES', 412, 95);
+
+    ctx.fillStyle = '#0B2859';
+    ctx.fillRect(0, 522, 824, 12);
+
+    return canvas.toDataURL('image/png');
   }
 
   private crearPlantillaAlternativaLimpia(): string {
@@ -122,29 +229,85 @@ export class Credenciales implements OnInit {
     return canvas.toDataURL('image/png');
   }
 
-  private async cargarFormatosGuardados(): Promise<void> {
+  private crearPlantillaHorizontalLimpia(): string {
+    if (typeof document === 'undefined') return '/img/Group%202029.png';
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 824;
+    canvas.height = 534;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '/img/Group%202029.png';
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, 824, 534);
+
+    const grad = ctx.createLinearGradient(0, 0, 824, 162);
+    grad.addColorStop(0, '#0B2859');
+    grad.addColorStop(1, '#174276');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 824, 162);
+
+    ctx.fillStyle = '#d4af37';
+    ctx.fillRect(0, 162, 824, 5);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 34px Arial, sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('UNIVERSIDAD IVES', 38, 78);
+
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'bold 17px Arial, sans-serif';
+    ctx.fillText('CREDENCIAL ESCOLAR OFICIAL', 40, 114);
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.14)';
+    ctx.beginPath();
+    ctx.arc(756, 81, 48, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'bold 21px Arial, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('IVES', 756, 88);
+
+    ctx.fillStyle = '#0B2859';
+    ctx.fillRect(0, 522, 824, 12);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  private cargarFormatosGuardados(): void {
+    if (typeof localStorage === 'undefined') return;
+
     try {
-      const resp = await fetch(this.API_URL).catch(() => fetch('/img/formatos/formatos.json'));
-      if (resp && resp.ok) {
-        const guardados: FormatoCredencial[] = await resp.json();
-        if (!Array.isArray(guardados) || guardados.length === 0) return;
+      const guardadoRaw = localStorage.getItem(this.STORAGE_KEY);
+      if (!guardadoRaw) return;
 
-        this.formatos.update(actuales => {
-          const mapa = new Map<string, FormatoCredencial>(actuales.map(f => [f.id, f]));
-          for (const item of guardados) {
-            mapa.set(item.id, item);
-          }
-          return Array.from(mapa.values());
-        });
+      const guardados: FormatoCredencial[] = JSON.parse(guardadoRaw);
+      if (!Array.isArray(guardados) || guardados.length === 0) return;
 
-        const activo = this.formatos().find(f => f.id === this.formatoActivoId());
-        if (activo) {
-          this.fondoFrente = activo.frente;
+      this.formatos.update(actuales => {
+        const mapa = new Map<string, FormatoCredencial>(actuales.map(f => [f.id, f]));
+        for (const item of guardados) {
+          mapa.set(item.id, {
+            ...item,
+            orientacion: item.orientacion ?? 'VERTICAL'
+          });
         }
+        return Array.from(mapa.values());
+      });
+
+      const activo = this.formatos().find(f => f.id === this.formatoActivoId());
+      if (activo) {
+        this.fondoFrente = activo.frente;
       }
     } catch {
-      console.warn('No se encontraron formatos guardados en el servidor aún.');
+      console.warn('No se pudieron leer los formatos locales.');
     }
+  }
+
+  private persistirEnNavegador(lista: FormatoCredencial[]): void {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(lista));
   }
 
   togglePanel(panel: 'VIGENCIA' | 'FORMATOS' | 'AGREGAR_FORMATO'): void {
@@ -216,7 +379,7 @@ export class Credenciales implements OnInit {
 
     const file = event.dataTransfer?.files?.[0];
     if (file && file.type.startsWith('image/')) {
-      this.procesarImagenComoPng(file);
+      this.procesarImagenOptimizada(file);
     }
   }
 
@@ -225,22 +388,32 @@ export class Credenciales implements OnInit {
     const file = input.files?.[0];
     if (!file) return;
 
-    this.procesarImagenComoPng(file);
+    this.procesarImagenOptimizada(file);
     input.value = '';
   }
 
-  private procesarImagenComoPng(file: File): void {
+  private procesarImagenOptimizada(file: File): void {
     this.errorFormularioFormato.set('');
     const reader = new FileReader();
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
+        // Redimensiona proporcionalmente al tamaño de credencial (máx. 900px) para guardar ligero y nítido
+        const maxDim = 900;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          const escala = maxDim / Math.max(w, h);
+          w = Math.round(w * escala);
+          h = Math.round(h * escala);
+        }
+
         const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
+        canvas.width = w;
+        canvas.height = h;
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          ctx.drawImage(img, 0, 0);
+          ctx.drawImage(img, 0, 0, w, h);
           const pngBase64 = canvas.toDataURL('image/png');
           this.nuevoFrenteBase64.set(pngBase64);
           this.nombreArchivoFrente.set(file.name.replace(/\.[^.]+$/, '') + '.png');
@@ -261,7 +434,8 @@ export class Credenciales implements OnInit {
   }
 
   private restaurarVistaPreviaActual(): void {
-    const formatoActual = this.formatos().find(f => f.id === this.formatoActivoId());
+    const formatoActual = this.formatosFiltrados().find(f => f.id === this.formatoActivoId())
+      ?? this.formatosFiltrados()[0];
     this.fondoFrente = formatoActual?.frente || '/img/Group%202029.png';
   }
 
@@ -275,10 +449,11 @@ export class Credenciales implements OnInit {
     this.panelActivo.set('NINGUNO');
   }
 
-  async guardarFormato(): Promise<void> {
+  guardarFormato(): void {
     const nombre = this.nuevoNombreFormato().trim();
     const frente = this.nuevoFrenteBase64();
     const idEnEdicion = this.editandoFormatoId();
+    const orientacionActual = this.orientacion();
 
     if (!nombre) {
       this.errorFormularioFormato.set('Ingresa un nombre para el formato.');
@@ -294,25 +469,18 @@ export class Credenciales implements OnInit {
     this.errorFormularioFormato.set('');
 
     try {
-      const respuesta = await fetch(this.API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: idEnEdicion,
-          nombre,
-          imagenBase64: frente
-        })
-      });
-
-      if (!respuesta.ok) {
-        throw new Error('Error en el servidor');
-      }
-
-      const formatoGuardado: FormatoCredencial = await respuesta.json();
+      const formatoGuardado: FormatoCredencial = {
+        id: idEnEdicion || `formato-${Date.now()}`,
+        nombre,
+        orientacion: orientacionActual,
+        frente
+      };
 
       const listaActualizada = idEnEdicion
         ? this.formatos().map(f => (f.id === idEnEdicion ? formatoGuardado : f))
         : [...this.formatos(), formatoGuardado];
+
+      this.persistirEnNavegador(listaActualizada);
 
       this.formatos.set(listaActualizada);
       this.formatoActivoId.set(formatoGuardado.id);
@@ -324,7 +492,7 @@ export class Credenciales implements OnInit {
       this.nombreArchivoFrente.set('');
       this.panelActivo.set('NINGUNO');
     } catch {
-      this.errorFormularioFormato.set('Enciende el servidor con: node server-formatos.js');
+      this.errorFormularioFormato.set('La imagen es muy pesada para el navegador. Usa una imagen más ligera.');
     } finally {
       this.guardando.set(false);
     }
@@ -343,6 +511,12 @@ export class Credenciales implements OnInit {
 
     const nodo = this.areaImpresion?.nativeElement;
     if (!nodo) return;
+
+    const esHorizontal = this.orientacion() === 'HORIZONTAL';
+    const pageW = esHorizontal ? '85mm' : '54mm';
+    const pageH = esHorizontal ? '54mm' : '85mm';
+    const lienzoW = esHorizontal ? '419px' : '267px';
+    const lienzoH = esHorizontal ? '267px' : '419px';
 
     const clon = nodo.cloneNode(true) as HTMLElement;
     clon.querySelectorAll('.no-print').forEach(el => el.remove());
@@ -371,7 +545,7 @@ export class Credenciales implements OnInit {
         ${estilos}
         <style>
           @page {
-            size: 54mm 85mm;
+            size: ${pageW} ${pageH};
             margin: 0;
           }
           * {
@@ -382,19 +556,19 @@ export class Credenciales implements OnInit {
           html, body {
             margin: 0 !important;
             padding: 0 !important;
-            width: 54mm !important;
+            width: ${pageW} !important;
             background: #ffffff !important;
             font-family: Arial, Helvetica, "Segoe UI", Roboto, sans-serif;
           }
           .credenciales-grid {
             display: block !important;
-            width: 54mm !important;
+            width: ${pageW} !important;
             margin: 0 !important;
             padding: 0 !important;
           }
           .credencial-card {
-            width: 54mm !important;
-            height: 85mm !important;
+            width: ${pageW} !important;
+            height: ${pageH} !important;
             margin: 0 !important;
             padding: 0 !important;
             overflow: hidden !important;
@@ -411,8 +585,8 @@ export class Credenciales implements OnInit {
             break-after: auto !important;
           }
           .lienzo-credencial {
-            width: 267px !important;
-            height: 419px !important;
+            width: ${lienzoW} !important;
+            height: ${lienzoH} !important;
             margin: 0 !important;
             border-radius: 0 !important;
             zoom: 0.7644 !important;

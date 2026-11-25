@@ -2,9 +2,9 @@
   <a routerLink="/inicio" class="btn-regresar no-print">&#8592; Regresar</a>
 
   <main class="seccion-previa">
-    <div #areaImpresion class="credenciales-grid">
+    <div #areaImpresion class="credenciales-grid" [class.modo-horizontal]="orientacion() === 'HORIZONTAL'">
       <!-- FRENTE -->
-      <article class="credencial-card">
+      <article class="credencial-card" [class.card-horizontal]="orientacion() === 'HORIZONTAL'">
         <div class="cred-header no-print">Frente</div>
 
         <div class="lienzo-credencial">
@@ -33,57 +33,69 @@
       </article>
 
       <!-- REVERSO -->
-      <article class="credencial-card">
+      <article class="credencial-card" [class.card-horizontal]="orientacion() === 'HORIZONTAL'">
         <div class="cred-header no-print">Reverso</div>
 
         <div class="lienzo-credencial">
           <img [src]="fondoReverso" class="img-fondo-plantilla" alt="Plantilla reversa" draggable="false" (error)="onErrorImagen($event)">
 
           <div class="capa-datos-reverso">
-            <!-- Parche limpio que oculta la firma vieja incrustada en la plantilla -->
+            <!-- Parche limpio que oculta la firma vieja incrustada en la plantilla vertical -->
             <div class="parche-firma-anterior" aria-hidden="true"></div>
 
-            <p class="texto-acreditacion">
-              Esta credencial lo acredita como alumno<br>
-              de la Universidad IVES<br>
-              Incorporada a la SEP y SEV
-            </p>
-
-            <div class="bloque-firma">
-              <img
-                [src]="firmaAutoridad"
-                class="img-firma-autoridad"
-                alt="Firma de la Vicerrectora"
-                draggable="false"
-                (error)="onErrorImagen($event)">
-              <div class="autoridad-nombre">
-                Dra. Erika Carolina<br>
-                Rodríguez Castillo
+            <!-- Cabecera institucional limpia solo en modo horizontal -->
+            @if (orientacion() === 'HORIZONTAL') {
+              <div class="cabecera-horizontal-reverso">
+                <span class="sello-ives-horizontal">UNIVERSIDAD IVES</span>
+                <span class="sub-ives-horizontal">Incorporada a la SEP y SEV</span>
               </div>
-              <div class="autoridad-cargo">Vicerrectora académica</div>
-            </div>
+            }
 
-            <!-- CÓDIGO DE BARRAS O CÓDIGO QR REAL -->
-            <div class="contenedor-codigo-barras">
-              @if (tipoCodigo() === 'BARRAS') {
-                <img [src]="codigoBarras" class="img-codigo-barras" alt="Código de barras" draggable="false" (error)="onErrorImagen($event)">
-                <span class="codigo-num">{{ alumno().matricula }}</span>
-              } @else {
+            <div class="columna-izq-reverso">
+              <p class="texto-acreditacion">
+                Esta credencial lo acredita como alumno<br>
+                de la Universidad IVES<br>
+                Incorporada a la SEP y SEV
+              </p>
+
+              <div class="bloque-firma">
                 <img
-                  [src]="qrDataUrl()"
-                  crossorigin="anonymous"
-                  class="img-qr-credencial"
-                  alt="Código QR {{ alumno().matricula }}"
+                  [src]="firmaAutoridad"
+                  class="img-firma-autoridad"
+                  alt="Firma de la Vicerrectora"
                   draggable="false"
                   (error)="onErrorImagen($event)">
-              }
+                <div class="autoridad-nombre">
+                  Dra. Erika Carolina<br>
+                  Rodríguez Castillo
+                </div>
+                <div class="autoridad-cargo">Vicerrectora académica</div>
+              </div>
             </div>
 
-            <div class="info-emergencia">
-              <p class="emergencia-titulo">En caso de emergencia llamar al:</p>
-              <strong class="emergencia-tel">2821401875</strong>
-              <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
-              <p class="direccion-txt">Tel. (228) 812.34.56</p>
+            <div class="columna-der-reverso">
+              <!-- CÓDIGO DE BARRAS O CÓDIGO QR REAL -->
+              <div class="contenedor-codigo-barras">
+                @if (tipoCodigo() === 'BARRAS') {
+                  <img [src]="codigoBarras" class="img-codigo-barras" alt="Código de barras" draggable="false" (error)="onErrorImagen($event)">
+                  <span class="codigo-num">{{ alumno().matricula }}</span>
+                } @else {
+                  <img
+                    [src]="qrDataUrl()"
+                    crossorigin="anonymous"
+                    class="img-qr-credencial"
+                    alt="Código QR {{ alumno().matricula }}"
+                    draggable="false"
+                    (error)="onErrorImagen($event)">
+                }
+              </div>
+
+              <div class="info-emergencia">
+                <p class="emergencia-titulo">En caso de emergencia llamar al:</p>
+                <strong class="emergencia-tel">2821401875</strong>
+                <p class="direccion-txt">Azueta No. 34 Zona Centro C.P. 91000 Xalapa, Ver.</p>
+                <p class="direccion-txt">Tel. (228) 812.34.56</p>
+              </div>
             </div>
 
             <div class="pie-contacto-esquinas">
@@ -97,7 +109,27 @@
   </main>
 
   <aside class="seccion-controles no-print">
-    <div class="etiqueta-estado">PAGO PENDIENTE</div>
+    <div class="etiqueta-estado">IMPRESIÓN CREDENCIAL</div>
+
+    <!-- SELECTOR DE ORIENTACIÓN: VERTICAL / HORIZONTAL -->
+    <div class="selector-orientacion" role="group" aria-label="Orientación de credencial">
+      <button
+        type="button"
+        class="btn-orientacion"
+        [class.orientacion-activa]="orientacion() === 'VERTICAL'"
+        (click)="cambiarOrientacion('VERTICAL')">
+        <span class="icono-orientacion icono-vert"></span>
+        Vertical
+      </button>
+      <button
+        type="button"
+        class="btn-orientacion"
+        [class.orientacion-activa]="orientacion() === 'HORIZONTAL'"
+        (click)="cambiarOrientacion('HORIZONTAL')">
+        <span class="icono-orientacion icono-horiz"></span>
+        Horizontal
+      </button>
+    </div>
 
     <button type="button" class="btn-accion" (click)="imprimirCredencial()">IMPRIMIR CREDENCIAL</button>
     <button type="button" class="btn-accion" (click)="togglePanel('VIGENCIA')">CAMBIAR VIGENCIA</button>
@@ -126,9 +158,9 @@
     <!-- PANEL: SELECCIONAR O EDITAR CUALQUIER FORMATO -->
     @if (panelActivo() === 'FORMATOS') {
       <section class="panel-formatos">
-        <p class="titulo-formatos">Seleccione el diseño que desee</p>
+        <p class="titulo-formatos">Seleccione el diseño ({{ orientacion() === 'VERTICAL' ? 'Vertical' : 'Horizontal' }})</p>
         <div class="rejilla-formatos">
-          @for (item of formatos(); track item.id) {
+          @for (item of formatosFiltrados(); track item.id) {
             <button
               type="button"
               class="formato-item"
@@ -152,7 +184,9 @@
           <span class="titulo-formatos">
             {{ editandoFormatoId() ? 'Editar diseño' : 'Crear nuevo diseño' }}
           </span>
-          <span class="badge-medida">54 × 85 mm</span>
+          <span class="badge-medida">
+            {{ orientacion() === 'VERTICAL' ? '54 × 85 mm' : '85 × 54 mm' }}
+          </span>
         </div>
 
         <div class="campo-grupo">
@@ -169,7 +203,7 @@
         <!-- ZONA DE CARGA: SOLO FRENTE -->
         <div class="campo-grupo">
           <div class="fila-label-estado">
-            <span class="label-campo">Plantilla Frente</span>
+            <span class="label-campo">Plantilla Frente ({{ orientacion() === 'VERTICAL' ? 'Vertical' : 'Horizontal' }})</span>
             <span class="tag-obligatorio">Requerido</span>
           </div>
 
