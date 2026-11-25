@@ -28,8 +28,7 @@
   text-decoration: none;
 }
 
-.btn-regresar:hover,
-.btn-guardar:hover {
+.btn-regresar:hover {
   background: #111722;
 }
 
@@ -39,6 +38,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 22px;
   padding: 28px;
   border: 2px solid #1e2837;
@@ -98,7 +98,7 @@
   user-select: none;
 }
 
-/* Sube únicamente la gráfica del reverso (rúbrica) sin mover el logo ni los textos */
+/* Sube únicamente la gráfica del reverso sin mover el logo superior */
 .capa-datos-reverso ~ .img-fondo-plantilla,
 .credencial-card:last-child .img-fondo-plantilla {
   top: -10px;
@@ -119,7 +119,7 @@
 }
 
 /* =========================================
-   FRENTE
+   FRENTE (INTACTO)
    ========================================= */
 .capa-datos-frente {
   padding: 164px 12px 6px;
@@ -216,10 +216,21 @@
 }
 
 /* ==========================================
-   REVERSO
+   REVERSO (FIRMA NUEVA Y ESPACIADO QR)
    ========================================== */
 .capa-datos-reverso {
   padding: 55px 10px 6px;
+}
+
+.parche-firma-anterior {
+  position: absolute;
+  top: 96px;
+  left: 20px;
+  right: 20px;
+  height: 145px;
+  z-index: -1;
+  background: #ffffff;
+  pointer-events: none;
 }
 
 .texto-acreditacion {
@@ -235,7 +246,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 132px;
+  margin-top: 10px;
+}
+
+.img-firma-autoridad {
+  width: 145px;
+  height: 52px;
+  margin-bottom: 2px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  filter: contrast(1.2);
+  pointer-events: none;
+  user-select: none;
 }
 
 .autoridad-nombre {
@@ -257,7 +279,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -3px;
+  margin: 4px 0;
 }
 
 .img-codigo-barras {
@@ -267,31 +289,32 @@
   mix-blend-mode: multiply;
 }
 
-.codigo-num,
-.qr-credencial-box {
-  background: #fff;
-  color: #000;
-  font-weight: 800;
-}
-
 .codigo-num {
   position: relative;
   z-index: 3;
   margin-top: -11px;
   padding: 1px 8px;
+  background: #fff;
+  color: #000;
   font-size: 10.8px;
+  font-weight: 800;
   letter-spacing: 0.8px;
   line-height: 1.08;
 }
 
-.qr-credencial-box {
-  padding: 4px 12px;
-  border: 1.5px solid #000;
-  font-size: 9px;
+.img-qr-credencial {
+  width: 76px;
+  height: 76px;
+  margin: 4px 0;
+  display: block;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  image-rendering: pixelated;
 }
 
 .info-emergencia {
   width: 100%;
+  margin-top: 2px;
   color: #111;
   line-height: 1.14;
 }
@@ -329,26 +352,15 @@
 }
 
 /* ==========================================
-   BOTÓN GUARDAR Y PANEL DE CONTROLES
+   PANEL DE CONTROLES (INTACTO)
    ========================================== */
-.btn-guardar,
 .btn-accion,
 .btn-mitad,
-.btn-aplicar-vigencia,
-.btn-gris,
-.btn-azul {
+.btn-aplicar-vigencia {
   border: 0;
   color: #fff;
+  font-weight: 700;
   cursor: pointer;
-}
-
-.btn-guardar {
-  min-width: 170px;
-  padding: 10px 26px;
-  border-radius: 6px;
-  background: #1e2837;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 20%);
-  font-weight: 600;
 }
 
 .seccion-controles {
@@ -370,12 +382,6 @@
   font-size: 15px;
   font-weight: 800;
   text-align: center;
-}
-
-.btn-accion,
-.btn-mitad,
-.btn-aplicar-vigencia {
-  font-weight: 700;
 }
 
 .btn-accion {
@@ -516,7 +522,7 @@
 }
 
 /* ==========================================
-   PANEL AGREGAR / EDITAR FORMATO
+   PANEL AGREGAR / EDITAR FORMATO (INTACTO)
    ========================================== */
 .panel-nuevo-formato {
   align-items: stretch;
@@ -762,54 +768,6 @@
   background: transparent;
   font-weight: 800;
   cursor: pointer;
-}
-
-.fondo-oscuro {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  background: rgb(0 0 0 / 60%);
-}
-
-.caja-alerta {
-  width: min(420px, 100%);
-  padding: 25px 35px;
-  border: 2px solid #174276;
-  border-radius: 12px;
-  background: #fff;
-  text-align: center;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
-}
-
-.alerta-titulo {
-  margin-top: 0;
-  color: #c9302c;
-}
-
-.alerta-botones {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.btn-gris,
-.btn-azul {
-  min-width: 95px;
-  padding: 8px 18px;
-  border-radius: 15px;
-}
-
-.btn-gris {
-  background: #888;
-}
-
-.btn-azul {
-  background: #174276;
 }
 
 @media (max-width: 900px) {

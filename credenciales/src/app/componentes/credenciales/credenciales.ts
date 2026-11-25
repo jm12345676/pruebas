@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, computed, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 export interface Alumno {
@@ -28,6 +28,7 @@ export class Credenciales implements OnInit {
 
   readonly codigoBarras = '/img/uwu.png';
   readonly fondoReverso = '/img/Group%202030.png';
+  readonly firmaAutoridad = '/img/uwuowo.jpeg';
   private readonly API_URL = 'http://localhost:3001/api/formatos';
 
   formatos = signal<FormatoCredencial[]>([
@@ -46,7 +47,6 @@ export class Credenciales implements OnInit {
   formatoActivoId = signal<string>('diseno-1');
   fondoFrente = '/img/Group%202029.png';
 
-  // Estados para crear / editar cualquier formato
   editandoFormatoId = signal<string | null>(null);
   nuevoNombreFormato = signal<string>('');
   nuevoFrenteBase64 = signal<string>('');
@@ -65,17 +65,17 @@ export class Credenciales implements OnInit {
   });
 
   panelActivo = signal<'NINGUNO' | 'VIGENCIA' | 'FORMATOS' | 'AGREGAR_FORMATO'>('NINGUNO');
-  mostrarAlerta = signal<boolean>(false);
-  tipoCodigo = signal<'BARRAS' | 'QR'>('BARRAS');
+  tipoCodigo = signal<'BARRAS' | 'QR'>('QR');
+
+  qrDataUrl = computed(() => {
+    const matricula = encodeURIComponent(this.alumno().matricula.trim());
+    return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&ecc=L&margin=0&color=000000&bgcolor=ffffff&data=${matricula}`;
+  });
 
   ngOnInit(): void {
     this.cargarFormatosGuardados();
   }
 
-  /**
-   * Genera una plantilla alternativa limpia (534x824px -> proporción 54x85mm)
-   * sin textos incrustados para que los datos del alumno no se encimen.
-   */
   private crearPlantillaAlternativaLimpia(): string {
     if (typeof document === 'undefined') return '/img/Group%202029.png';
 
@@ -85,11 +85,9 @@ export class Credenciales implements OnInit {
     const ctx = canvas.getContext('2d');
     if (!ctx) return '/img/Group%202029.png';
 
-    // Fondo blanco limpio en la zona inferior de textos
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, 534, 824);
 
-    // Cabecera azul marino institucional (deja libre la zona de foto y textos)
     const grad = ctx.createLinearGradient(0, 0, 534, 340);
     grad.addColorStop(0, '#0B2859');
     grad.addColorStop(1, '#174276');
@@ -102,7 +100,6 @@ export class Credenciales implements OnInit {
     ctx.closePath();
     ctx.fill();
 
-    // Franja dorada decorativa bajo la curva
     ctx.strokeStyle = '#d4af37';
     ctx.lineWidth = 8;
     ctx.beginPath();
@@ -110,7 +107,6 @@ export class Credenciales implements OnInit {
     ctx.quadraticCurveTo(267, 359, 534, 299);
     ctx.stroke();
 
-    // Texto superior institucional
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 34px Arial, sans-serif';
     ctx.textAlign = 'center';
@@ -120,7 +116,6 @@ export class Credenciales implements OnInit {
     ctx.font = 'bold 17px Arial, sans-serif';
     ctx.fillText('CREDENCIAL OFICIAL', 267, 130);
 
-    // Pie sutil institucional
     ctx.fillStyle = '#0B2859';
     ctx.fillRect(0, 810, 534, 14);
 
@@ -136,14 +131,12 @@ export class Credenciales implements OnInit {
 
         this.formatos.update(actuales => {
           const mapa = new Map<string, FormatoCredencial>(actuales.map(f => [f.id, f]));
-          // Si Diseño 1 o Diseño 2 fueron editados previamente, los actualiza; los nuevos los agrega
           for (const item of guardados) {
             mapa.set(item.id, item);
           }
           return Array.from(mapa.values());
         });
 
-        // Sincronizar la vista previa si el diseño activo fue editado
         const activo = this.formatos().find(f => f.id === this.formatoActivoId());
         if (activo) {
           this.fondoFrente = activo.frente;
@@ -177,7 +170,6 @@ export class Credenciales implements OnInit {
     this.panelActivo.update(actual => (actual === panel ? 'NINGUNO' : panel));
   }
 
-  // Ahora permite editar CUALQUIER formato seleccionado (Diseño 1, Diseño 2 o personalizados)
   iniciarEdicionFormatoActivo(): void {
     const actual = this.formatos().find(f => f.id === this.formatoActivoId());
     if (!actual) return;
@@ -203,7 +195,6 @@ export class Credenciales implements OnInit {
   seleccionarFormato(formato: FormatoCredencial): void {
     this.formatoActivoId.set(formato.id);
     this.fondoFrente = formato.frente;
-    // Mantiene abierto el panel de formatos para que puedas ver cuál elegiste y pulsar "Editar" si deseas
   }
 
   onDragOver(event: DragEvent): void {
@@ -349,7 +340,6 @@ export class Credenciales implements OnInit {
 
   imprimirCredencial(): void {
     this.panelActivo.set('NINGUNO');
-    this.mostrarAlerta.set(false);
 
     const nodo = this.areaImpresion?.nativeElement;
     if (!nodo) return;
