@@ -78,8 +78,8 @@ export class GestionCredenciales implements OnInit {
       apellidoMaterno: '',
       nombres: registro.nombre,
       telefonoEmergencia: '',
-      escuela: registro.carrera,
-      nivel: '',
+      escuela: registro.nivel,
+      nivel: registro.nivel,
       vigencia: '',
       foto: null,
       status: 'Activo'

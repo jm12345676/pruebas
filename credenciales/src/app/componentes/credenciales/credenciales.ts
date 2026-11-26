@@ -67,7 +67,7 @@ export class Credenciales implements OnInit {
         ...actual,
         nombre: registro.nombre.toUpperCase(),
         matricula: registro.matricula,
-        carrera: registro.carrera
+        carrera: registro.nivel
       }));
     }
   }
