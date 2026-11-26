@@ -628,10 +628,10 @@ export class Credenciales implements OnInit {
     if (!nodo) return;
 
     const esHorizontal = this.orientacion() === 'HORIZONTAL';
-    const pageW = esHorizontal ? '85mm' : '54mm';
-    const pageH = esHorizontal ? '54mm' : '85mm';
-    const lienzoW = esHorizontal ? '419px' : '267px';
-    const lienzoH = esHorizontal ? '267px' : '419px';
+    const pageW = esHorizontal ? '86mm' : '54mm';
+    const pageH = esHorizontal ? '54mm' : '86mm';
+    const lienzoW = esHorizontal ? '425px' : '267px';
+    const lienzoH = esHorizontal ? '267px' : '425px';
 
     const clon = nodo.cloneNode(true) as HTMLElement;
     clon.querySelectorAll('.no-print').forEach(el => el.remove());
