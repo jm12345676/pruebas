@@ -10,6 +10,38 @@
         <div class="lienzo-credencial">
           <img [src]="fondoFrente" class="img-fondo-plantilla" alt="Plantilla frontal" draggable="false" (error)="onErrorImagen($event)">
 
+          <!-- CABECERA DISEÑO 2 HORIZONTAL (SIN CÍRCULO DERECHO, LOGO IVES IZQUIERDA Y TEXTOS CENTRADOS) -->
+          @if (orientacion() === 'HORIZONTAL' && formatoActivoId() !== formatosFiltrados()[0]?.id) {
+            <div class="cabecera-diseno2-horizontal">
+              <!-- Logo oficial IVES vectorizado directamente para nitidez máxima -->
+              <svg class="logo-ives-izq-d2" viewBox="0 0 220 120" xmlns="http://www.w3.org/2000/svg" aria-label="Logo IVES">
+                <!-- Escudo izquierdo -->
+                <path d="M98 16 H22 V66 C22 93 43 108 66 108 C76 108 85 105 92 100" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+                <!-- Cuadros pixelados del escudo -->
+                <rect x="46" y="28" width="9" height="9" fill="#ffffff"/>
+                <rect x="46" y="42" width="9" height="9" fill="#ffffff"/>
+                <rect x="46" y="56" width="9" height="9" fill="#ffffff"/>
+                <rect x="34" y="35" width="9" height="9" fill="#ffffff"/>
+                <rect x="34" y="49" width="9" height="9" fill="#ffffff"/>
+                <rect x="23" y="42" width="8" height="8" fill="#ffffff"/>
+                <!-- Letra I -->
+                <rect x="59" y="26" width="14" height="58" fill="#ffffff"/>
+                <!-- Letra V + acento -->
+                <polygon points="76,36 90,36 99,66 111,36 125,36 105,84 92,84" fill="#ffffff"/>
+                <polygon points="113,12 126,12 117,29 105,29" fill="#ffffff"/>
+                <!-- Letra e -->
+                <path d="M123 60 C123 44 134 35 148 35 C162 35 171 44 171 59 V64 H136 C137 71 142 75 149 75 C154 75 158 73 161 70 L170 77 C165 82 157 85 148 85 C133 85 123 75 123 60 Z M136 55 H158 C157 49 153 45 148 45 C142 45 137 49 136 55 Z" fill="#ffffff"/>
+                <!-- Letra S -->
+                <path d="M173 74 L182 66 C186 71 192 74 198 74 C203 74 206 72 206 69 C206 66 203 65 195 63 C182 60 175 56 175 47 C175 38 183 32 195 32 C204 32 211 35 216 40 L208 48 C204 44 199 42 194 42 C190 42 187 44 187 46 C187 49 190 50 198 52 C211 55 218 59 218 68 C218 78 210 85 197 85 C187 85 178 81 173 74 Z" fill="#ffffff"/>
+              </svg>
+
+              <div class="textos-centro-d2">
+                <span class="titulo-ives-d2">UNIVERSIDAD IVES</span>
+                <span class="subtitulo-ives-d2">CREDENCIAL ESCOLAR OFICIAL</span>
+              </div>
+            </div>
+          }
+
           <div class="capa-datos-frente">
             <div class="contenedor-foto">
               @if (alumno().foto) {
@@ -20,7 +52,12 @@
             <div class="bloque-textos-frente">
               <div class="etiqueta-rol">ALUMNO</div>
               <div class="nombre-alumno">{{ alumno().nombre }}</div>
-              <div class="matricula-alumno">{{ alumno().matricula }}</div>
+              <div class="matricula-alumno">
+                @if (orientacion() === 'HORIZONTAL') {
+                  <span class="matricula-prefijo">Matrícula:</span>
+                }
+                {{ alumno().matricula }}
+              </div>
               <div class="carrera-alumno">{{ alumno().carrera }}</div>
               <div class="rvoe-alumno">R.V.O.E. &nbsp;{{ alumno().rvoe }}</div>
               <div class="bloque-vigencia">
@@ -264,9 +301,25 @@
       </section>
     }
 
-    <div class="panel-codigos">
-      <button type="button" class="opcion-codigo" [class.codigo-activo]="tipoCodigo() === 'QR'" (click)="alternarCodigo('QR')">QR</button>
-      <button type="button" class="opcion-codigo" [class.codigo-activo]="tipoCodigo() === 'BARRAS'" (click)="alternarCodigo('BARRAS')">||||||||||</button>
-    </div>
+    <!-- PANEL: SELECCIÓN DE CÓDIGOS -->
+    <section class="panel-codigos" aria-label="Tipo de código">
+      <p class="titulo-formatos">Códigos</p>
+      <div class="rejilla-codigos">
+        <button
+          type="button"
+          class="opcion-codigo"
+          [class.codigo-activo]="tipoCodigo() === 'QR'"
+          (click)="alternarCodigo('QR')">
+          QR
+        </button>
+        <button
+          type="button"
+          class="opcion-codigo"
+          [class.codigo-activo]="tipoCodigo() === 'BARRAS'"
+          (click)="alternarCodigo('BARRAS')">
+          ||||||||||
+        </button>
+      </div>
+    </section>
   </aside>
 </div>
