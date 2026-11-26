@@ -1,5 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild, computed, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, ElementRef, OnInit, ViewChild, computed, inject, signal } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import diccionario from '../../diccionario/diccionario.json'; 
 
 export interface Alumno {
   foto: string;
@@ -27,7 +28,50 @@ export interface FormatoCredencial {
 export class Credenciales implements OnInit {
   @ViewChild('areaImpresion') areaImpresion!: ElementRef<HTMLElement>;
 
-  readonly codigoBarras = '/img/uwu.png';
+  private route = inject(ActivatedRoute);
+
+  ngOnInit(): void {
+    this.cargarPlantillaHorizontalDesdeBase();
+    this.cargarFormatosGuardados();
+
+    const matricula = this.route.snapshot.paramMap.get('matricula');
+    if (matricula) {
+      this.cargarAlumnoPorMatricula(matricula);
+    }
+  }
+
+  private cargarAlumnoPorMatricula(matricula: string): void {
+    // 1) Primero busca en localStorage (los datos editados en gestión)
+    const guardado = localStorage.getItem('alumnos');
+    if (guardado) {
+      const lista = JSON.parse(guardado);
+      const encontrado = lista.find((a: any) => a.matricula === matricula);
+      if (encontrado) {
+        const nombre = `${encontrado.nombres} ${encontrado.apellidoPaterno} ${encontrado.apellidoMaterno}`.trim();
+        this.alumno.update(actual => ({
+          ...actual,
+          nombre: nombre.toUpperCase(),
+          matricula: encontrado.matricula,
+          carrera: encontrado.escuela,
+          foto: encontrado.foto ?? '',
+          vigencia: encontrado.vigencia || actual.vigencia
+        }));
+        return;
+      }
+    }
+
+    // 2) Si no hay nada guardado, busca en el JSON
+    const registro = diccionario.alumno.find(a => a.matricula === matricula);
+    if (registro) {
+      this.alumno.update(actual => ({
+        ...actual,
+        nombre: registro.nombre.toUpperCase(),
+        matricula: registro.matricula,
+        carrera: registro.carrera
+      }));
+    }
+  }
+
   readonly fondoReverso = '/img/Group%202030.png';
   readonly firmaAutoridad = '/img/uwuowo.jpeg';
   private readonly STORAGE_KEY = 'ives_formatos_credenciales_v1';
@@ -93,9 +137,80 @@ export class Credenciales implements OnInit {
     return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&ecc=L&margin=0&color=000000&bgcolor=ffffff&data=${matricula}`;
   });
 
-  ngOnInit(): void {
-    this.cargarPlantillaHorizontalDesdeBase();
-    this.cargarFormatosGuardados();
+  // Código de barras Code 128 generado a partir de la matrícula
+  codigoBarras = computed(() => this.generarCodigoBarras(this.alumno().matricula.trim()));
+
+  private readonly PATRON_CODE128: string[] = [
+    '212222','222122','222221','121223','121322','131222','122213','122312','132212','221213',
+    '221312','231212','112232','122132','122231','113222','123122','123221','223211','221132',
+    '221231','213212','223112','312131','311222','321122','321221','312212','322112','322211',
+    '212123','212321','232121','111323','131123','131321','112313','132113','132311','211313',
+    '231113','231311','112133','112331','132131','113123','113321','133121','313121','211331',
+    '231131','213113','213311','213131','311123','311321','331121','312113','312311','332111',
+    '314111','221411','431111','111224','111422','121124','121421','141122','141221','112214',
+    '112412','122114','122411','142112','142211','241211','221114','413111','241112','134111',
+    '111242','121142','121241','114212','124112','124211','411212','421112','421211','212141',
+    '214121','412121','111143','111341','131141','114113','114311','411113','411311','113141',
+    '114131','311141','411131','211412','211214','211232','2331112'
+  ];
+
+  private generarCodigoBarras(texto: string): string {
+    if (typeof document === 'undefined' || !texto) return '';
+
+    // Si son solo dígitos y cantidad par, usa Code C (más compacto); si no, Code B
+    const soloDigito = /^\d+$/.test(texto) && texto.length % 2 === 0;
+    const valor: number[] = [];
+
+    if (soloDigito) {
+      valor.push(105); // Start C
+      for (let i = 0; i < texto.length; i += 2) {
+        valor.push(parseInt(texto.substring(i, i + 2), 10));
+      }
+    } else {
+      valor.push(104); // Start B
+      for (const c of texto) {
+        const codigo = c.charCodeAt(0);
+        if (codigo < 32 || codigo > 126) return '';
+        valor.push(codigo - 32);
+      }
+    }
+
+    // Dígito verificador
+    let suma = valor[0];
+    for (let i = 1; i < valor.length; i++) {
+      suma += valor[i] * i;
+    }
+    valor.push(suma % 103);
+    valor.push(106); // Stop
+
+    // Dibujo en canvas
+    const modulo = 4;      // píxeles por módulo
+    const margen = 10;     // módulos de margen blanco a cada lado
+    const alto = 120;
+
+    const patron = valor.map(v => this.PATRON_CODE128[v]).join('');
+    const totalModulo = patron.split('').reduce((s, n) => s + parseInt(n, 10), 0);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = (totalModulo + margen * 2) * modulo;
+    canvas.height = alto;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return '';
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = '#000000';
+    let x = margen * modulo;
+    let esBarra = true;
+    for (const n of patron) {
+      const ancho = parseInt(n, 10) * modulo;
+      if (esBarra) ctx.fillRect(x, 0, ancho, alto);
+      x += ancho;
+      esBarra = !esBarra;
+    }
+
+    return canvas.toDataURL('image/png');
   }
 
   cambiarOrientacion(nueva: 'VERTICAL' | 'HORIZONTAL'): void {

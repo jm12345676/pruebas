@@ -1,10 +1,9 @@
-
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import diccionario from '../../diccionario/diccionario.json';
 
-interface Alumno {
+export interface Alumno {
   matricula: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
@@ -14,293 +13,164 @@ interface Alumno {
   nivel: string;
   vigencia: string;
   foto: string | null;
-  status: 'Activo' | 'Pendiente' | 'Baja';
+  status: 'Activo' | 'Baja';
   fechaBaja?: string;
   motivoBaja?: string;
 }
 
+type FiltroStatus = 'Todos' | 'Activo' | 'Baja';
+
 @Component({
   selector: 'app-gestion-credenciales',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [RouterLink, FormsModule],
   templateUrl: './gestion-credenciales.html',
-  styleUrl: './gestion-credenciales.css',
+  styleUrl: './gestion-credenciales.css'
 })
-export class GestionCredenciales {
+export class GestionCredenciales implements OnInit {
+  private readonly STORAGE_KEY = 'alumnos';
 
-  // Datos provenientes del archivo diccionario.json
-  alumnosDiccionario = diccionario.alumno;
+  // Datos
+  listaAlumno: Alumno[] = [];
 
-  // Lista que alimenta la tabla
-  alumnos: Alumno[] = [];
+  // Buscador y filtros (los usa el HTML)
+  filtro = '';
+  filtroStatus: FiltroStatus = 'Todos';
+  estados: FiltroStatus[] = ['Todos', 'Activo', 'Baja'];
 
-  constructor(private router: Router) {
-    const guardado = localStorage.getItem('alumnos');
+  // Modal de baja (los usa el HTML)
+  alumnoBaja: Alumno | null = null;
+  motivoBaja = '';
+  motivos: string[] = [
+    'Baja voluntaria',
+    'Baja académica',
+    'Baja administrativa',
+    'Cambio de escuela',
+    'Otro'
+  ];
 
-    if (guardado) {
-      this.alumnos = JSON.parse(guardado);
-    } else {
-      this.cargarAlumnosDiccionario();
-    }
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.listaAlumno = this.cargarAlumno();
   }
 
-  // ---------- CARGAR ALUMNOS DEL JSON ----------
+  // ---------- Carga y guardado ----------
+  private cargarAlumno(): Alumno[] {
+    if (typeof localStorage !== 'undefined') {
+      const guardado = localStorage.getItem(this.STORAGE_KEY);
+      if (guardado) {
+        try {
+          return JSON.parse(guardado);
+        } catch {
+          console.warn('No se pudo leer localStorage, se usará el diccionario.');
+        }
+      }
+    }
 
-  cargarAlumnosDiccionario() {
-    this.alumnos = this.alumnosDiccionario.map(a => ({
-      matricula: a.matricula,
+    // Funciona si el JSON es una lista directa o si tiene la clave "alumno"
+    const datos: any = diccionario;
+    const lista: any[] = Array.isArray(datos) ? datos : datos.alumno;
+
+    const alumnoInicial: Alumno[] = lista.map((registro): Alumno => ({
+      matricula: registro.matricula,
       apellidoPaterno: '',
       apellidoMaterno: '',
-      nombres: a.nombre,
+      nombres: registro.nombre,
       telefonoEmergencia: '',
-      escuela: '',
-      nivel: a.carrera,
+      escuela: registro.carrera,
+      nivel: '',
       vigencia: '',
       foto: null,
       status: 'Activo'
     }));
 
-    this.guardarLocal();
+    // Se guarda desde el inicio para que Editar y Credencial lo encuentren
+    if (typeof localStorage !== 'undefined') {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(alumnoInicial));
+    }
+    return alumnoInicial;
   }
 
-  // ---------- VER DETALLE ----------
-
-  VerDetalle(alumno: Alumno) {
-    this.router.navigate(
-      ['/credencial', alumno.matricula],
-      {
-        state: { alumno: alumno }
-      }
-    );
+  private guardarAlumno(): void {
+    if (typeof localStorage === 'undefined') return;
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.listaAlumno));
   }
 
-  // ---------- EDITAR ----------
+  // ---------- Tabla ----------
+  get alumnosFiltrados(): Alumno[] {
+    const texto = this.filtro.trim().toLowerCase();
 
-  editar(alumno: Alumno) {
-    this.router.navigate(['/editaralumno', alumno.matricula]);
-  }
-
-  // ---------- BUSCADOR ----------
-
-  filtro = '';
-
-  get alumnosFiltrados() {
-    const f = this.filtro.toLowerCase().trim();
-    const consultaIniciales = f.replace(/\s/g, '');
-
-    return this.alumnos.filter(a => {
-
-      if (
-        this.filtroStatus !== 'Todos' &&
-        a.status !== this.filtroStatus
-      ) {
-        return false;
-      }
-
-      const nombre = this.nombreCompleto(a).toLowerCase();
-      const matricula = a.matricula.toLowerCase();
-
-      const palabras = nombre.split(/\s+/).filter(Boolean);
-
-      const coincideNombre = palabras.some(palabra =>
-        palabra.startsWith(f)
-      );
-
-      const iniciales = palabras
-        .map(palabra => palabra[0])
-        .join('');
-
-      const coincideIniciales = iniciales.includes(consultaIniciales);
-
-      if (!f) {
-        return true;
-      }
-
-      return nombre.includes(f) ||
-        matricula.includes(f) ||
-        coincideNombre ||
-        coincideIniciales;
+    return this.listaAlumno.filter(a => {
+      const coincideTexto =
+        !texto ||
+        this.nombreCompleto(a).toLowerCase().includes(texto) ||
+        a.matricula.includes(texto);
+      const coincideStatus =
+        this.filtroStatus === 'Todos' || a.status === this.filtroStatus;
+      return coincideTexto && coincideStatus;
     });
   }
 
-  nombreCompleto(a: Alumno) {
-    return `${a.apellidoPaterno} ${a.apellidoMaterno} ${a.nombres}`
-      .trim()
-      .replace(/\s+/g, ' ');
+  nombreCompleto(a: Alumno): string {
+    return `${a.nombres} ${a.apellidoPaterno} ${a.apellidoMaterno}`
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
-  // ---------- AGREGAR ALUMNOS ----------
-
-  mostrarModalAgregar = false;
-
-  toggleModalAgregar() {
-    this.mostrarModalAgregar = !this.mostrarModalAgregar;
-  }
-
-  nuevo: Alumno = this.alumnoVacio();
-
-  private alumnoVacio(): Alumno {
-    return {
-      matricula: '',
-      apellidoPaterno: '',
-      apellidoMaterno: '',
-      nombres: '',
-      telefonoEmergencia: '',
-      escuela: '',
-      nivel: '',
-      vigencia: '',
-      foto: null,
-      status: 'Activo',
-    };
-  }
-
-  guardar() {
-    if (
-      !this.nuevo.matricula ||
-      !this.nuevo.nombres ||
-      !this.nuevo.apellidoPaterno
-    ) {
-      alert('Completa los campos obligatorios');
-      return;
+  // Ajusta estos nombres a las clases que tengas en tu CSS
+  claseBadge(status: string): string {
+    switch (status) {
+      case 'Activo':    return 'badge-activo';
+      case 'Pendiente': return 'badge-pendiente';
+      case 'Baja':      return 'badge-baja';
+      default:          return '';
     }
-
-    const existe = this.alumnos.some(
-      a => a.matricula === this.nuevo.matricula
-    );
-
-    if (existe) {
-      alert('Ya existe un alumno con esa matrícula');
-      return;
-    }
-
-    this.alumnos.push({ ...this.nuevo });
-
-    this.guardarLocal();
-
-    this.nuevo = this.alumnoVacio();
-    this.toggleModalAgregar();
   }
 
-  // ---------- ELIMINAR ----------
-
-  eliminar(matricula: string) {
-    this.alumnos = this.alumnos.filter(
-      a => a.matricula !== matricula
-    );
-
-    this.guardarLocal();
+  // ---------- Acciones ----------
+  VerDetalle(a: Alumno): void {
+    this.router.navigate(['/credencial', a.matricula]);
   }
 
-  // ---------- FILTRO POR ESTATUS ----------
-
-  estados = ['Todos', 'Activo', 'Pendiente', 'Baja'] as const;
-
-  filtroStatus: 'Todos' | 'Activo' | 'Pendiente' | 'Baja' = 'Todos';
-
-  motivos = [
-    'Baja voluntaria',
-    'Baja académica',
-    'Falta de pago',
-    'Cambio de escuela',
-    'Otro',
-  ];
-
-  // ---------- CONTROL DE BAJAS ----------
-
-  alumnoBaja: Alumno | null = null;
-
-  motivoBaja = '';
-
-  get totalBajas() {
-    return this.alumnos.filter(
-      a => a.status === 'Baja'
-    ).length;
+  editar(a: Alumno): void {
+    this.router.navigate(['/editaralumno', a.matricula]);
   }
 
-  abrirBaja(alumno: Alumno) {
-    this.alumnoBaja = alumno;
+  abrirBaja(a: Alumno): void {
+    this.alumnoBaja = a;
     this.motivoBaja = '';
   }
 
-  cerrarBaja() {
+  cerrarBaja(): void {
     this.alumnoBaja = null;
+    this.motivoBaja = '';
   }
 
-  confirmarBaja() {
-    if (!this.alumnoBaja || !this.motivoBaja) {
-      return;
-    }
+  confirmarBaja(): void {
+    if (!this.alumnoBaja || !this.motivoBaja) return;
 
-    this.alumnoBaja.status = 'Baja';
-    this.alumnoBaja.motivoBaja = this.motivoBaja;
-
-    this.alumnoBaja.fechaBaja = new Date()
-      .toISOString()
-      .slice(0, 10);
-
-    this.guardarLocal();
+    const matricula = this.alumnoBaja.matricula;
+    this.listaAlumno = this.listaAlumno.map(a =>
+      a.matricula === matricula
+        ? {
+            ...a,
+            status: 'Baja' as const,
+            motivoBaja: this.motivoBaja,
+            fechaBaja: new Date().toLocaleDateString('es-MX')
+          }
+        : a
+    );
+    this.guardarAlumno();
     this.cerrarBaja();
   }
 
-  reactivar(alumno: Alumno) {
-    alumno.status = 'Activo';
-    alumno.motivoBaja = undefined;
-    alumno.fechaBaja = undefined;
-
-    this.guardarLocal();
-  }
-
-  // ---------- GUARDAR EN LOCALSTORAGE ----------
-
-  private guardarLocal() {
-    localStorage.setItem(
-      'alumnos',
-      JSON.stringify(this.alumnos)
+  reactivar(a: Alumno): void {
+    this.listaAlumno = this.listaAlumno.map(x =>
+      x.matricula === a.matricula
+        ? { ...x, status: 'Activo' as const, fechaBaja: undefined, motivoBaja: undefined }
+        : x
     );
-  }
-
-  // ---------- GENERAR CREDENCIAL ----------
-
-  generarCredencial() {
-    console.log('Generar credencial de:', this.nuevo);
-  }
-
-  // ---------- FOTOGRAFÍAS ----------
-
-  seleccionarFoto(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const archivo = input.files?.[0];
-
-    if (!archivo) {
-      return;
-    }
-
-    const lector = new FileReader();
-
-    lector.onload = () => {
-      this.nuevo.foto = lector.result as string;
-    };
-
-    lector.readAsDataURL(archivo);
-  }
-
-  quitarFoto() {
-    this.nuevo.foto = null;
-  }
-
-  // ---------- CLASES VISUALES ----------
-
-  claseBadge(status: string) {
-    const mapa: Record<string, string> = {
-      Activo: 'badge-activo',
-      Pendiente: 'badge-pendiente',
-      Baja: 'badge-baja',
-    };
-
-    return mapa[status] ?? '';
-  }
-
-  claseOjo(status: string) {
-    return 'ver-' + status.toLowerCase();
+    this.guardarAlumno();
   }
 }

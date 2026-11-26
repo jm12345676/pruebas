@@ -113,7 +113,7 @@
               <!-- CÓDIGO DE BARRAS O CÓDIGO QR REAL -->
               <div class="contenedor-codigo-barras">
                 @if (tipoCodigo() === 'BARRAS') {
-                  <img [src]="codigoBarras" class="img-codigo-barras" alt="Código de barras" draggable="false" (error)="onErrorImagen($event)">
+                  <img [src]="codigoBarras()" class="img-codigo-barras" alt="Código de barras" draggable="false" (error)="onErrorImagen($event)">
                   <span class="codigo-num">{{ alumno().matricula }}</span>
                 } @else {
                   <img
