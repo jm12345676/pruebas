@@ -53,9 +53,8 @@
               <div class="etiqueta-rol">ALUMNO</div>
               <div class="nombre-alumno">{{ alumno().nombre }}</div>
               <div class="matricula-alumno">
-                @if (orientacion() === 'HORIZONTAL') {
-                  <span class="matricula-prefijo">Matrícula:</span>
-                }
+
+                <span class="matricula-prefijo">Matrícula:</span>
                 {{ alumno().matricula }}
               </div>
               <div class="carrera-alumno">{{ alumno().carrera }}</div>

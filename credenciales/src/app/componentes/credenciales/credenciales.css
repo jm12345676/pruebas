@@ -278,15 +278,15 @@
 
 .carrera-alumno {
   color: #111;
-  font-size: 11.2px;
+  font-size: 12px;     
   font-weight: 700;
-  line-height: 1.08;
+  line-height: 1.1;
 }
 
 .rvoe-alumno {
   color: #222;
-  font-size: 9.8px;
-  font-weight: 750;
+  font-size: 10px;        
+  font-weight: 700;
   line-height: 1.05;
 }
 
